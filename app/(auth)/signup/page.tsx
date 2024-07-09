@@ -6,7 +6,6 @@ const SignUp = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: '',
     role: '',
   });
 
@@ -62,17 +61,6 @@ const SignUp = () => {
                 name="password"
                 type="password"
                 value={form.password}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                value={form.confirmPassword}
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
               />
