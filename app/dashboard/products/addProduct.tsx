@@ -50,6 +50,7 @@ const AddProduct = ({brands}: {brands: Brand[]}) => {
                             onChange={(e) => setTitle(e.target.value)}
                             className="input input-bordered bg-white"
                             placeholder="Product Name"
+                            required
                             />
                         </div>
                         <div className="form-control w-full">
@@ -60,6 +61,7 @@ const AddProduct = ({brands}: {brands: Brand[]}) => {
                             onChange={(e) => setPrice(e.target.value)}
                             className="input input-bordered bg-white"
                             placeholder="Price"
+                            required
                             />
                         </div>
                         <div className="form-control w-full">
@@ -67,7 +69,7 @@ const AddProduct = ({brands}: {brands: Brand[]}) => {
                             <select 
                             value={brand}
                             onChange={(e) => setBrand(e.target.value)}
-                            className="select select-bordered bg-white">
+                            className="select select-bordered bg-white" required>
                             <option value="" disabled>Select Brand</option>
                             {brands.map((brand) => (
                                 <option key={brand.id} value={brand.id}>{brand.name}</option>
