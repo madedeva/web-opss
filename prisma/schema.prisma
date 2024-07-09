@@ -13,6 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// example model products
 model Brand {
   id       Int       @id @default(autoincrement())
   name     String
@@ -29,16 +30,53 @@ model Product {
   brandId   Int
 }
 
+// opss model
 model User {
-  id     Int     @id @default(autoincrement())
-  email  String  @unique
-  name   String?
-  role   Role    @relation(fields: [roleId], references: [id])
-  roleId Int
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  name         String?
+  role         Role           @relation(fields: [roleId], references: [id])
+  roleId       Int
+  conId        Conference[]
+  Con_Reviewer Con_Reviewer[]
 }
 
 model Role {
   id    Int    @id @default(autoincrement())
   name  String
   users User[]
+}
+
+model Conference {
+  id                  Int            @id @default(autoincrement())
+  name                String
+  slug                String         @unique
+  acronym             String?
+  theme               String?
+  description         String?
+  topic               String?
+  banner              String?
+  venue               String?
+  address             String?
+  city                String?
+  country             String?
+  email               String?
+  institution         String?
+  paper_template      String?
+  payment_info        String?
+  submission_deadline DateTime
+  startDate           DateTime
+  endDate             DateTime
+  status              String // status active, inactive, draft
+  User                User?          @relation(fields: [userId], references: [id])
+  userId              Int?
+  Con_Reviewer        Con_Reviewer[]
+}
+
+model Con_Reviewer {
+  id           Int        @id @default(autoincrement())
+  conference   Conference @relation(fields: [conferenceId], references: [id])
+  conferenceId Int
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int
 }
