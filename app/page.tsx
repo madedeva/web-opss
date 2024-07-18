@@ -42,7 +42,7 @@ export default function Home () {
   return (
     <div>
       <Head>
-        <title>Online Paper Submission System Testing</title>
+        <title>Online Paper Submission System</title>
         <meta name="description" content="Manage Your Conference with Online Paper Submission System (OPSS)" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
