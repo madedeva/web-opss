@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
+import { SessionProvider } from 'next-auth/react';
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isSidebarVisible, setSidebarVisible] = useState(true);
@@ -12,6 +13,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
   };
 
   return (
+    <SessionProvider>
     <div className="flex h-screen overflow-hidden">
       <Sidebar isVisible={isSidebarVisible} />
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarVisible ? 'ml-64' : 'ml-0'}`}>
@@ -21,6 +23,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
         </main>
       </div>
     </div>
+    </SessionProvider>
   );
 };
 

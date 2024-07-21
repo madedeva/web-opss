@@ -117,7 +117,7 @@ export default function Home () {
 
         <section className="py-20 text-center">
           <h2 className="text-3xl font-bold mb-4 text-white">Get in Touch with Us</h2>
-          <p className="mb-8">We're here to help. Reach out for any questions or support.</p>
+          <p className="mb-8">We`re here to help. Reach out for any questions or support.</p>
           <form className="max-w-xl mx-auto">
             <input type="text" placeholder="Your name" className="w-full mb-4 p-2 border rounded" />
             <textarea placeholder="Your message" className="w-full mb-4 p-2 border rounded" rows={4}></textarea>
