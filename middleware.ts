@@ -12,7 +12,8 @@ export async function middleware(request: NextRequest) {
   // Jika pengguna tidak login dan mencoba mengakses halaman yang dilindungi
   if (!token && pathname !== "/signin") {
     return NextResponse.redirect(new URL("/signin", request.url));
-  } else if (token && pathname === "/signin") {
+  } 
+  if (token && pathname === "/signin") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
@@ -20,5 +21,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/signin"],
 };
