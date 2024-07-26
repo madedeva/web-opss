@@ -59,7 +59,7 @@ const Conference =  async () => {
                 </td>
                 <td className="py-2">
                     <p>Full Paper Submission</p>
-                    <p>January 26, 2024</p>
+                    <p>{new Date(conference.submission_deadline).toLocaleDateString()}</p>
                 </td>
                 <td className="py-2">
                   <p><a className="underline" href="#">Author Registered Authors - 10</a></p>
