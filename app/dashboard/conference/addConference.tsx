@@ -3,33 +3,6 @@ import { useState, SyntheticEvent} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-// model Conference {
-//     id                  Int            @id @default(autoincrement())
-//     name                String
-//     slug                String         @unique
-//     acronym             String?
-//     theme               String?
-//     description         String?
-//     topic               String?
-//     banner              String?
-//     venue               String?
-//     address             String?
-//     city                String?
-//     country             String?
-//     email               String?
-//     institution         String?
-//     paper_template      String?
-//     payment_info        String?
-//     submission_deadline DateTime
-//     startDate           DateTime
-//     endDate             DateTime
-//     status              String // status active, inactive, draft
-//     User                User?          @relation(fields: [userId], references: [id])
-//     userId              Int?
-//     Con_Reviewer        Con_Reviewer[]
-//   }
-
-
 const AddConference = () => {
     const [name, setName] = useState('');
     // const [acronym, setAcronym] = useState('');

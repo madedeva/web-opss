@@ -30,7 +30,7 @@ const SignIn = () => {
     if (result?.error) {
       setError(result.error);
     } else {
-      router.push('/dashboard');
+      router.push('/');
     }
   };
 
