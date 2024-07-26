@@ -4,49 +4,22 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
-// model Conference {
-//     id                  Int            @id @default(autoincrement())
-//     name                String
-//     slug                String         @unique
-//     acronym             String?
-//     theme               String?
-//     description         String?
-//     topic               String?
-//     banner              String?
-//     venue               String?
-//     address             String?
-//     city                String?
-//     country             String?
-//     email               String?
-//     institution         String?
-//     paper_template      String?
-//     payment_info        String?
-//     submission_deadline DateTime
-//     startDate           DateTime
-//     endDate             DateTime
-//     status              String // status active, inactive, draft
-//     User                User?          @relation(fields: [userId], references: [id])
-//     userId              Int?
-//     Con_Reviewer        Con_Reviewer[]
-//   }
-
-
 const AddConference = () => {
     const { data: session } = useSession();
     const [name, setName] = useState('');
-    // const [acronym, setAcronym] = useState('');
-    // const [theme, setTheme] = useState('');
-    // const [description, setDescription] = useState('');
-    // const [topic, setTopic] = useState('');
-    // const [banner, setBanner] = useState('');
-    // const [venue, setVenue] = useState('');
-    // const [address, setAddress] = useState('');
-    // const [city, setCity] = useState('');
-    // const [country, setCountry] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [institution, setInstitution] = useState('');
-    // const [paperTemplate, setPaperTemplate] = useState('');
-    // const [paymentInfo, setPaymentInfo] = useState('');
+    const [acronym, setAcronym] = useState('');
+    const [theme, setTheme] = useState('');
+    const [description, setDescription] = useState('');
+    const [topic, setTopic] = useState('');
+    const [banner, setBanner] = useState('');
+    const [venue, setVenue] = useState('');
+    const [address, setAddress] = useState('');
+    const [city, setCity] = useState('');
+    const [country, setCountry] = useState('');
+    const [email, setEmail] = useState('');
+    const [institution, setInstitution] = useState('');
+    const [paper_template, setPaperTemplate] = useState('');
+    const [payment_info, setPaymentInfo] = useState('');
     const [submissionDeadline, setSubmissionDeadline] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -74,19 +47,19 @@ const AddConference = () => {
 
         await axios.post('/api/conferences', {
             name: name,
-            // acronym: acronym,
-            // theme: theme,
-            // description: description,
-            // topic: topic,
-            // banner: banner,
-            // venue: venue,
-            // address: address,
-            // city: city,
-            // country: country,
-            // email: email,
-            // institution: institution,
-            // paperTemplate: paperTemplate,
-            // paymentInfo: paymentInfo,
+            acronym: acronym,
+            theme: theme,
+            description: description,
+            topic: topic,
+            banner: banner,
+            venue: venue,
+            address: address,
+            city: city,
+            country: country,
+            email: email,
+            institution: institution,
+            paper_template: paper_template,
+            payment_info: payment_info,
             submission_deadline: submissionDeadlineIso,
             startDate: startDateIso,
             endDate: endDateIso,
@@ -94,19 +67,19 @@ const AddConference = () => {
             userId: user.id
         });
         setName('');
-        // setAcronym('');
-        // setTheme('');
-        // setDescription('');
-        // setTopic('');
-        // setBanner('');
-        // setVenue('');
-        // setAddress('');
-        // setCity('');
-        // setCountry('');
-        // setEmail('');
-        // setInstitution('');
-        // setPaperTemplate('');
-        // setPaymentInfo('');
+        setAcronym('');
+        setTheme('');
+        setDescription('');
+        setTopic('');
+        setBanner('');
+        setVenue('');
+        setAddress('');
+        setCity('');
+        setCountry('');
+        setEmail('');
+        setInstitution('');
+        setPaperTemplate('');
+        setPaymentInfo('');
         setSubmissionDeadline('');
         setStartDate('');
         setEndDate('');
@@ -124,10 +97,12 @@ const AddConference = () => {
 
     return (
         <div>
-            <button className="btn btn-accent text-white" onClick={handleModal}>
+            {/* <button className="btn btn-accent text-white" onClick={handleModal}>
             <svg width="32px" height="32px" viewBox="-3.6 -3.6 31.20 31.20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 12H18M12 6V18" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
                 Add New
-            </button>
+            </button> */}
+
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Conference</button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
                 <div className="modal-box bg-white">
@@ -144,7 +119,7 @@ const AddConference = () => {
                             required
                             />
                         </div>
-                        {/* <div className="form-control w-full">
+                        <div className="form-control w-full">
                             <label className="label font-bold">Acronym</label>
                             <input
                             type="text"
@@ -156,23 +131,31 @@ const AddConference = () => {
                         </div>
                         <div className="form-control w-full">
                             <label className="label font-bold">Theme</label>
-                            <input
+                            {/* <input
                             type="text"
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
                             className="input input-bordered bg-white"
                             placeholder="Theme"
-                            />
+                            /> */}
+                            <textarea 
+                            value={theme}
+                            onChange={(e) => setTheme(e.target.value)}
+                            id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
                         <div className="form-control w-full">
                             <label className="label font-bold">Description</label>
-                            <input
+                            {/* <input
                             type="text"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             className="input input-bordered bg-white"
                             placeholder="Description"
-                            />
+                            /> */}
+                            <textarea 
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
                         <div className="form-control w-full">
                             <label className="label font-bold">Topic</label>
@@ -258,7 +241,7 @@ const AddConference = () => {
                             <label className="label font-bold">Paper Template</label>
                             <input
                             type="text"
-                            value={paperTemplate}
+                            value={paper_template}
                             onChange={(e) => setPaperTemplate(e.target.value)}
                             className="input input-bordered bg-white"
                             placeholder="Paper Template"
@@ -268,12 +251,12 @@ const AddConference = () => {
                             <label className="label font-bold">Payment Info</label>
                             <input
                             type="text"
-                            value={paymentInfo}
+                            value={payment_info}
                             onChange={(e) => setPaymentInfo(e.target.value)}
                             className="input input-bordered bg-white"
                             placeholder="Payment Info"
                             />
-                        </div> */}
+                        </div>
                         <div className="form-control w-full">
                             <label className="label font-bold">Submission Deadline</label>
                             <input

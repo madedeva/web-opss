@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSession } from "next-auth/react";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,7 +34,7 @@ const Header: React.FC = () => {
           <a href="/" className="block px-4 py-2">Home</a>
           <a href="/about" className="block px-4 py-2">About Us</a>
           <a href="/signin" className="block px-4 py-2">
-            <button className="bg-orange-500 text-white py-2 px-4 rounded w-full">Sign In</button>
+            <button className="bg-orange-500 text-white py-2 px-4 rounded">Sign In</button>
           </a>
         </nav>
       )}
