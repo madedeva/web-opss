@@ -49,8 +49,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
             {dropdownOpen && (
-              <div ref={dropdownRef} className="absolute right-0 top-10 w-48 bg-white rounded-md shadow-lg z-10 mt-2">
-                <button onClick={() => signOut()} className="block px-6 py-4 text-gray-800 hover:bg-gray-100">Logout</button>
+              <div ref={dropdownRef} className="absolute right-0 top-10 bg-white rounded-md shadow-lg z-10 mt-2">
+                <button onClick={() => signOut()} className="block px-6 py-4 w-32 rounded-md text-gray-800 hover:bg-gray-100">Logout</button>
               </div>
             )}
           </div>
