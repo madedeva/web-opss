@@ -52,11 +52,10 @@ type Conference = {
     institution: string | null;
     paper_template: string | null;
     payment_info: string | null;
-    submission_deadline: string;
-    startDate: string;
-    endDate: string;
+    submission_deadline: Date;
+    startDate: Date;
+    endDate: Date;
     status: string;
-    User: User;
     userId: number;
 }
 
@@ -276,8 +275,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             <label className="label font-bold">Submission Deadline</label>
                             <input
                             type="datetime-local"
-                            value={submission_deadline}
-                            onChange={(e) => setSubmissionDeadline(e.target.value)}
+                            value={submission_deadline.toString()}
+                            onChange={(e) => setSubmissionDeadline(new Date(e.target.value))}
                             className="input input-bordered bg-white"
                             placeholder="Submission Deadline"
                             />
@@ -286,8 +285,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             <label className="label font-bold">Start Date</label>
                             <input
                             type="datetime-local"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                            value={startDate.toString()}
+                            onChange={(e) => setStartDate(new Date(e.target.value))}
                             className="input input-bordered bg-white"
                             placeholder="Start Date"
                             />
@@ -296,8 +295,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             <label className="label font-bold">End Date</label>
                             <input
                             type="datetime-local"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
+                            value={endDate.toString()}
+                            onChange={(e) => setEndDate(new Date(e.target.value))}
                             className="input input-bordered bg-white"
                             placeholder="End Date"
                             />
