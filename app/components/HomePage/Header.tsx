@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSession } from "next-auth/react";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

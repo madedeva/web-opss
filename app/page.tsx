@@ -3,6 +3,18 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Header from './components/HomePage/Header';
 import Footer from './components/HomePage/Footer';
+import { PrismaClient } from "@prisma/client";
+
+// const prisma = new PrismaClient();
+
+// export async function getServerSideProps() {
+//     const conference = await prisma.conference.findMany();
+//     return {
+//         props: {
+//             conference,
+//         },
+//     };
+// } 
 
 export default function Home () {
         const scrollToSection = (id: string) => {

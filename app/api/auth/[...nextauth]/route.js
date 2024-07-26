@@ -29,7 +29,7 @@ const handler = NextAuth({
           );
 
           if (!isValid) {
-            throw new Error("Invalid password");
+            throw new Error("Invalid email or password");
           }
 
           return {
