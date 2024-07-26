@@ -2,8 +2,10 @@
 import { useState, SyntheticEvent} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 const AddConference = () => {
+    const { data: session } = useSession();
     const [name, setName] = useState('');
     // const [acronym, setAcronym] = useState('');
     // const [theme, setTheme] = useState('');
@@ -23,6 +25,13 @@ const AddConference = () => {
     const [endDate, setEndDate] = useState('');
     const [status, setStatus] = useState('');
 
+    type User = {
+        id: number;
+        name: string;
+        email: string;
+        roleId: number;
+    }
+
 
     const router = useRouter();
 
@@ -33,6 +42,8 @@ const AddConference = () => {
         const submissionDeadlineIso = new Date(submissionDeadline).toISOString();
         const startDateIso = new Date(startDate).toISOString();
         const endDateIso = new Date(endDate).toISOString();
+
+        const user = session?.user as User;
 
         await axios.post('/api/conferences', {
             name: name,
@@ -52,7 +63,8 @@ const AddConference = () => {
             submission_deadline: submissionDeadlineIso,
             startDate: startDateIso,
             endDate: endDateIso,
-            status: status
+            status: status,
+            userId: user.id
         });
         setName('');
         // setAcronym('');
