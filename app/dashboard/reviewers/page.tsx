@@ -4,6 +4,7 @@ import AddConference from "../conference/addConference";
 import { PrismaClient } from "@prisma/client";
 import AddReviewer from "./addReviewer";
 import DeleteConRev from "./deleteProduct";
+import UpdateReviewer from "./updateReviewer";
 
 const prisma = new PrismaClient();
 
@@ -17,8 +18,13 @@ const getConRev = async () => {
               },
             },
             conference: {
-              select: {
-                institution: true,
+              include: {
+                User: {
+                  select:{
+                    name: true,
+                    email:true,
+                  }
+                }
               }
             },
         },
@@ -71,9 +77,10 @@ const Reviewer =  async () => {
                 <tr className="text-gray-700" key={cr.id}>
                   <td className="py-2">{cr.user.name}</td>
                   <td className="py-2">{cr.conference.institution}</td>
-                  <td className="py-2">{cr.user.email}</td>
+                  <td className="py-2">{cr.conference.User?.email}</td>
                   <td className="py-2">
-                      <DeleteConRev conRev={cr}/>
+                    <UpdateReviewer conferences={conference} users={user} userId={cr.userId} conId={cr.conferenceId} conRevId={cr.id} />
+                    <DeleteConRev conRev={cr}/>
                   </td>
               </tr>
               ))}
