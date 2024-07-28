@@ -1,9 +1,53 @@
 import DashboardLayout from "@/app/components/DashboardLayout"
 import WelcomeCard from "@/app/components/WelcomeCard";
 import AddConference from "../conference/addConference";
+import { PrismaClient } from "@prisma/client";
+import AddReviewer from "./addReviewer";
+import DeleteConRev from "./deleteProduct";
+import UpdateReviewer from "./updateReviewer";
 
+const prisma = new PrismaClient();
+
+const getConRev = async () => {
+    const res = await prisma.con_Reviewer.findMany({
+        include: {
+            user: {
+              select: {
+                  name: true,
+                  email: true,
+              },
+            },
+            conference: {
+              include: {
+                User: {
+                  select:{
+                    name: true,
+                    email:true,
+                  }
+                }
+              }
+            },
+        },
+    });
+    return res;
+};
+
+const getUserReviewer = async () => {
+  const res = await prisma.user.findMany({
+    where: {
+      roleId: 2
+    }
+  });
+  return res;
+}
+
+const getConference = async () => {
+  const res = await prisma.conference.findMany();
+  return res;
+}
 
 const Reviewer =  async () => {
+    const [conRev, user, conference] = await Promise.all([getConRev(), getUserReviewer(), getConference()]);
 
     return (
     <DashboardLayout>
@@ -17,26 +61,29 @@ const Reviewer =  async () => {
           </p>
           <hr className="mt-2"/>
           <div className="mt-4">
-            <AddConference />
+            <AddReviewer conferences={conference} users={user} />
           </div>
           <table className="table-auto min-w-full bg-white mt-6">
             <thead>
               <tr>
-                <th className="py-2">Reviewer Name</th>
-                <th className="py-2">Institution</th>
-                <th className="py-2">Email</th>
-                <th className="py-2">Action</th>
+                <th className="py-2 text-start">Reviewer Name</th>
+                <th className="py-2 text-start">Institution</th>
+                <th className="py-2 text-start">Email</th>
+                <th className="py-2 text-start">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="text-gray-700">
-                <td className="py-2">Prof. Deva Kerti Wijaya</td>
-                <td className="py-2">Universitas Pendidikan Ganesha</td>
-                <td className="py-2">deva.kerti@undiksha.ac.id</td>
-                <td className="py-2">
-                    Delete
-                </td>
+              {conRev.map((cr, index) => (
+                <tr className="text-gray-700" key={cr.id}>
+                  <td className="py-2">{cr.user.name}</td>
+                  <td className="py-2">{cr.conference.institution}</td>
+                  <td className="py-2">{cr.conference.User?.email}</td>
+                  <td className="py-2">
+                    <UpdateReviewer conferences={conference} users={user} userId={cr.userId} conId={cr.conferenceId} conRevId={cr.id} />
+                    <DeleteConRev conRev={cr}/>
+                  </td>
               </tr>
+              ))}
             </tbody>
           </table>
         </div>
