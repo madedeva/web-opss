@@ -4,32 +4,6 @@ import type { Brand } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-// model Conference {
-//     id                  Int            @id @default(autoincrement())
-//     name                String
-//     slug                String         @unique
-//     acronym             String?
-//     theme               String?
-//     description         String?
-//     topic               String?
-//     banner              String?
-//     venue               String?
-//     address             String?
-//     city                String?
-//     country             String?
-//     email               String?
-//     institution         String?
-//     paper_template      String?
-//     payment_info        String?
-//     submission_deadline DateTime
-//     startDate           DateTime
-//     endDate             DateTime
-//     status              String // status active, inactive, draft
-//     User                User?          @relation(fields: [userId], references: [id])
-//     userId              Int?
-//     Con_Reviewer        Con_Reviewer[]
-//   }
-
 type User = {
     id: number;
     name: string;
@@ -309,9 +283,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             className="select select-bordered bg-white"
                             required>
                                 <option value="" disabled>Select Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="draft">Draft</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
                             </select>
                         </div>
                         <div className="modal-action">

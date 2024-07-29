@@ -23,7 +23,7 @@ const AddConference = () => {
     const [submissionDeadline, setSubmissionDeadline] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('Inactive');
 
     type User = {
         id: number;
@@ -83,7 +83,7 @@ const AddConference = () => {
         setSubmissionDeadline('');
         setStartDate('');
         setEndDate('');
-        setStatus('');
+        setStatus('Inactive');
 
         router.refresh();
         setIsOpen(false);
@@ -97,10 +97,6 @@ const AddConference = () => {
 
     return (
         <div>
-            {/* <button className="btn btn-accent text-white" onClick={handleModal}>
-            <svg width="32px" height="32px" viewBox="-3.6 -3.6 31.20 31.20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 12H18M12 6V18" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-                Add New
-            </button> */}
 
             <button className="bg-blue-600 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Conference</button>
 
@@ -131,13 +127,6 @@ const AddConference = () => {
                         </div>
                         <div className="form-control w-full">
                             <label className="label font-bold">Theme</label>
-                            {/* <input
-                            type="text"
-                            value={theme}
-                            onChange={(e) => setTheme(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Theme"
-                            /> */}
                             <textarea 
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
@@ -145,13 +134,6 @@ const AddConference = () => {
                         </div>
                         <div className="form-control w-full">
                             <label className="label font-bold">Description</label>
-                            {/* <input
-                            type="text"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Description"
-                            /> */}
                             <textarea 
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -287,7 +269,7 @@ const AddConference = () => {
                             placeholder="End Date"
                             />
                         </div>
-                        <div className="form-control w-full">
+                        {/* <div className="form-control w-full">
                             <label className="label font-bold">Status</label>
                             <select
                             value={status}
@@ -299,6 +281,15 @@ const AddConference = () => {
                                 <option value="inactive">Inactive</option>
                                 <option value="draft">Draft</option>
                             </select>
+                        </div> */}
+                        <div className="form-control w-full invisible">
+                            <label className="label font-bold">Status</label>
+                            <input
+                                type="text"
+                                value={status}
+                                readOnly
+                                className="input input-bordered bg-white"
+                            />
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
