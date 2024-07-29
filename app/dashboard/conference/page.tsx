@@ -4,26 +4,40 @@ import { PrismaClient } from "@prisma/client";
 import AddConference from "./addConference";
 import DeleteConference from "./deleteConference";
 import UpdateConference from "./updateConference";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 const prisma = new PrismaClient();
 
-const getConference = async () => {
+const getConference = async (userId: number) => {
     const res = await prisma.conference.findMany({
-        include: {
-            User: {
-                select: {
-                    name: true,
-                    email: true,
-                },
-            },
-        },
+      where: {
+        userId: userId,
+      },
+      include: {
+          User: {
+              select: {
+                  name: true,
+                  email: true,
+              },
+          },
+      },
     });
     return res;
 };
 
+const Conference =  async ({ loggedInUserId }: { loggedInUserId: number }) => {
+    // const [conference] = await Promise.all([getConference()]);
+    const conference = await getConference(loggedInUserId);
+// const Conference = () => {
+//   const { data: session, status } = useSession();
+//   const [conferences, setConferences] = useState([]);
 
-const Conference =  async () => {
-    const [conference] = await Promise.all([getConference()]);
+//   useEffect(() => {
+//     if (status === 'authenticated' && session?.user?.id) {
+//       getConference(session.user.id).then(setConferences);
+//     }
+//   }, [status, session]);
 
     return (
     <DashboardLayout>
@@ -51,7 +65,7 @@ const Conference =  async () => {
               </tr>
             </thead>
             <tbody>
-            {conference.map((conference, index) => (
+            {conference.map((conference) => (
               <tr className="text-gray-700" key={conference.id}>
                 <td className="py-2">{conference.name}</td>
                 <td className="py-2">

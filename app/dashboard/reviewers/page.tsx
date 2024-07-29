@@ -35,7 +35,7 @@ const getConRev = async () => {
 const getUserReviewer = async () => {
   const res = await prisma.user.findMany({
     where: {
-      roleId: 2
+      roleId: 3
     }
   });
   return res;
@@ -61,7 +61,7 @@ const Reviewer =  async () => {
           </p>
           <hr className="mt-2"/>
           <div className="mt-4">
-            <AddReviewer conferences={conference} users={user} />
+            <AddReviewer conferences={conference} users={user} loggedInUserId={0} />
           </div>
           <table className="table-auto min-w-full bg-white mt-6">
             <thead>

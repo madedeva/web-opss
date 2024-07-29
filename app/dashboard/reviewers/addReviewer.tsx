@@ -4,7 +4,7 @@ import type { Conference, User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const AddReviewer = ({users, conferences}: {users: User[], conferences: Conference[]}) => {
+const AddReviewer = ({users, conferences, loggedInUserId}: {users: User[], conferences: Conference[], loggedInUserId: number}) => {
     const [idUser, setUser] = useState('');
     const [idCon, setCon] = useState('');
 
@@ -27,6 +27,8 @@ const AddReviewer = ({users, conferences}: {users: User[], conferences: Conferen
     const handleModal = () => {
         setIsOpen(!isOpen);
     }
+
+    // const usersFiltered = users.filter(user => user.id !== loggedInUserId);
 
     return (
         <div>
