@@ -3,8 +3,14 @@ import { useState, SyntheticEvent} from "react";
 import type { Conference, User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
-const AddReviewer = ({users, conferences, loggedInUserId}: {users: User[], conferences: Conference[], loggedInUserId: number}) => {
+const AddReviewer = ({users, conferences}: {users: User[], conferences: Conference[]}) => {
+
+    const { data: session } = useSession();
+    const user = session?.user as User;
+    const filteredConferences = conferences.filter(conferences => conferences.userId === user?.id);
+
     const [idUser, setUser] = useState('');
     const [idCon, setCon] = useState('');
 
@@ -28,8 +34,6 @@ const AddReviewer = ({users, conferences, loggedInUserId}: {users: User[], confe
         setIsOpen(!isOpen);
     }
 
-    // const usersFiltered = users.filter(user => user.id !== loggedInUserId);
-
     return (
         <div>
             <button className="bg-blue-600 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Reviewer</button>
@@ -48,9 +52,6 @@ const AddReviewer = ({users, conferences, loggedInUserId}: {users: User[], confe
                             {users.map(user => (
                                     <option key={user.id} value={user.id}>{user.name}</option>
                             ))}
-                            {/* {users.filter(user => user.roleId === 3).map(user => (
-                                <option key={user.id} value={user.id}>{user.name}</option>
-                            ))} */}
                             </select>
                         </div>
                         <div className="form-control w-full">
@@ -60,7 +61,7 @@ const AddReviewer = ({users, conferences, loggedInUserId}: {users: User[], confe
                             onChange={(e) => setCon(e.target.value)}
                             className="select select-bordered bg-white" required>
                             <option value="" disabled>Select Conference</option>
-                            {conferences.map((conference) => (
+                            {filteredConferences.map((conference) => (
                                 <option key={conference.id} value={conference.id}>{conference.name}</option>
                             ))}
                             </select>

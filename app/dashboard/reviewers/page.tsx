@@ -61,14 +61,15 @@ const Reviewer =  async () => {
           </p>
           <hr className="mt-2"/>
           <div className="mt-4">
-            <AddReviewer conferences={conference} users={user} loggedInUserId={0} />
+            <AddReviewer conferences={conference} users={user} />
           </div>
           <table className="table-auto min-w-full bg-white mt-6">
             <thead>
               <tr>
                 <th className="py-2 text-start">Reviewer Name</th>
-                <th className="py-2 text-start">Institution</th>
-                <th className="py-2 text-start">Email</th>
+                <th className="py-2 text-start">Conference Name</th>
+                <th className="py-2 text-start">Organizer Institution</th>
+                <th className="py-2 text-start">Organizer Email</th>
                 <th className="py-2 text-start">Action</th>
               </tr>
             </thead>
@@ -76,6 +77,7 @@ const Reviewer =  async () => {
               {conRev.map((cr, index) => (
                 <tr className="text-gray-700" key={cr.id}>
                   <td className="py-2">{cr.user.name}</td>
+                  <td className="py-2">{cr.conference.name}</td>
                   <td className="py-2">{cr.conference.institution}</td>
                   <td className="py-2">{cr.conference.User?.email}</td>
                   <td className="py-2">
