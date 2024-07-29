@@ -3,8 +3,14 @@ import { useState, SyntheticEvent} from "react";
 import type { Conference, User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: User[], conferences: Conference[], userId: number, conId: number, conRevId: number}) => {
+
+    const { data: session } = useSession();
+    const user = session?.user as User;
+    const filteredConferences = conferences.filter(conferences => conferences.userId === user?.id);
+
     const [idUser, setUser] = useState(userId.toString());
     const [idCon, setCon] = useState(conId.toString());
 
@@ -57,7 +63,7 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
                             onChange={(e) => setCon(e.target.value)}
                             className="select select-bordered bg-white" required>
                             <option value="" disabled>Select Conference</option>
-                            {conferences.map((conference) => (
+                            {filteredConferences.map((conference) => (
                                 <option key={conference.id} value={conference.id}>{conference.name}</option>
                             ))}
                             </select>
