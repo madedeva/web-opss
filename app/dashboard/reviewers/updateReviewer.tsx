@@ -44,7 +44,7 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
                             value={idUser}
                             onChange={(e) => setUser(e.target.value)}
                             className="select select-bordered bg-white" required>
-                            <option value="" disabled>Select Brand</option>
+                            <option value="" disabled>Select Reviewer</option>
                             {users.map((user) => (
                                 <option key={user.id} value={user.id}>{user.name}</option>
                             ))}
@@ -56,7 +56,7 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
                             value={idCon}
                             onChange={(e) => setCon(e.target.value)}
                             className="select select-bordered bg-white" required>
-                            <option value="" disabled>Select Brand</option>
+                            <option value="" disabled>Select Conference</option>
                             {conferences.map((conference) => (
                                 <option key={conference.id} value={conference.id}>{conference.name}</option>
                             ))}

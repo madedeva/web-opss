@@ -55,7 +55,7 @@ const Reviewer =  async () => {
 
         <div className="bg-white p-6 rounded-lg mt-4">
         <div className="mt-6">
-          <h3 className="text-lg font-medium">Reviewer</h3>
+          <h3 className="text-lg font-medium">Reviewers</h3>
           <p className="text-sm text-gray-600">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>

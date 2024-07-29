@@ -57,6 +57,8 @@ const SignUp = () => {
     }
   };
 
+  const filteredRoles = roles.filter(role => [1, 2, 3].includes(role.id));
+
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-blue-950">
       <ToastContainer />
@@ -111,7 +113,7 @@ const SignUp = () => {
                 className="mt-1 block w-full px-3 py-2 border border-orange-400 rounded-md bg-white shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
               >
                 <option value="" className='disable'>Select role</option>
-                {roles.map(role => (
+                {filteredRoles.map(role => (
                   <option key={role.id} value={role.id}>{role.name}</option>
                 ))}
               </select>

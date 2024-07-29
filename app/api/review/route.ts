@@ -7,12 +7,12 @@ const prisma = new PrismaClient();
 export const POST = async (request: Request) => {
     const body: Con_Reviewer = await request.json();
 
-    const product = await prisma.con_Reviewer.create({
+    const reviewer = await prisma.con_Reviewer.create({
         data: {
             userId: body.userId,
             conferenceId: body.conferenceId
         }
     });
 
-    return NextResponse.json(product, {status: 201});
+    return NextResponse.json(reviewer, {status: 201});
 }

@@ -46,6 +46,7 @@ const Conference =  async () => {
                 <th className="py-2">Conference Date</th>
                 <th className="py-2">Submission Deadline</th>
                 <th className="py-2">Statistic</th>
+                <th className="py-2">Status</th>
                 <th className="py-2">Action</th>
               </tr>
             </thead>
@@ -64,6 +65,11 @@ const Conference =  async () => {
                 <td className="py-2">
                   <p><a className="underline" href="#">Author Registered Authors - 10</a></p>
                   <p><a className="underline" href="#">Paper Submitted Paper - 10</a></p>
+                </td>
+                <td className="py-2">
+                  <p className={conference.status === 'Active' ? 'text-green-500' : 'text-red-500'}>
+                      {conference.status.charAt(0).toUpperCase() + conference.status.slice(1)}
+                  </p>
                 </td>
                 <td className="py-2">
                     <DeleteConference conference={conference}/>

@@ -30,11 +30,7 @@ const AddReviewer = ({users, conferences}: {users: User[], conferences: Conferen
 
     return (
         <div>
-            {/* <button className="btn btn-accent text-white" onClick={handleModal}>
-            <svg width="32px" height="32px" viewBox="-3.6 -3.6 31.20 31.20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 12H18M12 6V18" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-                Add New
-            </button> */}
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Review</button>
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Reviewer</button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
                 <div className="modal-box bg-white">
@@ -46,19 +42,22 @@ const AddReviewer = ({users, conferences}: {users: User[], conferences: Conferen
                             value={idUser}
                             onChange={(e) => setUser(e.target.value)}
                             className="select select-bordered bg-white" required>
-                            <option value="" disabled>Select Brand</option>
-                            {users.map((user) => (
-                                <option key={user.id} value={user.id}>{user.name}</option>
+                            <option value="" disabled>Select Reviewer</option>
+                            {users.map(user => (
+                                    <option key={user.id} value={user.id}>{user.name}</option>
                             ))}
+                            {/* {users.filter(user => user.roleId === 3).map(user => (
+                                <option key={user.id} value={user.id}>{user.name}</option>
+                            ))} */}
                             </select>
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Conference</label>
+                            <label className="label font-bold">Select Conference</label>
                             <select 
                             value={idCon}
                             onChange={(e) => setCon(e.target.value)}
                             className="select select-bordered bg-white" required>
-                            <option value="" disabled>Select Brand</option>
+                            <option value="" disabled>Select Conference</option>
                             {conferences.map((conference) => (
                                 <option key={conference.id} value={conference.id}>{conference.name}</option>
                             ))}
