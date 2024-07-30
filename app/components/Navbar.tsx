@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useSession, signOut } from "next-auth/react"
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -25,6 +26,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
     };
   }, []);
 
+  const { data: session } = useSession();
+
   return (
     <nav className="bg-white shadow-md w-full">
       <div className="mx-auto px-4">
@@ -38,16 +41,16 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           <div className="flex items-center space-x-1 relative">
             <button onClick={toggleDropdown} className="py-5 px-3 flex items-center space-x-2 text-gray-700">
               <img
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                src={"https://ui-avatars.com/api/?name=" + session?.user?.name + "&background=0D8ABC&color=fff"}
                 alt="Admin"
                 className="w-6 h-6 rounded-full"
               />
-              <span>Admin</span>
+              <span>{session?.user?.name}</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
             {dropdownOpen && (
-              <div ref={dropdownRef} className="absolute right-0 top-10 w-48 bg-white rounded-md shadow-lg z-10 mt-2">
-                <a href="/" className="block px-6 py-4 text-gray-800 hover:bg-gray-100">Logout</a>
+              <div ref={dropdownRef} className="absolute right-0 top-10 bg-white rounded-md shadow-lg z-10 mt-2">
+                <button onClick={() => signOut()} className="block px-6 py-4 w-32 rounded-md text-gray-800 hover:bg-gray-100">Logout</button>
               </div>
             )}
           </div>

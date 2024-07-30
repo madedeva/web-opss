@@ -1,11 +1,16 @@
 "use client";
+import ButtonAuthComponent from '@/app/components/signin/ButtonAuthComponent';
 import { useState } from 'react';
+import { SessionProvider, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation"; // gunakan `next/navigation` di Next.js 13
 
 const SignIn = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -15,12 +20,22 @@ const SignIn = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission
+    const email = (e.currentTarget as HTMLFormElement).email.value;
+    const password = (e.currentTarget as HTMLFormElement).password.value;
+    const result = await signIn("credentials", { redirect: false, email, password });
+
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      router.push('/');
+    }
   };
 
   return (
+    <SessionProvider>
     <div className="flex flex-col lg:flex-row h-screen bg-blue-950">
       <div className="lg:w-1/2 flex flex-col items-center justify-center bg-blue-950 text-white p-8">
         <h2 className="text-4xl font-bold mb-4 text-center">Simplify Your Conference Management with OPSS</h2>
@@ -30,6 +45,7 @@ const SignIn = () => {
         <div className="m-auto w-full max-w-md p-8 bg-white rounded-md shadow-md">
           <h2 className="text-2xl font-semibold text-center text-orange-500">Sign In</h2>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            {error && <p className='text-red-400 text-center'>{error}</p>}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
               <input
@@ -62,11 +78,12 @@ const SignIn = () => {
             </div>
           </form>
           <p className="mt-4 text-center text-sm text-gray-600">
-            Don't have an account? <a href="/signup" className="text-orange-500 hover:underline">Sign Up</a>
+            Don`t have an account? <a href="/signup" className="text-orange-500 hover:underline">Sign Up</a>
           </p>
         </div>
       </div>
     </div>
+    </SessionProvider>
   );
 };
 
