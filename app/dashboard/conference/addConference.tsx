@@ -269,28 +269,6 @@ const AddConference = () => {
                             placeholder="End Date"
                             />
                         </div>
-                        {/* <div className="form-control w-full">
-                            <label className="label font-bold">Status</label>
-                            <select
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                            className="select select-bordered bg-white"
-                            required>
-                                <option value="" disabled>Select Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="draft">Draft</option>
-                            </select>
-                        </div> */}
-                        {/* <div className="form-control w-full invisible">
-                            <label className="label font-bold">Status</label>
-                            <input
-                                type="text"
-                                value={status}
-                                readOnly
-                                className="input input-bordered bg-white"
-                            />
-                        </div> */}
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
                             <button type="submit" className="btn btn-accent text-white">Save</button>

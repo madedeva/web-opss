@@ -3,30 +3,13 @@ import { useState, SyntheticEvent} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { Conference, PrismaClient } from "@prisma/client";
+import { User, Conference } from "@prisma/client";
 
-export async function getServerSideProps() {
-    const prisma = new PrismaClient();
-    const conferences = await prisma.conference.findMany();
-    return {
-        props: {
-            conferences,
-        },
-    };
-}
-
-// const prisma = new PrismaClient();
-
-const RegisterConference = ({conferences}: {conferences: Conference[]}) => {
-    
-    // const getAllConference = async () => {
-    //     const res = await prisma.conference.findMany();
-    //     return res;
-    // }
-
-    // const con = prisma.conference.findMany();
-    
+const RegisterConference = ({users, conferences}: {users: User[], conferences: Conference[]}) => {
     const { data: session } = useSession();
+    const user = session?.user as User;
+    const filteredConferences = conferences.filter(conferences => conferences.userId === user?.id);
+    
     const [country, setCountry] = useState("");
     const [city, setCity] = useState("");
     const [idCon, setCon] = useState('');
@@ -45,8 +28,6 @@ const RegisterConference = ({conferences}: {conferences: Conference[]}) => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        const user = session?.user as User;
-
         await axios.post('/api/myconference', {
             country,
             city,
@@ -57,8 +38,8 @@ const RegisterConference = ({conferences}: {conferences: Conference[]}) => {
 
         setCountry('');
         setCity('');
-        setCon('');
         setStatus('Pending');
+        setCon('');
         
         router.refresh();
         setIsOpen(false);
@@ -102,9 +83,8 @@ const RegisterConference = ({conferences}: {conferences: Conference[]}) => {
                             onChange={(e) => setCon(e.target.value)}
                             className="select select-bordered bg-white" required>
                             <option value="" disabled>Select Conference</option>
-                            {/* {getAllConference().then((conferences) => conferences.map((conference) => ( */}
-                            {conferences.map((conference) => (
-                                    <option key={conference.id} value={conference.id}>{conference.name}</option>
+                            {filteredConferences.map((conference) => (
+                                <option key={conference.id} value={conference.id}>{conference.name}</option>
                             ))}
                             </select>
                         </div>
