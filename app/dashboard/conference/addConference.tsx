@@ -282,7 +282,7 @@ const AddConference = () => {
                                 <option value="draft">Draft</option>
                             </select>
                         </div> */}
-                        <div className="form-control w-full invisible">
+                        {/* <div className="form-control w-full invisible">
                             <label className="label font-bold">Status</label>
                             <input
                                 type="text"
@@ -290,7 +290,7 @@ const AddConference = () => {
                                 readOnly
                                 className="input input-bordered bg-white"
                             />
-                        </div>
+                        </div> */}
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
                             <button type="submit" className="btn btn-accent text-white">Save</button>

@@ -13,7 +13,7 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
     const filteredConferences = conference.filter(conference => conference.userId === user?.id);
 
     return (
-        <table className="table-auto min-w-full bg-white mt-6">
+        <table className="table-auto min-w-full bg-white mt-6 text-left">
         <thead>
           <tr>
             <th className="py-2">Conference Name</th>
@@ -29,8 +29,10 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
           <tr className="text-gray-700" key={conference.id}>
             <td className="py-2">{conference.name}</td>
             <td className="py-2">
-              <p>Date Start: {new Date(conference.startDate).toLocaleDateString()}</p>
-              <p>Date End: {new Date(conference.endDate).toLocaleDateString()}</p>
+              <p>Date Start</p>
+              <p>{new Date(conference.startDate).toLocaleDateString()}</p>
+              <p className="mt-4">Date End</p>
+              <p>{new Date(conference.endDate).toLocaleDateString()}</p>
             </td>
             <td className="py-2">
                 <p>Full Paper Submission</p>
@@ -38,7 +40,7 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
             </td>
             <td className="py-2">
               <p><a className="underline" href="#">Author Registered Authors - 10</a></p>
-              <p><a className="underline" href="#">Paper Submitted Paper - 10</a></p>
+              <p className="mt-4"><a className="underline" href="#">Paper Submitted Paper - 10</a></p>
             </td>
             <td className="py-2">
               <p className={conference.status === 'Active' ? 'text-green-500' : 'text-red-500'}>
