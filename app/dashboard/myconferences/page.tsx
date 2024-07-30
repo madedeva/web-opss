@@ -16,7 +16,7 @@ const MyConferences = () => {
           </p>
           <hr className="mt-2"/>
           <div className="mt-4">
-          <RegisterConference conferences={[]} />
+          <RegisterConference conferences={[]} users={[]} />
           </div>
         </div>
       </div>
