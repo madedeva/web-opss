@@ -1,5 +1,6 @@
 import DashboardLayout from "@/app/components/DashboardLayout"
 import WelcomeCard from "@/app/components/WelcomeCard";
+import RegisterConference from "./RegisterConference";
 
 const MyConferences = () => {
 
@@ -14,6 +15,9 @@ const MyConferences = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
           <hr className="mt-2"/>
+          <div className="mt-4">
+          <RegisterConference conferences={[]} />
+          </div>
         </div>
       </div>
     </DashboardLayout>

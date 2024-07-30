@@ -275,7 +275,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="End Date"
                             />
                         </div>
-                        {/* <div className="form-control w-full">
+                        <div className="form-control w-full">
                             <label className="label font-bold">Status</label>
                             <select
                             value={status}
@@ -286,15 +286,6 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
-                        </div> */}
-                        <div className="form-control w-full invisible">
-                            <label className="label font-bold">Status</label>
-                            <input
-                                type="text"
-                                value={status}
-                                readOnly
-                                className="input input-bordered bg-white"
-                            />
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Close</button>

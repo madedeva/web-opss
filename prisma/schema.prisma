@@ -115,8 +115,8 @@ model Submission {
   status               String
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
-  Conference           Conference?        @relation(fields: [conferenceId], references: [id])
-  conferenceId         Int?
+  Conference           Conference         @relation(fields: [conferenceId], references: [id])
+  conferenceId         Int
   ReviewPaper          ReviewPaper[]
 }
 

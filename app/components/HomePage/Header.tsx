@@ -10,7 +10,7 @@ const Header: React.FC = () => {
         <h1 className="text-xl font-bold">Online Paper Submission System</h1>
         <nav className="hidden md:flex items-center">
           <a href="/" className="px-4">Home</a>
-          <a href="/about" className="px-4">About Us</a>
+          <a href="/about-us" className="px-4">About Us</a>
           <a href="/signin" className="px-4">
             <button className="bg-orange-500 text-white py-2 px-4 rounded">Sign In</button>
           </a>

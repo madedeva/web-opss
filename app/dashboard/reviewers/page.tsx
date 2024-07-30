@@ -1,10 +1,10 @@
 import DashboardLayout from "@/app/components/DashboardLayout"
 import WelcomeCard from "@/app/components/WelcomeCard";
-import AddConference from "../conference/addConference";
 import { PrismaClient } from "@prisma/client";
 import AddReviewer from "./addReviewer";
-import DeleteConRev from "./deleteProduct";
+import DeleteConRev from "./deleteReviewer";
 import UpdateReviewer from "./updateReviewer";
+import TableReviewer from "@/app/components/Reviewer/TableReviewer";
 
 const prisma = new PrismaClient();
 
@@ -63,6 +63,8 @@ const Reviewer =  async () => {
           <div className="mt-4">
             <AddReviewer conferences={conference} users={user} />
           </div>
+
+          {/* <TableReviewer conRev={conRev}/> */}
           <table className="table-auto min-w-full bg-white mt-6">
             <thead>
               <tr>

@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import type {Conference} from "@prisma/client";
+import type {RegisterConference} from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export const POST = async (request: Request) => {
-    const body: Conference = await request.json();
+    const body: RegisterConference = await request.json();
 
-    const slug = body.name.toLowerCase().replace(/ /g, "-") + "-" + Date.now();
+    const country = body.country;
 
-    const con = await prisma.conference.create({
+    const con = await prisma.registerConference.create({
         data: {
             ...body,
-            slug
+            country
         }
     });
 
