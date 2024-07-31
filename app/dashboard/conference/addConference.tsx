@@ -20,7 +20,8 @@ const AddConference = () => {
     const [institution, setInstitution] = useState('');
     const [paper_template, setPaperTemplate] = useState('');
     const [payment_info, setPaymentInfo] = useState('');
-    const [submissionDeadline, setSubmissionDeadline] = useState('');
+    const [submission_deadlineStart, setSubmissionDeadlineStart] = useState('');
+    const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [status, setStatus] = useState('Inactive');
@@ -57,7 +58,8 @@ const AddConference = () => {
         e.preventDefault();
 
         // ISO-8601 DateTime
-        const submissionDeadlineIso = new Date(submissionDeadline).toISOString();
+        const submissionDeadlineStartIso = new Date(submission_deadlineStart).toISOString();
+        const submissionDeadlineEndIso = new Date(submission_deadlineEnd).toISOString();
         const startDateIso = new Date(startDate).toISOString();
         const endDateIso = new Date(endDate).toISOString();
 
@@ -78,7 +80,8 @@ const AddConference = () => {
             institution: institution,
             paper_template: paper_template,
             payment_info: payment_info,
-            submission_deadline: submissionDeadlineIso,
+            submission_deadlineStart: submissionDeadlineStartIso,
+            submission_deadlineEnd: submissionDeadlineEndIso,
             startDate: startDateIso,
             endDate: endDateIso,
             status: status,
@@ -98,7 +101,8 @@ const AddConference = () => {
         setInstitution('');
         setPaperTemplate('');
         setPaymentInfo('');
-        setSubmissionDeadline('');
+        setSubmissionDeadlineStart('');
+        setSubmissionDeadlineEnd('');
         setStartDate('');
         setEndDate('');
         setStatus('Inactive');
@@ -208,16 +212,6 @@ const AddConference = () => {
                             placeholder="City"
                             />
                         </div>
-                        {/* <div className="form-control w-full">
-                            <label className="label font-bold">Country</label>
-                            <input
-                            type="text"
-                            value={country}
-                            onChange={(e) => setCountry(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Country"
-                            />
-                        </div> */}
                         <div className="form-control w-full">
                             <label className="label font-bold">Country <span className="text-red-500">*</span></label>
                             <select
@@ -275,11 +269,21 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Submission Deadline <span className="text-red-500">*</span></label>
+                            <label className="label font-bold">Submission Deadline Start<span className="text-red-500">*</span></label>
                             <input
                             type="datetime-local"
-                            value={submissionDeadline}
-                            onChange={(e) => setSubmissionDeadline(e.target.value)}
+                            value={submission_deadlineStart}
+                            onChange={(e) => setSubmissionDeadlineStart(e.target.value)}
+                            className="input input-bordered bg-white"
+                            placeholder="Submission Deadline"
+                            />
+                        </div>
+                        <div className="form-control w-full">
+                            <label className="label font-bold">Submission Deadline End<span className="text-red-500">*</span></label>
+                            <input
+                            type="datetime-local"
+                            value={submission_deadlineEnd}
+                            onChange={(e) => setSubmissionDeadlineEnd(e.target.value)}
                             className="input input-bordered bg-white"
                             placeholder="Submission Deadline"
                             />
@@ -310,26 +314,6 @@ const AddConference = () => {
                                 />
                             </div>
                         </div>
-                        {/* <div className="form-control w-full">
-                            <label className="label font-bold">Start Date <span className="text-red-500">*</span></label>
-                            <input
-                            type="datetime-local"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Start Date"
-                            />
-                        </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">End Date <span className="text-red-500">*</span></label>
-                            <input
-                            type="datetime-local"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="End Date"
-                            />
-                        </div> */}
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
                             <button type="submit" className="btn btn-accent text-white">Save</button>

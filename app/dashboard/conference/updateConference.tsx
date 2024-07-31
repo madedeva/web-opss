@@ -26,7 +26,8 @@ type Conference = {
     institution: string | null;
     paper_template: string | null;
     payment_info: string | null;
-    submission_deadline: Date;
+    submission_deadlineStart: Date;
+    submission_deadlineEnd: Date;
     startDate: Date;
     endDate: Date;
     status: string;
@@ -49,7 +50,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
     const [institution, setInstitution] = useState(conference.institution || '');
     const [paper_template, setPaperTemplate] = useState(conference.paper_template || '');
     const [payment_info, setPaymentInfo] = useState(conference.payment_info || '');
-    const [submission_deadline, setSubmissionDeadline] = useState(conference.submission_deadline);
+    const [submission_deadlineStart, setSubmissionDeadlineStart] = useState(conference.submission_deadlineStart);
+    const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState(conference.submission_deadlineEnd);
     const [startDate, setStartDate] = useState(conference.startDate);
     const [endDate, setEndDate] = useState(conference.endDate);
     const [status, setStatus] = useState(conference.status);
@@ -59,7 +61,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
     const handleUpdate = async (e: SyntheticEvent) => {
 
         // ISO-8601 DateTime
-        const submissionDeadlineIso = new Date(submission_deadline).toISOString();
+        const submissionDeadlineStartIso = new Date(submission_deadlineStart).toISOString();
+        const submissionDeadlineEndIso = new Date(submission_deadlineEnd).toISOString();
         const startDateIso = new Date(startDate).toISOString();
         const endDateIso = new Date(endDate).toISOString();
 
@@ -79,7 +82,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
             institution: institution,
             paper_template: paper_template,
             payment_info: payment_info,
-            submission_deadline: submissionDeadlineIso,
+            submission_deadlineStart: submissionDeadlineStartIso,
+            submission_deadlineEnd: submissionDeadlineEndIso,
             startDate: startDateIso,
             endDate: endDateIso,
             status: status,
@@ -249,8 +253,18 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             <label className="label font-bold">Submission Deadline</label>
                             <input
                             type="datetime-local"
-                            value={submission_deadline.toString()}
-                            onChange={(e) => setSubmissionDeadline(new Date(e.target.value))}
+                            value={submission_deadlineStart.toString()}
+                            onChange={(e) => setSubmissionDeadlineStart(new Date(e.target.value))}
+                            className="input input-bordered bg-white"
+                            placeholder="Submission Deadline"
+                            />
+                        </div>
+                        <div className="form-control w-full">
+                            <label className="label font-bold">Submission Deadline</label>
+                            <input
+                            type="datetime-local"
+                            value={submission_deadlineEnd.toString()}
+                            onChange={(e) => setSubmissionDeadlineEnd(new Date(e.target.value))}
                             className="input input-bordered bg-white"
                             placeholder="Submission Deadline"
                             />
