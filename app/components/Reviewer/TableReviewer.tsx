@@ -23,7 +23,7 @@ const TableReviewer = ({conRev}:{ conRev:  Con_Reviewer[]}) => {
             <tr>
                 <th className="py-2">Reviewer Name</th>
                 <th className="py-2">Email</th>
-                <th className="py-2">Conference Name</th>
+                <th className="py-2 w-60">Conference Name</th>
                 <th className="py-2">Action</th>
             </tr>
             </thead>

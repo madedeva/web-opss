@@ -13,10 +13,11 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
     const filteredConferences = conference.filter(conference => conference.userId === user?.id);
 
     return (
-        <table className="table-auto min-w-full bg-white mt-6 text-left">
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white mt-6 text-left">
         <thead>
           <tr>
-            <th className="py-2">Conference Name</th>
+            <th className="py-2 w-60">Conference Name</th>
             <th className="py-2">Conference Date</th>
             <th className="py-2">Submission Deadline</th>
             <th className="py-2">Statistic</th>
@@ -28,7 +29,7 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
         {filteredConferences.map((conference) => (
           <tr className="text-gray-700" key={conference.id}>
             <td className="py-2">{conference.name}</td>
-            <td className="py-2">
+            <td className="py-2px-4">
               <p>Date Start</p>
               <p>{new Date(conference.startDate).toLocaleDateString()}</p>
               <p className="mt-4">Date End</p>
@@ -39,8 +40,10 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
                 <p>{new Date(conference.submission_deadline).toLocaleDateString()}</p>
             </td>
             <td className="py-2">
-              <p><a className="underline" href="#">Author Registered Authors - 10</a></p>
-              <p className="mt-4"><a className="underline" href="#">Paper Submitted Paper - 10</a></p>
+              <p>Author</p>
+              <p><a className="underline" href="#">Registered Authors - 10</a></p>
+              <p className="mt-4">Paper</p>
+              <p><a className="underline" href="#">Submitted Paper - 10</a></p>
             </td>
             <td className="py-2">
               <p className={conference.status === 'Active' ? 'text-green-500' : 'text-red-500'}>
@@ -55,6 +58,7 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
         ))}
         </tbody>
       </table>
+    </div>
     )
 };
 

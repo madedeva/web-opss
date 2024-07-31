@@ -1,8 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Head from 'next/head';
 import Header from './components/HomePage/Header';
 import Footer from './components/HomePage/Footer';
+import HeadNav from './components/HomePage/Head';
 import GetAllConference from './components/Conference/getAllConference';
 
     export default function Home () {
@@ -20,35 +20,39 @@ import GetAllConference from './components/Conference/getAllConference';
         const [showScroll, setShowScroll] = useState(false);
 
         useEffect(() => {
-            window.addEventListener('scroll', checkScrollTop);
-            return () => window.removeEventListener('scroll', checkScrollTop);
+            if (typeof window !== 'undefined') {
+              window.addEventListener('scroll', checkScrollTop);
+              return () => window.removeEventListener('scroll', checkScrollTop);
+            }
         }, []);
 
         const checkScrollTop = () => {
-            if (!showScroll && window.pageYOffset > 400) {
-                setShowScroll(true);
-            } else if (showScroll && window.pageYOffset <= 400) {
-                setShowScroll(false);
+            if (typeof window !== 'undefined' && window.pageYOffset > 400) {
+              setShowScroll(true);
+            } else {
+              setShowScroll(false);
             }
         };
 
         const scrollToTop = () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setShowScroll(false);
-        }
+            if (typeof window !== 'undefined') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setShowScroll(false);
+            }
+        };
 
         const openVideo = () => {
-            window.open('https://www.youtube.com/watch?v=J5U5of0jBog', '_blank');
-        }
+            const url = 'https://www.youtube.com/watch?v=J5U5of0jBog';
+            if (typeof window !== 'undefined' && url) {
+              window.open(url, '_blank');
+            }
+        };
 
 
     return (
         <div>
-        <Head>
-            <title>Online Paper Submission System</title>
-            <meta name="description" content="Manage Your Conference with Online Paper Submission System (OPSS)" />
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
+        
+        <HeadNav />
 
         <Header />
 
