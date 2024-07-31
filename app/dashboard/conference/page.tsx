@@ -34,10 +34,10 @@ const Conference =  async () => {
           <p className="text-sm text-gray-600">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
-          <hr className="mt-2"/>
-          <div className="mt-4">
+          <div className="mt-2">
             <AddConference />
           </div>
+          <hr className="mt-2"/>
           <TableConference conference={conference}/>
         </div>
       </div>

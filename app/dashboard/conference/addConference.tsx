@@ -1,5 +1,5 @@
 "use client";
-import { useState, SyntheticEvent} from "react";
+import { useState, SyntheticEvent, useEffect} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -24,6 +24,8 @@ const AddConference = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [status, setStatus] = useState('Inactive');
+    const [countries, setCountries] = useState<string[]>([]);
+    const [fetchError, setFetchError] = useState<string | null>(null);
 
     type User = {
         id: number;
@@ -34,6 +36,22 @@ const AddConference = () => {
 
 
     const router = useRouter();
+
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const response = await fetch('/countries.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                setCountries(data); // Ensure this is an array of strings
+            } catch (error) {
+                console.error('Error fetching countries:', error);
+                setFetchError('Failed to load countries');
+            }
+        };
+
+        fetchCountries();
+    }, []);
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -102,10 +120,11 @@ const AddConference = () => {
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
                 <div className="modal-box bg-white">
-                    <h3 className="font-bold text-lg">Add New Conference</h3>
+                    <h3 className="font-bold text-lg text-center">Add New Conference</h3>
+                    <hr className="mb-4"/>
                     <form onSubmit={handleSubmit}>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Name</label>
+                            <label className="label font-bold">Conference Name <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={name}
@@ -116,7 +135,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Acronym</label>
+                            <label className="label font-bold">Acronym <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={acronym}
@@ -126,21 +145,21 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Theme</label>
+                            <label className="label font-bold">Theme <span className="text-red-500">*</span></label>
                             <textarea 
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
                             id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Description</label>
+                            <label className="label font-bold">Description <span className="text-red-500">*</span></label>
                             <textarea 
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Topic</label>
+                            <label className="label font-bold">Topic <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={topic}
@@ -150,7 +169,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Banner</label>
+                            <label className="label font-bold">Banner <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={banner}
@@ -160,7 +179,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Venue</label>
+                            <label className="label font-bold">Conference Venue <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={venue}
@@ -170,7 +189,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Address</label>
+                            <label className="label font-bold">Address <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={address}
@@ -180,7 +199,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">City</label>
+                            <label className="label font-bold">City <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={city}
@@ -189,7 +208,7 @@ const AddConference = () => {
                             placeholder="City"
                             />
                         </div>
-                        <div className="form-control w-full">
+                        {/* <div className="form-control w-full">
                             <label className="label font-bold">Country</label>
                             <input
                             type="text"
@@ -198,9 +217,25 @@ const AddConference = () => {
                             className="input input-bordered bg-white"
                             placeholder="Country"
                             />
+                        </div> */}
+                        <div className="form-control w-full">
+                            <label className="label font-bold">Country <span className="text-red-500">*</span></label>
+                            <select
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                className="select select-bordered bg-white"
+                                required
+                            >
+                                <option value="" disabled>Select Country</option>
+                                {countries.map((country) => (
+                                    <option key={country} value={country}>
+                                        {country}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Email</label>
+                            <label className="label font-bold">Organizer Email <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={email}
@@ -210,7 +245,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Institution</label>
+                            <label className="label font-bold">Organizer Institution <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={institution}
@@ -220,7 +255,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Paper Template</label>
+                            <label className="label font-bold">Paper Template <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={paper_template}
@@ -230,7 +265,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Payment Info</label>
+                            <label className="label font-bold">Payment Information <span className="text-red-500">*</span></label>
                             <input
                             type="text"
                             value={payment_info}
@@ -240,7 +275,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Submission Deadline</label>
+                            <label className="label font-bold">Submission Deadline <span className="text-red-500">*</span></label>
                             <input
                             type="datetime-local"
                             value={submissionDeadline}
@@ -249,8 +284,34 @@ const AddConference = () => {
                             placeholder="Submission Deadline"
                             />
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Start Date</label>
+                        <div className="flex w-full gap-4">
+                            <div className="form-control w-1/2">
+                                <label className="label font-bold">
+                                    Start Date <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="datetime-local"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className="input input-bordered bg-white"
+                                    placeholder="Start Date"
+                                />
+                            </div>
+                            <div className="form-control w-1/2">
+                                <label className="label font-bold">
+                                    End Date <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="datetime-local"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="input input-bordered bg-white"
+                                    placeholder="End Date"
+                                />
+                            </div>
+                        </div>
+                        {/* <div className="form-control w-full">
+                            <label className="label font-bold">Start Date <span className="text-red-500">*</span></label>
                             <input
                             type="datetime-local"
                             value={startDate}
@@ -260,7 +321,7 @@ const AddConference = () => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">End Date</label>
+                            <label className="label font-bold">End Date <span className="text-red-500">*</span></label>
                             <input
                             type="datetime-local"
                             value={endDate}
@@ -268,7 +329,7 @@ const AddConference = () => {
                             className="input input-bordered bg-white"
                             placeholder="End Date"
                             />
-                        </div>
+                        </div> */}
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
                             <button type="submit" className="btn btn-accent text-white">Save</button>
