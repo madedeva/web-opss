@@ -34,7 +34,7 @@ model Product {
 model User {
   id                 Int                  @id @default(autoincrement())
   email              String               @unique
-  name               String?
+  name               String
   role               Role                 @relation(fields: [roleId], references: [id])
   roleId             Int
   password           String
@@ -52,31 +52,32 @@ model Role {
 }
 
 model Conference {
-  id                  Int                  @id @default(autoincrement())
-  name                String
-  slug                String               @unique
-  acronym             String
-  theme               String
-  description         String
-  topic               String
-  banner              String
-  venue               String
-  address             String
-  city                String
-  country             String
-  email               String
-  institution         String
-  paper_template      String
-  payment_info        String
-  submission_deadline DateTime
-  startDate           DateTime
-  endDate             DateTime
-  status              String
-  User                User?                @relation(fields: [userId], references: [id])
-  userId              Int
-  Con_Reviewer        Con_Reviewer[]
-  RegisterConference  RegisterConference[]
-  Submission          Submission[]
+  id                       Int                  @id @default(autoincrement())
+  name                     String
+  slug                     String               @unique
+  acronym                  String
+  theme                    String
+  description              String
+  topic                    String
+  banner                   String
+  venue                    String
+  address                  String
+  city                     String
+  country                  String
+  email                    String
+  institution              String
+  paper_template           String
+  payment_info             String
+  submission_deadlineStart DateTime
+  submission_deadlineEnd   DateTime
+  startDate                DateTime
+  endDate                  DateTime
+  status                   String
+  User                     User                 @relation(fields: [userId], references: [id])
+  userId                   Int
+  Con_Reviewer             Con_Reviewer[]
+  RegisterConference       RegisterConference[]
+  Submission               Submission[]
 }
 
 model Con_Reviewer {

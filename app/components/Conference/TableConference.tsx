@@ -49,15 +49,13 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
         {filteredConferences.map((conference) => (
           <tr className="text-gray-700 text-sm text-left" key={conference.id}>
             <td className="py-2">{conference.name}</td>
-            <td className="py-2">
-              <p>Date Start</p>
-              <p>{getFormattedDate(conference.startDate)}</p>
-              <p className="mt-4">Date End</p>
-              <p>{getFormattedDate(conference.endDate)}</p>
+            <td className="py-2 w-60">
+              <p>Conference Date</p>
+              <p>{getFormattedDate(conference.startDate)} - {getFormattedDate(conference.endDate)}</p>
             </td>
-            <td className="py-2">
+            <td className="py-2 w-60">
                 <p>Full Paper Submission</p>
-                <p>{getFormattedDate(conference.submission_deadline)}</p>
+                <p>{getFormattedDate(conference.submission_deadlineStart)} - {getFormattedDate(conference.submission_deadlineEnd)}</p>
             </td>
             <td className="py-2">
               <p>Author</p>
