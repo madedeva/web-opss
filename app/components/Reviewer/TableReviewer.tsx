@@ -29,7 +29,7 @@ const TableReviewer = ({conRev}:{ conRev:  Con_Reviewer[]}) => {
             </thead>
             <tbody>
             {filteredConRev.map((conRev) => (
-            <tr className="text-gray-700" key={conRev.id}>
+            <tr className="text-gray-700 text-sm" key={conRev.id}>
                 <td className="py-2">{conRev.userId}</td>
                 <td className="py-2">{conRev.userId}</td>
                 <td className="py-2">{conRev.conferenceId}</td>
