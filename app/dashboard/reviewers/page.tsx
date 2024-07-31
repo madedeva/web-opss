@@ -69,7 +69,7 @@ const Reviewer =  async () => {
             <thead>
               <tr>
                 <th className="py-2 text-start">Reviewer Name</th>
-                <th className="py-2 text-start">Conference Name</th>
+                <th className="py-2 text-start w-60">Conference Name</th>
                 <th className="py-2 text-start">Organizer Institution</th>
                 <th className="py-2 text-start">Organizer Email</th>
                 <th className="py-2 text-start">Action</th>
