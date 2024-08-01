@@ -88,7 +88,7 @@ const RegisterConference = ({conferences}: {conferences: Conference[]}) => {
                             <input 
                             type="text" 
                             value={institution}
-                            onChange={(e) => setCountry(e.target.value)}
+                            onChange={(e) => setInstitution(e.target.value)}
                             className="input input-bordered bg-white" required/>
                         </div>
                         <div className="form-control w-full">
