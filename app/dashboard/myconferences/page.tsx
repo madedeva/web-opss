@@ -1,8 +1,28 @@
 import DashboardLayout from "@/app/components/DashboardLayout"
 import WelcomeCard from "@/app/components/WelcomeCard";
 import RegisterConference from "./RegisterConference";
+import { PrismaClient } from "@prisma/client";
 
-const MyConferences = () => {
+
+const prisma = new PrismaClient();
+
+const getConference = async () => {
+    const res = await prisma.conference.findMany({
+      include: {
+          User: {
+              select: {
+                  name: true,
+                  email: true,
+              },
+          },
+      },
+    });
+    return res;
+};
+
+const MyConferences = async () => {
+
+  const [conference] = await Promise.all([getConference()]);
 
     return (
     <DashboardLayout>
@@ -15,7 +35,7 @@ const MyConferences = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
           <div className="mt-2">
-          <RegisterConference conferences={[]}/>
+          <RegisterConference conferences={conference}/>
           </div>
           <hr className="mt-2"/>
         </div>
