@@ -31,7 +31,6 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
             setIsOpen(false);
         } catch (error) {
             console.error('Failed to add reviewer:', error);
-            // Optionally display an error message to the user
         }
     };
 
@@ -41,7 +40,7 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
 
     return (
         <div>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-full" onClick={handleModalToggle}>
+            <button className="bg-blue-950 text-white px-4 py-2 rounded-full" onClick={handleModalToggle}>
                 + New Reviewer
             </button>
 

@@ -120,10 +120,10 @@ const AddConference = () => {
     return (
         <div>
 
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Conference</button>
+            <button className="bg-blue-950 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Conference</button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
-                <div className="modal-box bg-white">
+                <div className="modal-box bg-white w-full max-w-5xl">
                     <h3 className="font-bold text-lg text-center">Add New Conference</h3>
                     <hr className="mb-4"/>
                     <form onSubmit={handleSubmit}>
@@ -268,30 +268,32 @@ const AddConference = () => {
                             placeholder="Payment Info"
                             />
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Submission Deadline Start<span className="text-red-500">*</span></label>
-                            <input
-                            type="datetime-local"
-                            value={submission_deadlineStart}
-                            onChange={(e) => setSubmissionDeadlineStart(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Submission Deadline"
-                            />
-                        </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Submission Deadline End<span className="text-red-500">*</span></label>
-                            <input
-                            type="datetime-local"
-                            value={submission_deadlineEnd}
-                            onChange={(e) => setSubmissionDeadlineEnd(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Submission Deadline"
-                            />
+                        <div className="flex w-full gap-4">
+                            <div className="form-control w-1/2">
+                                <label className="label font-bold">Submission Start Date<span className="text-red-500">*</span></label>
+                                <input
+                                type="datetime-local"
+                                value={submission_deadlineStart}
+                                onChange={(e) => setSubmissionDeadlineStart(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Submission Deadline"
+                                />
+                            </div>
+                            <div className="form-control w-1/2">
+                                <label className="label font-bold">Submission End Date<span className="text-red-500">*</span></label>
+                                <input
+                                type="datetime-local"
+                                value={submission_deadlineEnd}
+                                onChange={(e) => setSubmissionDeadlineEnd(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Submission Deadline"
+                                />
+                            </div>
                         </div>
                         <div className="flex w-full gap-4">
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">
-                                    Start Date <span className="text-red-500">*</span>
+                                    Conference Start Date <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="datetime-local"
@@ -303,7 +305,7 @@ const AddConference = () => {
                             </div>
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">
-                                    End Date <span className="text-red-500">*</span>
+                                Conference End Date <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="datetime-local"
@@ -315,7 +317,7 @@ const AddConference = () => {
                             </div>
                         </div>
                         <div className="modal-action">
-                            <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
+                            <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
                             <button type="submit" className="btn btn-accent text-white">Save</button>
                         </div>
                     </form>

@@ -105,7 +105,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
-                <div className="modal-box bg-white">
+                <div className="modal-box bg-white w-full max-w-5xl">
                     <h3 className="font-bold text-lg">Update {conference.name}</h3>
                     <form onSubmit={handleUpdate}>
                     <div className="form-control w-full">
@@ -130,24 +130,18 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             />
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Theme</label>
-                            <input
-                            type="text"
+                            <label className="label font-bold">Theme <span className="text-red-500">*</span></label>
+                            <textarea 
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Theme"
-                            />
+                            id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Description</label>
-                            <input
-                            type="text"
+                            <label className="label font-bold">Description <span className="text-red-500">*</span></label>
+                            <textarea 
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Description"
-                            />
+                            id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
                         <div className="form-control w-full">
                             <label className="label font-bold">Topic</label>
@@ -249,45 +243,54 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="Payment Info"
                             />
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Submission Deadline</label>
-                            <input
-                            type="datetime-local"
-                            value={submission_deadlineStart.toString()}
-                            onChange={(e) => setSubmissionDeadlineStart(new Date(e.target.value))}
-                            className="input input-bordered bg-white"
-                            placeholder="Submission Deadline"
-                            />
+
+                        <div className="flex w-full gap-4">
+                            <div className="form-control w-1/2">
+                                <label className="label font-bold">Submission Start Date<span className="text-red-500">*</span></label>
+                                <input
+                                type="datetime-local"
+                                value={submission_deadlineStart.toString()}
+                                onChange={(e) => setSubmissionDeadlineStart(new Date(e.target.value))}
+                                className="input input-bordered bg-white"
+                                placeholder="Submission Deadline"
+                                />
+                            </div>
+                            <div className="form-control w-1/2">
+                                <label className="label font-bold">Submission End Date<span className="text-red-500">*</span></label>
+                                <input
+                                type="datetime-local"
+                                value={submission_deadlineEnd.toString()}
+                                onChange={(e) => setSubmissionDeadlineEnd(new Date(e.target.value))}
+                                className="input input-bordered bg-white"
+                                placeholder="Submission Deadline"
+                                />
+                            </div>
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Submission Deadline</label>
-                            <input
-                            type="datetime-local"
-                            value={submission_deadlineEnd.toString()}
-                            onChange={(e) => setSubmissionDeadlineEnd(new Date(e.target.value))}
-                            className="input input-bordered bg-white"
-                            placeholder="Submission Deadline"
-                            />
-                        </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Start Date</label>
-                            <input
-                            type="datetime-local"
-                            value={startDate.toString()}
-                            onChange={(e) => setStartDate(new Date(e.target.value))}
-                            className="input input-bordered bg-white"
-                            placeholder="Start Date"
-                            />
-                        </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">End Date</label>
-                            <input
-                            type="datetime-local"
-                            value={endDate.toString()}
-                            onChange={(e) => setEndDate(new Date(e.target.value))}
-                            className="input input-bordered bg-white"
-                            placeholder="End Date"
-                            />
+                        <div className="flex w-full gap-4">
+                            <div className="form-control w-1/2">
+                                <label className="label font-bold">
+                                    Conference Start Date <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="datetime-local"
+                                    value={startDate.toString()}
+                                    onChange={(e) => setStartDate(new Date(e.target.value))}
+                                    className="input input-bordered bg-white"
+                                    placeholder="Start Date"
+                                />
+                            </div>
+                            <div className="form-control w-1/2">
+                                <label className="label font-bold">
+                                Conference End Date <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="datetime-local"
+                                    value={endDate.toString()}
+                                    onChange={(e) => setEndDate(new Date(e.target.value))}
+                                    className="input input-bordered bg-white"
+                                    placeholder="End Date"
+                                />
+                            </div>
                         </div>
                         <div className="form-control w-full">
                             <label className="label font-bold">Status</label>
@@ -302,7 +305,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             </select>
                         </div>
                         <div className="modal-action">
-                            <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
+                            <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
                             <button type="submit" className="btn btn-accent text-white">Update</button>
                         </div>
                     </form>

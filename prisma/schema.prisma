@@ -95,6 +95,7 @@ model RegisterConference {
   conferenceId Int
   user         User         @relation(fields: [userId], references: [id])
   userId       Int
+  institution  String
   country      String
   city         String
   status       String
