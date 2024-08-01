@@ -80,6 +80,9 @@ const SignIn = () => {
           <p className="mt-4 text-center text-sm text-gray-600">
             Don`t have an account? <a href="/signup" className="text-orange-500 hover:underline">Sign Up</a>
           </p>
+          <p className="mt-4 text-center text-sm text-gray-600">
+            Forgot your password? <a href="/forgot-password" className="text-orange-500 hover:underline">Reset Password</a>
+          </p>
         </div>
       </div>
     </div>
