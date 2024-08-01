@@ -4,7 +4,6 @@ import UpdateConference from "@/app/dashboard/conference/updateConference";
 import { Conference, PrismaClient, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
-
 const getOrdinalSuffix = (day: number) => {
   if (day > 3 && day < 21) return 'th';
   switch (day % 10) {
