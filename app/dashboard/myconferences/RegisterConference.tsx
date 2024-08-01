@@ -10,7 +10,7 @@ const RegisterConference = ({conferences}: {conferences: Conference[]}) => {
     const user = session?.user as User;
 
     const filterConferences = conferences.filter(conference => 
-        conference.status === "Active"
+    (conference.status === "Active")
     );
 
     const [selectedConferenceId, setSelectedConferenceId] = useState('');
