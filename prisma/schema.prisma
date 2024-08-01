@@ -43,6 +43,18 @@ model User {
   RegisterConference RegisterConference[]
   Submission         Submission[]
   ReviewPaper        ReviewPaper[]
+  PasswordResetToken PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "userId_index")
 }
 
 model Role {
