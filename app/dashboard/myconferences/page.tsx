@@ -2,27 +2,41 @@ import DashboardLayout from "@/app/components/DashboardLayout"
 import WelcomeCard from "@/app/components/WelcomeCard";
 import RegisterConference from "./RegisterConference";
 import { PrismaClient } from "@prisma/client";
+import TableMyConference from "@/app/components/MyConference/TableMyConference";
+import Conference from "../conference/page";
 
 
 const prisma = new PrismaClient();
 
-const getConference = async () => {
-    const res = await prisma.conference.findMany({
+const getRegisterConference = async () => {
+  try {
+    const res = await prisma.registerConference.findMany({
       include: {
-          User: {
-              select: {
-                  name: true,
-                  email: true,
-              },
+        user: {
+          select: {
+            name: true,
+            email: true,
           },
+        },
+        conference: true, // This line ensures the conference data is fetched
       },
     });
     return res;
+  } catch (error) {
+    console.error("Error fetching registered conferences:", error);
+    return [];
+  }
 };
+
+
+const getConference = async () => {
+  const res = await prisma.conference.findMany();
+  return res;
+}
 
 const MyConferences = async () => {
 
-  const [conference] = await Promise.all([getConference()]);
+  const [reg_conference, conference] = await Promise.all([getRegisterConference(), getConference()]);
 
     return (
     <DashboardLayout>
@@ -38,6 +52,7 @@ const MyConferences = async () => {
           <RegisterConference conferences={conference}/>
           </div>
           <hr className="mt-2"/>
+          <TableMyConference reg_conference={reg_conference} />
         </div>
       </div>
     </DashboardLayout>
