@@ -1,5 +1,5 @@
 "use client";
-import { useState, SyntheticEvent, useEffect} from "react";
+import { useState, SyntheticEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -10,7 +10,7 @@ const AddConference = () => {
     const [acronym, setAcronym] = useState('');
     const [theme, setTheme] = useState('');
     const [description, setDescription] = useState('');
-    const [topic, setTopic] = useState('');
+    const [topic, setTopics] = useState<string[]>(['']);
     const [banner, setBanner] = useState('');
     const [venue, setVenue] = useState('');
     const [address, setAddress] = useState('');
@@ -35,7 +35,6 @@ const AddConference = () => {
         roleId: number;
     }
 
-
     const router = useRouter();
 
     useEffect(() => {
@@ -44,7 +43,7 @@ const AddConference = () => {
                 const response = await fetch('/countries.json');
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
-                setCountries(data); // Ensure this is an array of strings
+                setCountries(data);
             } catch (error) {
                 console.error('Error fetching countries:', error);
                 setFetchError('Failed to load countries');
@@ -54,10 +53,21 @@ const AddConference = () => {
         fetchCountries();
     }, []);
 
+    const handleTopicChange = (index: number, value: string) => {
+        const newTopics = [...topic];
+        newTopics[index] = value;
+        setTopics(newTopics);
+    }
+
+    const addTopicField = () => {
+        setTopics([...topic, '']);
+    }
+
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        // ISO-8601 DateTime
+        const concatenatedTopics = topic.join(', ');
+
         const submissionDeadlineStartIso = new Date(submission_deadlineStart).toISOString();
         const submissionDeadlineEndIso = new Date(submission_deadlineEnd).toISOString();
         const startDateIso = new Date(startDate).toISOString();
@@ -66,32 +76,32 @@ const AddConference = () => {
         const user = session?.user as User;
 
         await axios.post('/api/conferences', {
-            name: name,
-            acronym: acronym,
-            theme: theme,
-            description: description,
-            topic: topic,
-            banner: banner,
-            venue: venue,
-            address: address,
-            city: city,
-            country: country,
-            email: email,
-            institution: institution,
-            paper_template: paper_template,
-            payment_info: payment_info,
+            name,
+            acronym,
+            theme,
+            description,
+            topic: concatenatedTopics,
+            banner,
+            venue,
+            address,
+            city,
+            country,
+            email,
+            institution,
+            paper_template,
+            payment_info,
             submission_deadlineStart: submissionDeadlineStartIso,
             submission_deadlineEnd: submissionDeadlineEndIso,
             startDate: startDateIso,
             endDate: endDateIso,
-            status: status,
+            status,
             userId: user.id
         });
         setName('');
         setAcronym('');
         setTheme('');
         setDescription('');
-        setTopic('');
+        setTopics(['']);
         setBanner('');
         setVenue('');
         setAddress('');
@@ -119,7 +129,6 @@ const AddConference = () => {
 
     return (
         <div>
-
             <button className="bg-blue-950 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Conference</button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
@@ -130,89 +139,97 @@ const AddConference = () => {
                         <div className="form-control w-full">
                             <label className="label font-bold">Conference Name <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Name"
-                            required
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Add conference name.."
+                                required
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Acronym <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={acronym}
-                            onChange={(e) => setAcronym(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Acronym"
+                                type="text"
+                                value={acronym}
+                                onChange={(e) => setAcronym(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Add acronym here.."
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Theme <span className="text-red-500">*</span></label>
                             <textarea 
-                            value={theme}
-                            onChange={(e) => setTheme(e.target.value)}
-                            id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
+                                value={theme}
+                                onChange={(e) => setTheme(e.target.value)}
+                                id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your theme here..."></textarea>
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Description <span className="text-red-500">*</span></label>
                             <textarea 
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your description here..."></textarea>
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Topic <span className="text-red-500">*</span></label>
+                        <div className="w-full gap-4 mt-6">
+                            {topic.map((topic, index) => (
+                                <div className="form-control w-full mt-2" key={index}>
+                                    <label className="label font-bold">Topic <span className="text-red-500">*</span></label>
+                                    <input
+                                        type="text"
+                                        value={topic}
+                                        onChange={(e) => handleTopicChange(index, e.target.value)}
+                                        className="input input-bordered bg-white"
+                                        placeholder='Add topic here..'
+                                        required
+                                    />
+                                </div>
+                            ))}
+                            <div className="mt-2">
+                                <button type="button" className="btn btn-accent text-white mt-2" onClick={addTopicField}>Add new topic</button>
+                            </div>
+                        </div>
+                        <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Banner Image<span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={topic}
-                            onChange={(e) => setTopic(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Topic"
+                                type="text"
+                                value={banner}
+                                onChange={(e) => setBanner(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Upload banner image.."
                             />
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Banner <span className="text-red-500">*</span></label>
-                            <input
-                            type="text"
-                            value={banner}
-                            onChange={(e) => setBanner(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Banner"
-                            />
-                        </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Conference Venue <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={venue}
-                            onChange={(e) => setVenue(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Venue"
+                                type="text"
+                                value={venue}
+                                onChange={(e) => setVenue(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Add conference venue.."
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Address <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Address"
+                                type="text"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Add your conference address.."
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">City <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="City"
+                                type="text"
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Add conference city.."
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Country <span className="text-red-500">*</span></label>
                             <select
                                 value={country}
@@ -228,69 +245,69 @@ const AddConference = () => {
                                 ))}
                             </select>
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Organizer Email <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Add organizer email.."
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Organizer Institution <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={institution}
-                            onChange={(e) => setInstitution(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Institution"
+                                type="text"
+                                value={institution}
+                                onChange={(e) => setInstitution(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Add organizer institution.."
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Paper Template <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={paper_template}
-                            onChange={(e) => setPaperTemplate(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Paper Template"
+                                type="text"
+                                value={paper_template}
+                                onChange={(e) => setPaperTemplate(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Upload paper template.."
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Payment Information <span className="text-red-500">*</span></label>
                             <input
-                            type="text"
-                            value={payment_info}
-                            onChange={(e) => setPaymentInfo(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Payment Info"
+                                type="text"
+                                value={payment_info}
+                                onChange={(e) => setPaymentInfo(e.target.value)}
+                                className="input input-bordered bg-white"
+                                placeholder="Write payment information.."
                             />
                         </div>
-                        <div className="flex w-full gap-4">
+                        <div className="flex w-full gap-4 mt-6">
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">Submission Start Date<span className="text-red-500">*</span></label>
                                 <input
-                                type="datetime-local"
-                                value={submission_deadlineStart}
-                                onChange={(e) => setSubmissionDeadlineStart(e.target.value)}
-                                className="input input-bordered bg-white"
-                                placeholder="Submission Deadline"
+                                    type="datetime-local"
+                                    value={submission_deadlineStart}
+                                    onChange={(e) => setSubmissionDeadlineStart(e.target.value)}
+                                    className="input input-bordered bg-white"
+                                    placeholder="Submission Deadline"
                                 />
                             </div>
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">Submission End Date<span className="text-red-500">*</span></label>
                                 <input
-                                type="datetime-local"
-                                value={submission_deadlineEnd}
-                                onChange={(e) => setSubmissionDeadlineEnd(e.target.value)}
-                                className="input input-bordered bg-white"
-                                placeholder="Submission Deadline"
+                                    type="datetime-local"
+                                    value={submission_deadlineEnd}
+                                    onChange={(e) => setSubmissionDeadlineEnd(e.target.value)}
+                                    className="input input-bordered bg-white"
+                                    placeholder="Submission Deadline"
                                 />
                             </div>
                         </div>
-                        <div className="flex w-full gap-4">
+                        <div className="flex w-full gap-4 mt-6">
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">
                                     Conference Start Date <span className="text-red-500">*</span>
@@ -318,7 +335,7 @@ const AddConference = () => {
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
-                            <button type="submit" className="btn btn-accent text-white">Save</button>
+                            <button type="submit" className="btn btn-accent text-white">Add Conference</button>
                         </div>
                     </form>
                 </div>
