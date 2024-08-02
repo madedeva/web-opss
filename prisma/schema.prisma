@@ -120,25 +120,6 @@ model RegisterConference {
   updatedAt    DateTime      @updatedAt
 }
 
-// will deleted models
-// model Submission {
-//   id                   Int                @id @default(autoincrement())
-//   registerconference   RegisterConference @relation(fields: [registerconferenceId], references: [id])
-//   registerconferenceId Int
-//   user                 User               @relation(fields: [userId], references: [id])
-//   userId               Int
-//   title                String
-//   abstract             String
-//   keywords             String
-//   paper                String
-//   status               String
-//   createdAt            DateTime           @default(now())
-//   updatedAt            DateTime           @updatedAt
-//   Conference           Conference         @relation(fields: [conferenceId], references: [id])
-//   conferenceId         Int
-//   ReviewPaper          ReviewPaper[]
-// }
-
 // model ReviewPaper {
 //   id           Int        @id @default(autoincrement())
 //   submission   Submission @relation(fields: [submissionId], references: [id])
