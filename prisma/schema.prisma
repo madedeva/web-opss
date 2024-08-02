@@ -100,7 +100,6 @@ model Con_Reviewer {
   userId       Int
 }
 
-// additional model
 model RegisterConference {
   id           Int          @id @default(autoincrement())
   conference   Conference   @relation(fields: [conferenceId], references: [id])
@@ -116,6 +115,7 @@ model RegisterConference {
   Submission   Submission[]
 }
 
+// will deleted models
 model Submission {
   id                   Int                @id @default(autoincrement())
   registerconference   RegisterConference @relation(fields: [registerconferenceId], references: [id])
