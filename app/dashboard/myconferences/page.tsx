@@ -17,7 +17,7 @@ const getRegisterConference = async () => {
             email: true,
           },
         },
-       conference: {
+        conference: {
           include: {
             User: {
               select:{
