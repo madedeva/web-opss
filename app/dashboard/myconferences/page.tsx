@@ -18,12 +18,7 @@ const getRegisterConference = async () => {
             email: true,
           },
         },
-        conference: {
-          select: {
-            name: true,
-            description: true,
-          },
-        },
+      conference: true,
       },
     });
     return res;

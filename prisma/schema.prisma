@@ -41,8 +41,6 @@ model User {
   conId              Conference[]
   Con_Reviewer       Con_Reviewer[]
   RegisterConference RegisterConference[]
-  Submission         Submission[]
-  ReviewPaper        ReviewPaper[]
   PasswordResetToken PasswordResetToken[]
 }
 
@@ -89,58 +87,46 @@ model Conference {
   userId                   Int
   Con_Reviewer             Con_Reviewer[]
   RegisterConference       RegisterConference[]
-  Submission               Submission[]
 }
 
 model Con_Reviewer {
-  id           Int        @id @default(autoincrement())
-  conference   Conference @relation(fields: [conferenceId], references: [id])
-  conferenceId Int
-  user         User       @relation(fields: [userId], references: [id])
-  userId       Int
+  id                 Int                  @id @default(autoincrement())
+  conference         Conference           @relation(fields: [conferenceId], references: [id])
+  conferenceId       Int
+  user               User                 @relation(fields: [userId], references: [id])
+  userId             Int
+  RegisterConference RegisterConference[]
 }
 
 model RegisterConference {
-  id           Int          @id @default(autoincrement())
-  conference   Conference   @relation(fields: [conferenceId], references: [id])
+  id           Int           @id @default(autoincrement())
+  conference   Conference    @relation(fields: [conferenceId], references: [id])
   conferenceId Int
-  user         User         @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id])
   userId       Int
+  con_reviewer Con_Reviewer? @relation(fields: [conrevId], references: [id])
+  conrevId     Int?
+  paper_title  String?
+  topic        String?
+  abstract     String?
+  keywords     String?
+  paper        String?
+  comments     String?
   institution  String
   country      String
   city         String
   status       String
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  Submission   Submission[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
-// will deleted models
-model Submission {
-  id                   Int                @id @default(autoincrement())
-  registerconference   RegisterConference @relation(fields: [registerconferenceId], references: [id])
-  registerconferenceId Int
-  user                 User               @relation(fields: [userId], references: [id])
-  userId               Int
-  title                String
-  abstract             String
-  keywords             String
-  paper                String
-  status               String
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-  Conference           Conference         @relation(fields: [conferenceId], references: [id])
-  conferenceId         Int
-  ReviewPaper          ReviewPaper[]
-}
-
-model ReviewPaper {
-  id           Int        @id @default(autoincrement())
-  submission   Submission @relation(fields: [submissionId], references: [id])
-  submissionId Int
-  reviewer     User       @relation(fields: [reviewerId], references: [id])
-  reviewerId   Int
-  comment      String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-}
+// model ReviewPaper {
+//   id           Int        @id @default(autoincrement())
+//   submission   Submission @relation(fields: [submissionId], references: [id])
+//   submissionId Int
+//   reviewer     User       @relation(fields: [reviewerId], references: [id])
+//   reviewerId   Int
+//   comment      String
+//   createdAt    DateTime   @default(now())
+//   updatedAt    DateTime   @updatedAt
+// }
