@@ -4,7 +4,25 @@ import UpdateConference from "@/app/dashboard/conference/updateConference";
 import { RegisterConference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
-const TableMyConference = ({ reg_conference }: { reg_conference: RegisterConference[] }) => {
+type UserCon = {
+  country: string,
+  userId: number,
+  id: number,
+  user: {
+      name: string,
+      email: string,
+  },
+  conference: {
+    id: number,
+    name: string,
+      User: {
+          name: string,
+          email: string,
+      };
+  }
+}
+
+const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) => {
     const { data: session } = useSession();
     const user = session?.user as User;
 
@@ -22,11 +40,11 @@ const TableMyConference = ({ reg_conference }: { reg_conference: RegisterConfere
           </tr>
         </thead>
         <tbody>
-          {filteredRegConferences.map((reg_con, index) => (
-            <tr className="text-gray-700 text-sm text-left" key={reg_con.id}>
-              <td className="py-2">{reg_con.conferenceId}</td>
-              <td className="py-2">{reg_con.userId}</td>
-              <td className="py-2">{reg_con.country}</td>
+          {filteredRegConferences.map((reg_conference) => (
+            <tr className="text-gray-700 text-sm text-left" key={reg_conference.id}>
+              <td className="py-2">{reg_conference.conference.name}</td>
+              <td className="py-2">{reg_conference.user.name}</td>
+              <td className="py-2">{reg_conference.country}</td>
               <td className="py-2">
                 {/* <UpdateConference reg_con={reg_con} />
                 <DeleteConference reg_con={reg_con} /> */}

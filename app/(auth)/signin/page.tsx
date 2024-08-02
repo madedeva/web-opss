@@ -12,7 +12,7 @@ const SignIn = () => {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): any => {
     const { name, value } = e.target;
     setForm({
       ...form,
@@ -30,7 +30,7 @@ const SignIn = () => {
     if (result?.error) {
       setError(result.error);
     } else {
-      router.push('/');
+      router.push('/dashboard');
     }
   };
 
