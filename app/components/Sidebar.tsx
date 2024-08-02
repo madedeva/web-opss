@@ -16,7 +16,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
   // const userRole = session.user.roleId;
   
   return (
-    <div className={`w-64 h-full shadow-md bg-blue-950 px-1 absolute transition-transform ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
+    <div className={`w-64 h-full bg-blue-950 0 px-1 absolute transition-transform ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between h-12 px-10 py-10 border-b">
             <a href="/"><img src="/logo/opss-logo.png" alt="OPSS Logo" className="w-36"/></a>
         </div>
