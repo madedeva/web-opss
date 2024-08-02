@@ -29,7 +29,6 @@ export const DELETE = async (request: Request, {params}: {params: {id: string}})
     return NextResponse.json(con, {status: 200});
 }
 
-// show conference
 export const GET = async (request: Request, {params}: {params: {id: string}}) => {
     const con = await prisma.conference.findUnique({
         where: {

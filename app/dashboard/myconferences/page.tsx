@@ -18,7 +18,7 @@ const getRegisterConference = async () => {
             email: true,
           },
         },
-        conference: true, // This line ensures the conference data is fetched
+        conference: true,
       },
     });
     return res;
