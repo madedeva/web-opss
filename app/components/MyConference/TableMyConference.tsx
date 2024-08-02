@@ -34,13 +34,13 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
         <thead>
           <tr className="text-sm">
             <th className="py-2 w-60">Conference Name</th>
-            <th className="py-2 w-60">User ID</th>
-            <th className="py-2 w-60">Country</th>
+            <th className="py-2">Conference Date</th>
+            <th className="py-2">Submission Deadline</th>
             <th className="py-2 w-60">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filteredRegConferences.map((reg_conference) => (
+        {filteredRegConferences.map((reg_conference) => (
             <tr className="text-gray-700 text-sm text-left" key={reg_conference.id}>
               <td className="py-2">{reg_conference.conference.name}</td>
               <td className="py-2">{reg_conference.user.name}</td>
