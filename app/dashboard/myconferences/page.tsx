@@ -3,7 +3,6 @@ import WelcomeCard from "@/app/components/WelcomeCard";
 import RegisterConference from "./RegisterConference";
 import { PrismaClient } from "@prisma/client";
 import TableMyConference from "@/app/components/MyConference/TableMyConference";
-import Conference from "../conference/page";
 
 
 const prisma = new PrismaClient();
@@ -18,7 +17,16 @@ const getRegisterConference = async () => {
             email: true,
           },
         },
-        conference: true,
+        conference: {
+          include: {
+            User: {
+              select:{
+                name: true,
+                email:true,
+              }
+            }
+          }
+        },
       },
     });
     return res;
