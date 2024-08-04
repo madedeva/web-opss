@@ -1,17 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { resetPassword } from '@/lib/user';
 
-const handleMethodNotAllowed = (res: NextApiResponse) => {
-  res.status(405).json({
-    error: 'Method Not Allowed',
-    message: 'Only POST requests are allowed for this route',
-    allowedMethods: ['POST'],
-  });
-};
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    return handleMethodNotAllowed(res);
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
   const { token, newPassword } = req.body;
