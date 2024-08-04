@@ -3,6 +3,7 @@ import { useState, SyntheticEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useRef } from "react";
 
 const AddConference = () => {
     const { data: session } = useSession();
@@ -11,14 +12,16 @@ const AddConference = () => {
     const [theme, setTheme] = useState('');
     const [description, setDescription] = useState('');
     const [topic, setTopics] = useState<string[]>(['']);
-    const [banner, setBanner] = useState('');
+    const [banner, setBanner] = useState<any>();
+    const fileInput = useRef<HTMLInputElement>(null);
+    const fileInput2 = useRef<HTMLInputElement>(null);
     const [venue, setVenue] = useState('');
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [country, setCountry] = useState('');
     const [email, setEmail] = useState('');
     const [institution, setInstitution] = useState('');
-    const [paper_template, setPaperTemplate] = useState('');
+    const [paper_template, setPaperTemplate] = useState<any>();
     const [payment_info, setPaymentInfo] = useState('');
     const [submission_deadlineStart, setSubmissionDeadlineStart] = useState('');
     const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState('');
@@ -65,51 +68,51 @@ const AddConference = () => {
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
-
-        const concatenatedTopics = topic.join(', ');
-
-        const submissionDeadlineStartIso = new Date(submission_deadlineStart).toISOString();
-        const submissionDeadlineEndIso = new Date(submission_deadlineEnd).toISOString();
-        const startDateIso = new Date(startDate).toISOString();
-        const endDateIso = new Date(endDate).toISOString();
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('acronym', acronym);
+        formData.append('theme', theme);
+        formData.append('description', description);
+        formData.append('topics', topic.join(', '));
+        // formData.append('banner', banner);
+        formData.append("banner", fileInput?.current?.files?.[0]!);
+        formData.append('venue', venue);
+        formData.append('address', address);
+        formData.append('city', city);
+        formData.append('country', country);
+        formData.append('email', email);
+        formData.append('institution', institution);
+        // formData.append('paper_template', paper_template);
+        formData.append("paper_template", fileInput2?.current?.files?.[0]!);
+        formData.append('payment_info', payment_info);
+        formData.append('submission_deadlineStart', new Date(submission_deadlineStart).toISOString());
+        formData.append('submission_deadlineEnd', new Date(submission_deadlineEnd).toISOString());
+        formData.append('startDate', new Date(startDate).toISOString());
+        formData.append('endDate', new Date(endDate).toISOString());
+        formData.append('status', status);
 
         const user = session?.user as User;
+        formData.append('userId', user.id.toString());
 
-        await axios.post('/api/conferences', {
-            name,
-            acronym,
-            theme,
-            description,
-            topic: concatenatedTopics,
-            banner,
-            venue,
-            address,
-            city,
-            country,
-            email,
-            institution,
-            paper_template,
-            payment_info,
-            submission_deadlineStart: submissionDeadlineStartIso,
-            submission_deadlineEnd: submissionDeadlineEndIso,
-            startDate: startDateIso,
-            endDate: endDateIso,
-            status,
-            userId: user.id
+        await axios.post('/api/conferences', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         });
+
         setName('');
         setAcronym('');
         setTheme('');
         setDescription('');
         setTopics(['']);
-        setBanner('');
+        setBanner(null);
         setVenue('');
         setAddress('');
         setCity('');
         setCountry('');
         setEmail('');
         setInstitution('');
-        setPaperTemplate('');
+        setPaperTemplate(null);
         setPaymentInfo('');
         setSubmissionDeadlineStart('');
         setSubmissionDeadlineEnd('');
@@ -135,7 +138,7 @@ const AddConference = () => {
                 <div className="modal-box bg-white w-full max-w-5xl">
                     <h3 className="font-bold text-lg text-center">Add New Conference</h3>
                     <hr className="mb-4"/>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} encType="multipart/data">
                         <div className="form-control w-full">
                             <label className="label font-bold">Conference Name <span className="text-red-500">*</span></label>
                             <input
@@ -192,7 +195,8 @@ const AddConference = () => {
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Banner Image<span className="text-red-500">*</span></label>
                             <input
-                                type="text"
+                                type="file"
+                                ref={fileInput}
                                 value={banner}
                                 onChange={(e) => setBanner(e.target.value)}
                                 className="input input-bordered bg-white"
@@ -268,7 +272,8 @@ const AddConference = () => {
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Paper Template <span className="text-red-500">*</span></label>
                             <input
-                                type="text"
+                                type="file"
+                                ref={fileInput2}
                                 value={paper_template}
                                 onChange={(e) => setPaperTemplate(e.target.value)}
                                 className="input input-bordered bg-white"
