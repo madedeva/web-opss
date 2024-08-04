@@ -67,7 +67,16 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
             <tr className="text-gray-700 text-sm text-left" key={reg_conference.id}>
               <td className="py-2">{reg_conference.conference.name}</td>
               <td className="py-2">{getFormattedDate(reg_conference.conference.submission_deadlineStart)} - {getFormattedDate(reg_conference.conference.submission_deadlineEnd)}</td>
-              <td className="py-2">{reg_conference.conference.paper_template}</td>
+              <td className="py-2">
+                <a
+                  href={`/api/templates/${reg_conference.conference.paper_template}`}
+                  download
+                  className="text-blue-600 underline"
+                >
+                  Download Template
+                </a>
+              </td>
+              {/* <td className="py-2">{reg_conference.conference.paper_template}</td> */}
               <td className="py-2">
                 {/* <UpdateConference reg_con={reg_con} />
                 <DeleteConference reg_con={reg_con} /> */}

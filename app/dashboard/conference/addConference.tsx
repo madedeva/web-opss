@@ -192,7 +192,34 @@ const AddConference = () => {
                                 <button type="button" className="btn btn-accent text-white mt-2" onClick={addTopicField}>Add new topic</button>
                             </div>
                         </div>
-                        <div className="form-control w-full mt-6">
+
+                        <div className="w-full mt-6">
+                            <p className="font-bold">Upload Banner Image</p>
+                            <label
+                                className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2">
+                                <span className="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <span className="font-medium text-gray-600">
+                                        Drop files to Attach, or
+                                        <span className="text-blue-600 underline">browse</span>
+                                    </span>
+                                </span>
+                                <input 
+                                type="file"
+                                ref={fileInput}
+                                value={banner}
+                                onChange={(e) => setBanner(e.target.value)}
+                                name="file_upload"
+                                className="hidden" 
+                                />
+                            </label>
+                        </div>
+
+                        {/* <div className="form-control w-full mt-6">
                             <label className="label font-bold">Banner Image<span className="text-red-500">*</span></label>
                             <input
                                 type="file"
@@ -202,7 +229,7 @@ const AddConference = () => {
                                 className="input input-bordered bg-white"
                                 placeholder="Upload banner image.."
                             />
-                        </div>
+                        </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Conference Venue <span className="text-red-500">*</span></label>
                             <input
@@ -269,7 +296,34 @@ const AddConference = () => {
                                 placeholder="Add organizer institution.."
                             />
                         </div>
-                        <div className="form-control w-full mt-6">
+
+                        <div className="w-full mt-6">
+                            <p className="font-bold">Upload Paper Template</p>
+                            <label
+                                className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2">
+                                <span className="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <span className="font-medium text-gray-600">
+                                        Drop files to Attach, or
+                                        <span className="text-blue-600 underline">browse</span>
+                                    </span>
+                                </span>
+                                <input 
+                                type="file"
+                                ref={fileInput2}
+                                value={paper_template}
+                                onChange={(e) => setPaperTemplate(e.target.value)}
+                                name="file_upload"
+                                className="hidden" 
+                                />
+                            </label>
+                        </div>
+
+                        {/* <div className="form-control w-full mt-6">
                             <label className="label font-bold">Paper Template <span className="text-red-500">*</span></label>
                             <input
                                 type="file"
@@ -279,7 +333,7 @@ const AddConference = () => {
                                 className="input input-bordered bg-white"
                                 placeholder="Upload paper template.."
                             />
-                        </div>
+                        </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Payment Information <span className="text-red-500">*</span></label>
                             <input

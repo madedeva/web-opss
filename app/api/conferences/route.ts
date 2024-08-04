@@ -53,7 +53,7 @@ export const POST = async (req: Request) => {
                 topic: formData.get("topic")?.valueOf().toString() ?? '',
                 venue: formData.get("venue")?.valueOf().toString() ?? '',
                 userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
-                status: 'inactive',
+                status: 'Inactive',
                 slug
             }
         });
