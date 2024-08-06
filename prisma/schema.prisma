@@ -106,11 +106,11 @@ model RegisterConference {
   userId       Int
   con_reviewer Con_Reviewer? @relation(fields: [conrevId], references: [id])
   conrevId     Int?
-  paper_title  String?
-  topic        String?
-  abstract     String?
-  keywords     String?
-  paper        String?
+  paper_title  String
+  topic        String
+  abstract     String
+  keywords     String
+  paper        String
   comments     String?
   institution  String
   country      String

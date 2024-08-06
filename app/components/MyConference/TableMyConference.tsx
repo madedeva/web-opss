@@ -71,7 +71,7 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                 <a
                   href={`/api/templates/${reg_conference.conference.paper_template}`}
                   download
-                  className="text-blue-600 underline"
+                  className="text-blue-950 underline"
                 >
                   Download Template
                 </a>

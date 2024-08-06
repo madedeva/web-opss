@@ -9,7 +9,7 @@ const DeleteConRev = ({conRev}: {conRev: Con_Reviewer}) => {
     const router = useRouter();
 
     const handleDelete = async (conRevId: number) => {
-        await axios.delete(`/api/review/${conRevId}`);
+        await axios.delete(`/api/reviewer/${conRevId}`);
         router.refresh();
         setIsOpen(false);
     }
