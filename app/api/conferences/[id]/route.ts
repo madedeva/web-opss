@@ -6,30 +6,37 @@ import formidable from 'formidable';
 import fs from "node:fs/promises";
 import path from 'path';
 
+export const config = {
+    api: {
+      bodyParser: false,
+    },
+};
+
 const prisma = new PrismaClient();
 
 const generateSlug = (name: string): string => {
     return name.toLowerCase().replace(/ /g, "-") + "-" + Date.now();
   }  
 
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };
 
-  export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
+export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
     try {
         const formData = await req.formData();
     
         const paper_template = formData.get("paper_template") as File;
         const banner = formData.get("banner") as File;
-        const arrayBufferPT = await paper_template.arrayBuffer();
-        const arrayBufferBN = await banner.arrayBuffer();
-        const bufferPT = new Uint8Array(arrayBufferPT);
-        const bufferBN = new Uint8Array(arrayBufferBN);
-        await fs.writeFile(`./public/uploads/paper_template/${paper_template.name}`, bufferPT);
-        await fs.writeFile(`./public/uploads/banner/${banner.name}`, bufferBN);
+
+        if (paper_template){
+            const arrayBufferPT = await paper_template.arrayBuffer();
+            const bufferPT = new Uint8Array(arrayBufferPT);
+            await fs.writeFile(`./public/uploads/paper_template/${paper_template.name}`, bufferPT);
+        }
+
+        if (banner){
+            const arrayBufferBN = await banner.arrayBuffer();
+            const bufferBN = new Uint8Array(arrayBufferBN);
+            await fs.writeFile(`./public/uploads/banner/${banner.name}`, bufferBN);
+        }
     
         const name = formData.get("name")?.valueOf().toString();
         const slug = name ? generateSlug(name) : '';
@@ -57,7 +64,6 @@ export const config = {
                 theme: formData.get("theme")?.valueOf().toString() ?? '',
                 topic: formData.get("topic")?.valueOf().toString() ?? '',
                 venue: formData.get("venue")?.valueOf().toString() ?? '',
-                userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
                 status: 'Inactive',
                 slug: slug
             }
