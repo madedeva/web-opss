@@ -9,7 +9,7 @@ const HeadNav: React.FC = () => {
     <Head>
         <title>Online Paper Submission System</title>
         <meta name="description" content="Manage Your Conference with Online Paper Submission System (OPSS)" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo/favicon.png" type="image/png" />
     </Head>
   );
 };

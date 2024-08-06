@@ -58,14 +58,50 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
             </td>
             <td className="py-2">
               <p>Author</p>
-              <p><a className="underline" href="#">Registered Authors - 10</a></p>
+              <p><a className="underline text-blue-950" href="#">Registered Authors - 10</a></p>
               <p className="mt-4">Paper</p>
-              <p><a className="underline" href="#">Submitted Paper - 10</a></p>
+              <p><a className="underline text-blue-950" href="#">Submitted Paper - 10</a></p>
             </td>
             <td className="py-2">
-              <p className={conference.status === 'Active' ? 'text-green-500' : 'text-red-500'}>
-                  {conference.status.charAt(0).toUpperCase() + conference.status.slice(1)}
-              </p>
+              {conference.status === 'Active' ? (
+                <>
+                <div className="badge badge-success gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="inline-block h-4 w-4 stroke-current"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  <span>Active</span>
+                </div>
+                </>
+              ) : (
+                <>
+                <div className="badge badge-error gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="inline-block h-4 w-4 stroke-current"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  <span>Inactive</span>
+                </div>
+                </>
+              )}
             </td>
             <td className="py-2">
                 <button className="btn btn-ghost btn-sm text-white bg-transparent">
