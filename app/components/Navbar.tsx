@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const { data: session } = useSession();
 
   return (
-    <nav className="bg-white shadow-md w-full">
+    <nav className="bg-white shadow-lg w-full">
       <div className="mx-auto px-4">
         <div className="flex justify-between">
           <div className="flex space-x-4">

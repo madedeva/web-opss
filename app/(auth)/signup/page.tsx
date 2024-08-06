@@ -49,11 +49,11 @@ const SignUp = () => {
 
       if (response.status === 201) {
         console.log('Registrasi berhasil', response.data);
-        toast.success('Registrasi berhasil!');
+        toast.success('Sign up account success!');
       }
     } catch (error: any) {
       console.error('Registrasi gagal', error);
-      toast.error('Registrasi gagal: ' + error.message);
+      toast.error('Sign up account failed: ' + error.message);
     }
   };
 

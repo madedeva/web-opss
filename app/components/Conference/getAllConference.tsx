@@ -37,6 +37,15 @@ const GetAllConference = () => {
                 status: 'Active',
             },
             take: 8,
+            select: {
+                id: true,
+                name: true,
+                startDate: true,
+                submission_deadlineEnd: true,
+                city: true,
+                country: true,
+                banner: true,
+            },
         });
     
         return res;
@@ -51,7 +60,7 @@ const GetAllConference = () => {
                 className="bg-white p-4 rounded block hover:bg-gray-100 transition duration-300 transform hover:scale-105 hover:shadow-lg"
                 >
                 <img
-                src={getRandomImageUrl()}
+                src={conference.banner || getRandomImageUrl()} 
                 alt="Conference"
                 className="rounded w-full"
                 />

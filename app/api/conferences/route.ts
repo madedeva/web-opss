@@ -8,7 +8,7 @@ import path from 'path';
 
 export const config = {
     api: {
-      bodyParser: false, // Disable the built-in body parser to handle file uploads manually
+      bodyParser: false,
     },
 };
 
@@ -16,7 +16,6 @@ const prisma = new PrismaClient();
 
 export const POST = async (req: Request) => {
     try {
-        // Upload File Logic
         const formData = await req.formData();
     
         const paper_template = formData.get("paper_template") as File;

@@ -18,7 +18,7 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        await axios.patch(`/api/review/${conRevId}`, {
+        await axios.patch(`/api/reviewer/${conRevId}`, {
             userId: parseInt(idUser),
             conferenceId: parseInt(idCon),
         });

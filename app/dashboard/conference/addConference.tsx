@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRef } from "react";
+import CustomAlert from "@/app/components/Alert/CustomAlert";
 
 const AddConference = () => {
     const { data: session } = useSession();
@@ -37,6 +38,8 @@ const AddConference = () => {
         email: string;
         roleId: number;
     }
+
+    const [alert, setAlert] = useState<{ type: 'info' | 'danger' | 'success' | 'warning' | 'dark'; message: string } | null>(null);
 
     const router = useRouter();
 
@@ -73,7 +76,7 @@ const AddConference = () => {
         formData.append('acronym', acronym);
         formData.append('theme', theme);
         formData.append('description', description);
-        formData.append('topics', topic.join(', '));
+        formData.append('topic', topic.join(', '));
         // formData.append('banner', banner);
         formData.append("banner", fileInput?.current?.files?.[0]!);
         formData.append('venue', venue);
@@ -94,34 +97,44 @@ const AddConference = () => {
         const user = session?.user as User;
         formData.append('userId', user.id.toString());
 
-        await axios.post('/api/conferences', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        try{
+            await axios.post('/api/conferences', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
 
-        setName('');
-        setAcronym('');
-        setTheme('');
-        setDescription('');
-        setTopics(['']);
-        setBanner(null);
-        setVenue('');
-        setAddress('');
-        setCity('');
-        setCountry('');
-        setEmail('');
-        setInstitution('');
-        setPaperTemplate(null);
-        setPaymentInfo('');
-        setSubmissionDeadlineStart('');
-        setSubmissionDeadlineEnd('');
-        setStartDate('');
-        setEndDate('');
-        setStatus('Inactive');
+            setName('');
+            setAcronym('');
+            setTheme('');
+            setDescription('');
+            setTopics(['']);
+            setBanner(null);
+            setVenue('');
+            setAddress('');
+            setCity('');
+            setCountry('');
+            setEmail('');
+            setInstitution('');
+            setPaperTemplate(null);
+            setPaymentInfo('');
+            setSubmissionDeadlineStart('');
+            setSubmissionDeadlineEnd('');
+            setStartDate('');
+            setEndDate('');
+            setStatus('Inactive');
 
-        router.refresh();
-        setIsOpen(false);
+            setAlert({ type: 'success', message: 'Conference added successfully!' });
+            setTimeout(() => setAlert(null), 5000);
+
+            router.refresh();
+            setIsOpen(false);
+
+        } catch (error: any) {
+            console.error('Error submitting the form:', error);
+            setAlert({ type: 'danger', message: 'Conference addition failed: ' + error.message });
+            setTimeout(() => setAlert(null), 5000);
+        }
     }
 
     const [isOpen, setIsOpen] = useState(false);
@@ -132,6 +145,7 @@ const AddConference = () => {
 
     return (
         <div>
+            {alert && <CustomAlert type={alert.type} message={alert.message} />}
             <button className="bg-blue-950 text-white px-4 py-2 rounded-full" onClick={handleModal}>+ New Conference</button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
@@ -139,7 +153,7 @@ const AddConference = () => {
                     <h3 className="font-bold text-lg text-center">Add New Conference</h3>
                     <hr className="mb-4"/>
                     <form onSubmit={handleSubmit} encType="multipart/data">
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Conference Name <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
@@ -218,18 +232,6 @@ const AddConference = () => {
                                 />
                             </label>
                         </div>
-
-                        {/* <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Banner Image<span className="text-red-500">*</span></label>
-                            <input
-                                type="file"
-                                ref={fileInput}
-                                value={banner}
-                                onChange={(e) => setBanner(e.target.value)}
-                                className="input input-bordered bg-white"
-                                placeholder="Upload banner image.."
-                            />
-                        </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Conference Venue <span className="text-red-500">*</span></label>
                             <input
@@ -322,18 +324,6 @@ const AddConference = () => {
                                 />
                             </label>
                         </div>
-
-                        {/* <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Paper Template <span className="text-red-500">*</span></label>
-                            <input
-                                type="file"
-                                ref={fileInput2}
-                                value={paper_template}
-                                onChange={(e) => setPaperTemplate(e.target.value)}
-                                className="input input-bordered bg-white"
-                                placeholder="Upload paper template.."
-                            />
-                        </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Payment Information <span className="text-red-500">*</span></label>
                             <input

@@ -1,8 +1,10 @@
 "use client";
-import ButtonAuthComponent from '@/app/components/signin/ButtonAuthComponent';
+import ButtonAuthComponent from '@/app/components/SignIn/ButtonAuthComponent';
 import { useState } from 'react';
 import { SessionProvider, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation"; // gunakan `next/navigation` di Next.js 13
+import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
   const [form, setForm] = useState({
@@ -29,7 +31,9 @@ const SignIn = () => {
 
     if (result?.error) {
       setError(result.error);
+      toast.error('Sign in failed' + error);
     } else {
+      toast.success('Sign in success!');
       router.push('/dashboard');
     }
   };

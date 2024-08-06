@@ -4,28 +4,23 @@ import type { Brand } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-type User = {
-    id: number;
-    name: string;
-}
-
 type Conference = {
     id: number;
     name: string;
     slug: string;
-    acronym: string | null;
-    theme: string | null;
-    description: string | null;
-    topic: string | null;
-    banner: string | null;
-    venue: string | null;
-    address: string | null;
-    city: string | null;
-    country: string | null;
-    email: string | null;
-    institution: string | null;
-    paper_template: string | null;
-    payment_info: string | null;
+    acronym: string;
+    theme: string;
+    description: string;
+    topic: string;
+    banner: string;
+    venue: string;
+    address: string;
+    city: string;
+    country: string;
+    email: string;
+    institution: string;
+    paper_template: string;
+    payment_info: string;
     submission_deadlineStart: Date;
     submission_deadlineEnd: Date;
     startDate: Date;
@@ -34,21 +29,20 @@ type Conference = {
     userId: number;
 }
 
-const UpdateConference = ({conference}: {conference: Conference}) => {
+const UpdateConference = ({ conference }: { conference: Conference }) => {
     const [name, setName] = useState(conference.name);
-    const [slug, setSlug] = useState(conference.slug);
     const [acronym, setAcronym] = useState(conference.acronym || '');
     const [theme, setTheme] = useState(conference.theme || '');
     const [description, setDescription] = useState(conference.description || '');
     const [topic, setTopic] = useState(conference.topic || '');
-    const [banner, setBanner] = useState(conference.banner || '');
+    const [banner, setBanner] = useState<File | null>(null);
     const [venue, setVenue] = useState(conference.venue || '');
     const [address, setAddress] = useState(conference.address || '');
     const [city, setCity] = useState(conference.city || '');
     const [country, setCountry] = useState(conference.country || '');
     const [email, setEmail] = useState(conference.email || '');
     const [institution, setInstitution] = useState(conference.institution || '');
-    const [paper_template, setPaperTemplate] = useState(conference.paper_template || '');
+    const [paper_template, setPaperTemplate] = useState<File | null>(null);
     const [payment_info, setPaymentInfo] = useState(conference.payment_info || '');
     const [submission_deadlineStart, setSubmissionDeadlineStart] = useState(conference.submission_deadlineStart);
     const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState(conference.submission_deadlineEnd);
@@ -57,46 +51,44 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
     const [status, setStatus] = useState(conference.status);
 
     const router = useRouter();
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleUpdate = async (e: SyntheticEvent) => {
-
-        // ISO-8601 DateTime
-        const submissionDeadlineStartIso = new Date(submission_deadlineStart).toISOString();
-        const submissionDeadlineEndIso = new Date(submission_deadlineEnd).toISOString();
-        const startDateIso = new Date(startDate).toISOString();
-        const endDateIso = new Date(endDate).toISOString();
-
         e.preventDefault();
-        await axios.patch(`/api/conferences/${conference.id}`, {
-            name: name,
-            acronym: acronym,
-            theme: theme,
-            description: description,
-            topic: topic,
-            banner: banner,
-            venue: venue,
-            address: address,
-            city: city,
-            country: country,
-            email: email,
-            institution: institution,
-            paper_template: paper_template,
-            payment_info: payment_info,
-            submission_deadlineStart: submissionDeadlineStartIso,
-            submission_deadlineEnd: submissionDeadlineEndIso,
-            startDate: startDateIso,
-            endDate: endDateIso,
-            status: status,
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('acronym', acronym);
+        formData.append('theme', theme);
+        formData.append('description', description);
+        formData.append('topic', topic);
+        formData.append('banner', banner || '');
+        formData.append('venue', venue);
+        formData.append('address', address);
+        formData.append('city', city);
+        formData.append('country', country);
+        formData.append('email', email);
+        formData.append('institution', institution);
+        formData.append('paper_template', paper_template || '');
+        formData.append('payment_info', payment_info);
+        formData.append('submission_deadlineStart', submission_deadlineStart.toISOString());
+        formData.append('submission_deadlineEnd', submission_deadlineEnd.toISOString());
+        formData.append('startDate', startDate.toISOString());
+        formData.append('endDate', endDate.toISOString());
+        formData.append('status', status);
+
+        await axios.put(`/api/conferences/${conference.id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         });
         router.refresh();
         setIsOpen(false);
-    }
-
-    const [isOpen, setIsOpen] = useState(false);
+    };
 
     const handleModal = () => {
         setIsOpen(!isOpen);
-    }
+    };
 
     return (
         <div>
@@ -106,10 +98,11 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
                 <div className="modal-box bg-white w-full max-w-5xl">
-                    <h3 className="font-bold text-lg">Update {conference.name}</h3>
+                    <h3 className="font-bold text-lg text-center">Update {conference.name}</h3>
+                    <hr className="mb-4"/>
                     <form onSubmit={handleUpdate}>
-                    <div className="form-control w-full">
-                            <label className="label font-bold">Name</label>
+                    <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Conference Name</label>
                             <input
                             type="text"
                             value={name}
@@ -119,7 +112,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             required
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Acronym</label>
                             <input
                             type="text"
@@ -129,21 +122,21 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="Acronym"
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Theme <span className="text-red-500">*</span></label>
                             <textarea 
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
                             id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Description <span className="text-red-500">*</span></label>
                             <textarea 
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Topic</label>
                             <input
                             type="text"
@@ -153,18 +146,41 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="Topic"
                             />
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Banner</label>
-                            <input
-                            type="text"
-                            value={banner}
-                            onChange={(e) => setBanner(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Banner"
-                            />
+
+                        <div className="w-full mt-6">
+                            <p className="font-bold">Banner Image</p>
+                            <label
+                                className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2">
+                                <span className="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <span className="font-medium text-gray-600">
+                                        Drop files to Attach, or
+                                        <span className="text-blue-600 underline">browse</span>
+                                    </span>
+                                </span>
+                                <input 
+                                type="file"
+                                onChange={(e) => e.target.files && setBanner(e.target.files[0])}
+                                name="file_upload"
+                                className="hidden" 
+                                />
+                            </label>
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Venue</label>
+
+                        {/* <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Banner Image</label>
+                            <input
+                                type="file"
+                                onChange={(e) => e.target.files && setBanner(e.target.files[0])}
+                                className="input input-bordered bg-white"
+                            />
+                        </div> */}
+                        <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Conference Venue</label>
                             <input
                             type="text"
                             value={venue}
@@ -173,7 +189,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="Venue"
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Address</label>
                             <input
                             type="text"
@@ -183,7 +199,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="Address"
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">City</label>
                             <input
                             type="text"
@@ -193,7 +209,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="City"
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Country</label>
                             <input
                             type="text"
@@ -203,8 +219,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="Country"
                             />
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Email</label>
+                        <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Organizer Email</label>
                             <input
                             type="text"
                             value={email}
@@ -213,8 +229,8 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="Email"
                             />
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Institution</label>
+                        <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Organizer Institution</label>
                             <input
                             type="text"
                             value={institution}
@@ -223,18 +239,39 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             placeholder="Institution"
                             />
                         </div>
-                        <div className="form-control w-full">
+                        <div className="w-full mt-6">
+                            <p className="font-bold">Paper Template</p>
+                            <label
+                                className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2">
+                                <span className="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <span className="font-medium text-gray-600">
+                                        Drop files to Attach, or
+                                        <span className="text-blue-600 underline">browse</span>
+                                    </span>
+                                </span>
+                                <input 
+                                type="file"
+                                onChange={(e) => e.target.files && setPaperTemplate(e.target.files[0])}
+                                name="file_upload"
+                                className="hidden" 
+                                />
+                            </label>
+                        </div>
+                        {/* <div className="form-control w-full mt-6">
                             <label className="label font-bold">Paper Template</label>
                             <input
-                            type="text"
-                            value={paper_template}
-                            onChange={(e) => setPaperTemplate(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Paper Template"
+                                type="file"
+                                onChange={(e) => e.target.files && setPaperTemplate(e.target.files[0])}
+                                className="input input-bordered bg-white"
                             />
-                        </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Payment Info</label>
+                        </div> */}
+                        <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Payment Information</label>
                             <input
                             type="text"
                             value={payment_info}
@@ -244,7 +281,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                             />
                         </div>
 
-                        <div className="flex w-full gap-4">
+                        <div className="flex w-full gap-4 mt-6">
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">Submission Start Date<span className="text-red-500">*</span></label>
                                 <input
@@ -266,7 +303,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                                 />
                             </div>
                         </div>
-                        <div className="flex w-full gap-4">
+                        <div className="flex w-full gap-4 mt-6">
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">
                                     Conference Start Date <span className="text-red-500">*</span>
@@ -292,7 +329,7 @@ const UpdateConference = ({conference}: {conference: Conference}) => {
                                 />
                             </div>
                         </div>
-                        <div className="form-control w-full">
+                        <div className="form-control w-full mt-6">
                             <label className="label font-bold">Status</label>
                             <select
                             value={status}

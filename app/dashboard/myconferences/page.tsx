@@ -4,7 +4,6 @@ import RegisterConference from "./RegisterConference";
 import { PrismaClient } from "@prisma/client";
 import TableMyConference from "@/app/components/MyConference/TableMyConference";
 
-
 const prisma = new PrismaClient();
 
 const getRegisterConference = async () => {
