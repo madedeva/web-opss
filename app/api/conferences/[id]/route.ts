@@ -64,7 +64,7 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
                 theme: formData.get("theme")?.valueOf().toString() ?? '',
                 topic: formData.get("topic")?.valueOf().toString() ?? '',
                 venue: formData.get("venue")?.valueOf().toString() ?? '',
-                status: 'Inactive',
+                status: formData.get("status")?.valueOf().toString() ?? '',
                 slug: slug
             }
         });
