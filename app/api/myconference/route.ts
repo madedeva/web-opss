@@ -48,19 +48,3 @@ export const POST = async (request: Request) => {
         return NextResponse.json({ status: "fail", error: e });
     }
 }
-
-
-// export const POST = async (request: Request) => {
-//     const body: RegisterConference = await request.json();
-
-//     const country = body.country;
-
-//     const con = await prisma.registerConference.create({
-//         data: {
-//             ...body,
-//             country
-//         }
-//     });
-
-//     return NextResponse.json(con, {status: 201});
-// }
