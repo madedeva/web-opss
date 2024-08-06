@@ -18,10 +18,12 @@ export const POST = async (request: Request) => {
     try{
         const formData = await request.formData();
 
-        const paper = formData.get("paper_template") as File;
-        const arrayBufferPaper = await paper.arrayBuffer();
-        const bufferPaper = new Uint8Array(arrayBufferPaper);
-        await fs.writeFile(`./public/uploads/papers/${paper.name}`, bufferPaper);
+        const paper = formData.get("paper") as File;
+        if (paper){
+            const arrayBufferPaper = await paper.arrayBuffer();
+            const bufferPaper = new Uint8Array(arrayBufferPaper);
+            await fs.writeFile(`./public/uploads/papers/${paper.name}`, bufferPaper);
+        }
 
         const con = await prisma.registerConference.create({
             data: {
