@@ -154,7 +154,9 @@ const Papers = () => {
                             {paginatedPapers.map((paper) => (
                                 <tr key={paper.id} className="text-gray-700 text-xs border-b border-gray-200">
                                     <td className="py-2 px-4">{paper.paper_title}</td>
-                                    <td className="py-2 px-4">{paper.user.name}</td>
+                                    <td className="py-2 px-4">
+                                        {paper.user.name}, <p>({paper.institution}, {paper.user.email})</p>
+                                    </td>
                                     <td className="py-2 px-4">{getFormattedDate(paper.createdAt)}</td>
                                     <td className="py-2 px-4">
                                         <p>Topic</p>
@@ -167,7 +169,61 @@ const Papers = () => {
                                         <p>{paper.keywords}</p>
                                     </td>
                                     <td className="py-2 px-4">{paper.city}, {paper.country}</td>
-                                    <td className="py-2 px-4">{paper.status}</td>
+                                    <td className="py-2 px-4">
+                                    {paper.status === 'Accepted' && (
+                                    <div className="badge badge-success gap-2">
+                                        <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        className="inline-block h-4 w-4 stroke-current">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M5 13l4 4L19 7"
+                                        ></path>
+                                        </svg>
+                                        <span className="text-xs">Accepted</span>
+                                    </div>
+                                    )}
+
+                                    {paper.status === 'Pending' && (
+                                    <div className="badge badge-warning gap-2">
+                                        <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        className="inline-block h-4 w-4 stroke-current">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        ></path>
+                                        </svg>
+                                        <span className="text-xs">Pending</span>
+                                    </div>
+                                    )}
+
+                                    {paper.status === 'Under review' && (
+                                    <div className="badge badge-info gap-2">
+                                        <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        className="inline-block h-4 w-4 stroke-current">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        ></path>
+                                        </svg>
+                                        <span className="text-xs">Under review</span>
+                                    </div>
+                                    )}
+                                    </td>
                                     <td className="py-2 px-4">
                                         <a className="underline text-blue-950 text-xs" href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
                                             View Paper

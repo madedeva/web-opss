@@ -1,5 +1,5 @@
 import { Conference, PrismaClient } from "@prisma/client";
-import Link from 'next/link'; // Import Link for navigation
+import Link from 'next/link';
 
 const prisma = new PrismaClient();
 
@@ -51,7 +51,7 @@ const GetAllConference = async () => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-gray-500">
             {conferences.map((conference) => (
-                <Link
+                <a
                     key={conference.id}
                     href={`/conference-detail/${conference.slug}`}
                     className="bg-white p-4 rounded block hover:bg-gray-100 transition duration-300 transform hover:scale-105 hover:shadow-lg"
@@ -83,7 +83,7 @@ const GetAllConference = async () => {
                             {conference.city}, {conference.country}
                         </p>
                     </div>
-                </Link>
+                </a>
             ))}
         </div>
     );
