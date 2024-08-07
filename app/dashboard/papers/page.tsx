@@ -2,6 +2,26 @@
 import { useEffect, useState } from 'react';
 import DashboardLayout from '@/app/components/DashboardLayout';
 import WelcomeCard from '@/app/components/WelcomeCard';
+import UpdatePaper from './updatePaper';
+
+const getOrdinalSuffix = (day: number) => {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+    }
+  };
+
+  const getFormattedDate = (date: Date | string): string => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString('en-US', { month: 'long' });
+    const year = dateObj.getFullYear();
+    const suffix = getOrdinalSuffix(day);
+    return `${month} ${day}${suffix}, ${year}`;
+  };
 
 type Paper = {
     id: number;
@@ -17,10 +37,27 @@ type Paper = {
     userId: number;
     conferenceId: number;
     createdAt: Date;
+    user: {
+        name: string
+        email: string
+    },
+    conference: {
+        id: number,
+        name: string,
+        description: string,
+        submission_deadlineStart: Date
+        submission_deadlineEnd: Date
+        paper_template: string
+          User: {
+              name: string,
+              email: string,
+          };
+      }
 };
 
 const Papers = () => {
     const [papers, setPapers] = useState<Paper[]>([]);
+    const [groupedPapers, setGroupedPapers] = useState({});
 
     useEffect(() => {
         const fetchPapers = async () => {
@@ -66,20 +103,28 @@ const Papers = () => {
                             {papers.map((paper) => (
                                 <tr key={paper.id} className="text-gray-700 text-sm text-left">
                                     <td className="py-2">{paper.paper_title}</td>
-                                    <td className="py-2">{paper.userId}</td>
-                                    <td className="py-2">{paper.userId}</td>
+                                    <td className="py-2">{paper.user.name}</td>
+                                    <td className="py-2">{getFormattedDate(paper.createdAt)}</td>
                                     <td className="py-2">
-                                      {paper.topic}
+                                        <p>Topic</p>
+                                        <p>{paper.topic}</p>
+                                        <p className="mt-4">Paper</p>
+                                        <p><a className="underline text-blue-950" href="#">View abstract</a></p>
+                                        <p className="mt-4">Keywords</p>
+                                        <p>{paper.keywords}</p>
                                     </td>
+                                    {/* <td className="py-2">
+                                      {paper.topic}
+                                    </td> */}
                                     <td className="py-2">{paper.city}, {paper.country}</td>
                                     <td className="py-2">{paper.status}</td>
                                     <td className="py-2">
-                                        <a href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
+                                        <a className="underline text-blue-950" href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
                                             View Paper
                                         </a>
                                     </td>
                                     <td className="py-2">
-                                        {/* Add your actions here */}
+                                        <UpdatePaper users={[]} userId={0} conRevId={0} />
                                     </td>
                                 </tr>
                             ))}

@@ -54,7 +54,7 @@ const Reviewer = async () => {
       ...conf,
       reviewers: conRev.filter((cr) => cr.conferenceId === conf.id),
     };
-  }).filter(conf => conf.reviewers.length > 0); // Menyaring konferensi tanpa reviewer
+  }).filter(conf => conf.reviewers.length > 0);
 
   return (
     <DashboardLayout>

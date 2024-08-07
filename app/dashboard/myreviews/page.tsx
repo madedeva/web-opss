@@ -10,6 +10,18 @@ type Paper = {
   paper: string;
   conferenceId: number;
   createdAt: Date;
+  conference: {
+    id: number,
+    name: string,
+    description: string,
+    submission_deadlineStart: Date
+    submission_deadlineEnd: Date
+    paper_template: string
+      User: {
+          name: string,
+          email: string,
+      };
+  }
 };
 
 const MyReviews = () => {
@@ -56,10 +68,10 @@ const MyReviews = () => {
                             {papers.map((paper) => (
                                 <tr key={paper.id} className="text-gray-700 text-sm text-left">
                                     <td className="py-2">{paper.paper_title}</td>
-                                    <td className="py-2">{paper.conferenceId}</td>
+                                    <td className="py-2">{paper.conference.name}</td>
                                     <td className="py-2">{paper.status}</td>
                                     <td className="py-2">
-                                        <a href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
+                                        <a className="underline text-blue-950" href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
                                             View Paper
                                         </a>
                                     </td>
