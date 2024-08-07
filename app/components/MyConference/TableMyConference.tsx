@@ -75,12 +75,11 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
             <th className="py-2">Conference Name</th>
             <th className="py-2">Paper Title</th>
             <th className="py-2">Comments</th>
-            <th className="py-2">Status</th>
             <th className="py-2">Action</th>
           </tr>
         </thead>
         <tbody>
-          {filteredRegConferences.map((reg_conference) => (
+        {filteredRegConferences.map((reg_conference) => (
             <tr className="text-gray-700 text-xs text-left" key={reg_conference.id}>
               <td className="py-2">{reg_conference.conference.name}</td>
               <td className="py-2">{reg_conference.paper_title}</td>
@@ -92,9 +91,69 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                   View comments
                 </button>
               </td>
-              <td className="py-2">{reg_conference.status}</td>
               <td className="py-2">
-                {/* Add your actions here */}
+                {/* Conditionally render the Upload Revision button based on status */}
+                {reg_conference.status !== 'Accepted' && (
+                  <button
+                    className="btn btn-ghost btn-xs text-blue-950 underline">
+                    Upload Revision
+                  </button>
+                )}
+
+                {/* Dynamic Badge Display */}
+                {reg_conference.status === 'Accepted' && (
+                  <div className="badge badge-success gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-4 w-4 stroke-current">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      ></path>
+                    </svg>
+                    <span className="text-xs">Accepted</span>
+                  </div>
+                )}
+
+                {reg_conference.status === 'Pending' && (
+                  <div className="badge badge-warning gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-4 w-4 stroke-current">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      ></path>
+                    </svg>
+                    <span className="text-xs">Pending</span>
+                  </div>
+                )}
+
+                {reg_conference.status === 'Under review' && (
+                  <div className="badge badge-info gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-4 w-4 stroke-current">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      ></path>
+                    </svg>
+                    <span className="text-xs">Under review</span>
+                  </div>
+                )}
               </td>
             </tr>
           ))}

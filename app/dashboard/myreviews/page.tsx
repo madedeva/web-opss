@@ -93,9 +93,69 @@ const MyReviews = () => {
                                             View Paper
                                         </a>
                                     </td>
-                                    <td className="py-2">{paper.status}</td>
+                                    <td className="py-2 px-4">
+                                    {paper.status === 'Accepted' && (
+                                    <div className="badge badge-success gap-2">
+                                        <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        className="inline-block h-4 w-4 stroke-current">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M5 13l4 4L19 7"
+                                        ></path>
+                                        </svg>
+                                        <span className="text-xs">Accepted</span>
+                                    </div>
+                                    )}
+
+                                    {paper.status === 'Pending' && (
+                                    <div className="badge badge-warning gap-2">
+                                        <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        className="inline-block h-4 w-4 stroke-current">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        ></path>
+                                        </svg>
+                                        <span className="text-xs">Pending</span>
+                                    </div>
+                                    )}
+
+                                    {paper.status === 'Under review' && (
+                                    <div className="badge badge-info gap-2">
+                                        <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        className="inline-block h-4 w-4 stroke-current">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        ></path>
+                                        </svg>
+                                        <span className="text-xs">Under review</span>
+                                    </div>
+                                    )}
+                                    </td>
                                     <td className="py-2">
-                                        {/* Add your actions here */}
+                                    {paper.status === 'Accepted' ? (
+                                        <span className="text-green-600 text-xs">Review complete</span>
+                                        ) : (
+                                        <button className="btn btn-ghost btn-xs text-blue-950 underline">
+                                            Review paper
+                                        </button>
+                                        )}
                                     </td>
                                 </tr>
                             ))}
