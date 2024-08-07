@@ -56,6 +56,13 @@ type Paper = {
 };
 
 const Papers = () => {
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleModal = () => {
+        setIsOpen(!isOpen);
+    }
+
     const [papers, setPapers] = useState<Paper[]>([]);
     const [groupedPapers, setGroupedPapers] = useState({});
 
@@ -108,14 +115,13 @@ const Papers = () => {
                                     <td className="py-2">
                                         <p>Topic</p>
                                         <p>{paper.topic}</p>
-                                        <p className="mt-4">Paper</p>
-                                        <p><a className="underline text-blue-950" href="#">View abstract</a></p>
+                                        <p className="mt-4">Abstract</p>
+                                        <button className="btn btn-ghost btn-sm text-blue-950 underline" onClick={handleModal}>
+                                            View abstract
+                                        </button>
                                         <p className="mt-4">Keywords</p>
                                         <p>{paper.keywords}</p>
                                     </td>
-                                    {/* <td className="py-2">
-                                      {paper.topic}
-                                    </td> */}
                                     <td className="py-2">{paper.city}, {paper.country}</td>
                                     <td className="py-2">{paper.status}</td>
                                     <td className="py-2">
@@ -130,6 +136,20 @@ const Papers = () => {
                             ))}
                         </tbody>
                     </table>
+                    {papers.map((paper) => (
+                    <div className={isOpen ? 'modal modal-open' : 'modal'}>
+                        <div className="modal-box bg-white">
+                            <h3 className="font-bold text-lg">Paper Title: {paper.paper_title}</h3>
+                            <hr className='mt-4'/>
+                            <p className="py-4">
+                            {paper.abstract}
+                            </p>
+                            <div className="modal-action">
+                            <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    ))}
                 </div>
             </div>
         </DashboardLayout>
