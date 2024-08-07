@@ -57,10 +57,7 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
                 <p>{getFormattedDate(conference.submission_deadlineStart)} - {getFormattedDate(conference.submission_deadlineEnd)}</p>
             </td>
             <td className="py-2">
-              <p>Author</p>
-              <p><a className="underline text-blue-950" href="#">Registered Authors - 10</a></p>
-              <p className="mt-4">Paper</p>
-              <p><a className="underline text-blue-950" href="#">Submitted Paper - 10</a></p>
+              <p><a className="underline text-blue-950" href="#">Submitted Paper: 10</a></p>
             </td>
             <td className="py-2">
               {conference.status === 'Active' ? (

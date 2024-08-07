@@ -10,6 +10,7 @@ type Paper = {
   paper: string;
   conferenceId: number;
   createdAt: Date;
+  abstract: string;
   conference: {
     id: number,
     name: string,
@@ -26,7 +27,13 @@ type Paper = {
 
 const MyReviews = () => {
 
-  const [papers, setPapers] = useState<Paper[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleModal = () => {
+        setIsOpen(!isOpen);
+    }
+
+    const [papers, setPapers] = useState<Paper[]>([]);
 
     useEffect(() => {
         const fetchPapers = async () => {
@@ -59,8 +66,9 @@ const MyReviews = () => {
                             <tr className="text-sm">
                                 <th className="py-2">Paper Title</th>
                                 <th className="py-2">Conference</th>
-                                <th className="py-2">Status</th>
+                                <th className="py-2">Abstract</th>
                                 <th className="py-2">Paper File</th>
+                                <th className="py-2">Status</th>
                                 <th className="py-2">Actions</th>
                             </tr>
                         </thead>
@@ -69,12 +77,17 @@ const MyReviews = () => {
                                 <tr key={paper.id} className="text-gray-700 text-sm text-left">
                                     <td className="py-2">{paper.paper_title}</td>
                                     <td className="py-2">{paper.conference.name}</td>
-                                    <td className="py-2">{paper.status}</td>
+                                    <td className="py-2">
+                                        <button className="btn btn-ghost btn-sm text-blue-950 underline" onClick={handleModal}>
+                                            View abstract
+                                        </button>
+                                    </td>
                                     <td className="py-2">
                                         <a className="underline text-blue-950" href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
                                             View Paper
                                         </a>
                                     </td>
+                                    <td className="py-2">{paper.status}</td>
                                     <td className="py-2">
                                         {/* Add your actions here */}
                                     </td>
@@ -82,8 +95,22 @@ const MyReviews = () => {
                             ))}
                         </tbody>
                     </table>
-        </div>
-      </div>
+                    {papers.map((paper) => (
+                    <div className={isOpen ? 'modal modal-open' : 'modal'}>
+                        <div className="modal-box bg-white">
+                            <h3 className="font-bold text-lg">Paper Title: {paper.paper_title}</h3>
+                            <hr className='mt-4'/>
+                            <p className="py-4">
+                            {paper.abstract}
+                            </p>
+                            <div className="modal-action">
+                            <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    ))}
+                </div>
+            </div>
     </DashboardLayout>
     )
 };

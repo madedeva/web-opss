@@ -29,7 +29,7 @@ import { useState } from "react";
       userId: number,
       id: number,
       status: string,
-      comments: string
+      // comments: string
       user: {
           name: string,
           email: string,
@@ -89,18 +89,18 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
         </tbody>
       </table>
 
-      <div className={isOpen ? 'modal modal-open' : 'modal'}>
-                <div className="modal-box bg-white">
-                    <h3 className="font-bold text-lg">Reviewer Comments</h3>
-                    <p className="py-4">
-                      {/* {reg_conference.comments?.toString() || ''} */}
-                      Lorem ipsum odor amet, consectetuer adipiscing elit. Sollicitudin hendrerit blandit per odio condimentum. Litora maecenas porttitor dignissim viverra libero justo. Lacinia feugiat pretium sollicitudin enim dis hendrerit laoreet.
-                    </p>
-                    <div className="modal-action">
-                      <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
-                    </div>
-                </div>
+        <div className={isOpen ? 'modal modal-open' : 'modal'}>
+          <div className="modal-box bg-white">
+            <h3 className="font-bold text-lg">Reviewer Comments</h3>
+            <p className="py-4">
+            {/* {reg_conference.comments?.toString() || ''} */}
+            Lorem ipsum odor amet, consectetuer adipiscing elit. Sollicitudin hendrerit blandit per odio condimentum. Litora maecenas porttitor dignissim viverra libero justo. Lacinia feugiat pretium sollicitudin enim dis hendrerit laoreet.
+            </p>
+            <div className="modal-action">
+              <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
             </div>
+          </div>
+         </div>
       </div>
     );
 };
