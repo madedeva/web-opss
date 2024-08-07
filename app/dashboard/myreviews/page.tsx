@@ -26,12 +26,18 @@ type Paper = {
 };
 
 const MyReviews = () => {
-
+    const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleModal = () => {
-        setIsOpen(!isOpen);
-    }
+    const handleModalOpen = (paper: Paper) => {
+        setSelectedPaper(paper);
+        setIsOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setSelectedPaper(null);
+        setIsOpen(false);
+    };
 
     const [papers, setPapers] = useState<Paper[]>([]);
 
@@ -63,7 +69,7 @@ const MyReviews = () => {
 
           <table className="min-w-full bg-white mt-6 text-left">
                         <thead>
-                            <tr className="text-sm">
+                            <tr className="text-xs">
                                 <th className="py-2">Paper Title</th>
                                 <th className="py-2">Conference</th>
                                 <th className="py-2">Abstract</th>
@@ -74,11 +80,11 @@ const MyReviews = () => {
                         </thead>
                         <tbody>
                             {papers.map((paper) => (
-                                <tr key={paper.id} className="text-gray-700 text-sm text-left">
+                                <tr key={paper.id} className="text-gray-700 text-xs text-left">
                                     <td className="py-2">{paper.paper_title}</td>
                                     <td className="py-2">{paper.conference.name}</td>
                                     <td className="py-2">
-                                        <button className="btn btn-ghost btn-sm text-blue-950 underline" onClick={handleModal}>
+                                        <button className="btn btn-ghost btn-xs text-blue-950 underline" onClick={() => handleModalOpen(paper)}>
                                             View abstract
                                         </button>
                                     </td>
@@ -95,20 +101,20 @@ const MyReviews = () => {
                             ))}
                         </tbody>
                     </table>
-                    {papers.map((paper) => (
-                    <div className={isOpen ? 'modal modal-open' : 'modal'}>
+                    {isOpen && selectedPaper && (
+                    <div className="modal modal-open">
                         <div className="modal-box bg-white">
-                            <h3 className="font-bold text-lg">Paper Title: {paper.paper_title}</h3>
-                            <hr className='mt-4'/>
+                            <h3 className="font-bold text-lg">Paper Title: {selectedPaper.paper_title}</h3>
+                            <hr className="mt-4" />
                             <p className="py-4">
-                            {paper.abstract}
+                                {selectedPaper.abstract}
                             </p>
                             <div className="modal-action">
-                            <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
+                                <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
                             </div>
                         </div>
                     </div>
-                    ))}
+                )}
                 </div>
             </div>
     </DashboardLayout>

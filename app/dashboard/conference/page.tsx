@@ -37,7 +37,6 @@ const Conference =  async () => {
           <div className="mt-2">
             <AddConference />
           </div>
-          <hr className="mt-2"/>
           <TableConference conference={conference}/>
         </div>
       </div>
