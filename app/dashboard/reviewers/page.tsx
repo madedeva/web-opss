@@ -76,7 +76,7 @@ const Reviewer = async () => {
                 <h4 className="text-md font-medium mt-2">{conf.name}</h4>
                 <table className="table-auto min-w-full bg-white mt-2">
                   <thead>
-                    <tr className="text-sm">
+                    <tr className="text-xs">
                       <th className="py-2 text-start">Reviewer Name</th>
                       <th className="py-2 text-start w-60">Organizer Institution</th>
                       <th className="py-2 text-start">Organizer Email</th>
@@ -85,7 +85,7 @@ const Reviewer = async () => {
                   </thead>
                   <tbody>
                     {conf.reviewers.map((cr) => (
-                      <tr className="text-gray-700 text-sm" key={cr.id}>
+                      <tr className="text-gray-700 text-xs" key={cr.id}>
                         <td className="py-2">{cr.user.name}</td>
                         <td className="py-2">{cr.conference.institution}</td>
                         <td className="py-2">{cr.conference.User?.email}</td>
