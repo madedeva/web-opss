@@ -107,13 +107,13 @@ const Papers = () => {
 
     return (
         <DashboardLayout>
-            <WelcomeCard />
+            {/* <WelcomeCard /> */}
 
-            <div className="bg-white p-6 rounded-lg mt-4">
+            <div className="bg-white p-6 rounded-lg">
                 <div className="mt-6">
                     <h3 className="text-lg font-medium">Submitted Papers</h3>
                     <p className="text-sm text-gray-600">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    The following are papers submitted by authors, you can manage these papers.
                     </p>
                     <hr className="mt-2" />
 
@@ -137,17 +137,33 @@ const Papers = () => {
                         </select>
                     </div>
 
-                    <table className="min-w-full bg-white mt-6 text-left border border-gray-200 rounded-lg">
-                        <thead>
+                    <table className="min-w-full divide-y divide-gray-200 mt-6">
+                        <thead className="bg-gray-50">
                             <tr className="text-xs border-b border-gray-200">
-                                <th className="py-2 px-4">Paper Title</th>
-                                <th className="py-2 px-4">Author</th>
-                                <th className="py-2 px-4">Submit Date</th>
-                                <th className="py-2 px-4">Topic, Abstract, Keywords</th>
-                                <th className="py-2 px-4">City, Country</th>
-                                <th className="py-2 px-4">Status</th>
-                                <th className="py-2 px-4">Paper File</th>
-                                <th className="py-2 px-4">Actions</th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Paper Title
+                                </th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Author
+                                </th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Submit Date
+                                </th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Topic, Abstract, Keywords
+                                </th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    City, Country
+                                </th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Paper File
+                                </th>
+                                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Action
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -171,57 +187,26 @@ const Papers = () => {
                                     <td className="py-2 px-4">{paper.city}, {paper.country}</td>
                                     <td className="py-2 px-4">
                                     {paper.status === 'Accepted' && (
-                                    <div className="badge badge-success gap-2">
-                                        <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        className="inline-block h-4 w-4 stroke-current">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M5 13l4 4L19 7"
-                                        ></path>
-                                        </svg>
-                                        <span className="text-xs">Accepted</span>
-                                    </div>
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Accepted
+                                    </span>
                                     )}
 
                                     {paper.status === 'Pending' && (
-                                    <div className="badge badge-warning gap-2">
-                                        <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        className="inline-block h-4 w-4 stroke-current">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        ></path>
-                                        </svg>
-                                        <span className="text-xs">Pending</span>
-                                    </div>
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                        Pending
+                                    </span>
                                     )}
 
-                                    {paper.status === 'Under review' && (
-                                    <div className="badge badge-info gap-2">
-                                        <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        className="inline-block h-4 w-4 stroke-current">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        ></path>
-                                        </svg>
-                                        <span className="text-xs">Under review</span>
-                                    </div>
+                                    {paper.status === 'Revision' && (
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        Revision
+                                    </span>
+                                    )}
+                                    {paper.status === 'Rejected' && (
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                        Rejected
+                                    </span>
                                     )}
                                     </td>
                                     <td className="py-2 px-4">
