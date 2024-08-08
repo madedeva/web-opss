@@ -46,35 +46,35 @@ const AvailableConference = async () => {
 
   return (
     <DashboardLayout>
-      <WelcomeCard />
-      <div className="bg-white p-6 rounded-lg mt-4">
+      {/* <WelcomeCard /> */}
+      <div className="bg-white p-6 rounded-lg">
         <div className="mt-6">
           <h3 className="text-lg font-medium">Available Conference</h3>
           <p className="text-sm text-gray-600">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+           Below is a list of available conferences that you can attend.
           </p>
-          <table className="min-w-full bg-white mt-6 text-left border border-gray-200 rounded-lg">
-            <thead>
-                <tr className="text-xs border-b border-gray-200">
-                    <th className="py-2 px-4 border-r border-gray-200 w-60">Conference Name</th>
-                    <th className="py-2 px-4 border-r border-gray-200">Conference Date</th>
-                    <th className="py-2 px-4 border-r border-gray-200">Submission Deadline</th>
-                    <th className="py-2 px-4">Action</th>
+          <table className="min-w-full divide-y divide-gray-200 mt-6">
+              <thead className="bg-gray-50">
+                <tr>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conference Name</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conference Date</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submission Deadline</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {conferences.map((conference) => (
-                    <tr key={conference.id} className="text-gray-700 text-xs border-b border-gray-200">
-                        <td className="py-2 px-4 border-r border-gray-200">{conference.name}</td>
-                        <td className="py-2 px-4 border-r border-gray-200 w-60">
+                    <tr key={conference.id} className="text-gray-700 text-xs">
+                        <td className="py-2 px-4">{conference.name}</td>
+                        <td className="py-2 px-4">
                             <p className="text-xs">Conference Date</p>
                             <p>{getFormattedDate(conference.startDate)} - {getFormattedDate(conference.endDate)}</p>
                         </td>
-                        <td className="py-2 px-4 border-r border-gray-200 w-60">
+                        <td className="py-2 px-4">
                             <p className="text-xs">Full Paper Submission</p>
                             <p>{getFormattedDate(conference.submission_deadlineStart)} - {getFormattedDate(conference.submission_deadlineEnd)}</p>
                         </td>
-                        <td className="py-2 px-4 w-20 border-r border-gray-200">
+                        <td className="py-2 px-4">
                           <button
                             className="btn btn-ghost btn-xs text-blue-950 underline">
                             Register

@@ -30,7 +30,9 @@ type UserCon = {
   id: number,
   status: string,
   paper_title: string,
-  comments?: string, // Changed from string | undefined to string | null
+  comments?: string,
+  createdAt: Date,
+  paper: string
   user: {
       name: string,
       email: string,
@@ -42,6 +44,7 @@ type UserCon = {
     submission_deadlineStart: Date,
     submission_deadlineEnd: Date,
     paper_template: string,
+    acronym: string
     User: {
         name: string,
         email: string,
@@ -68,114 +71,95 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
   const filteredRegConferences = reg_conference.filter(reg => reg.userId === user?.id);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white mt-6 text-left">
-        <thead>
-          <tr className="text-xs">
-            <th className="py-2">Conference Name</th>
-            <th className="py-2">Paper Title</th>
-            <th className="py-2">Comments</th>
-            <th className="py-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-        {filteredRegConferences.map((reg_conference) => (
-            <tr className="text-gray-700 text-xs text-left" key={reg_conference.id}>
-              <td className="py-2">{reg_conference.conference.name}</td>
-              <td className="py-2">{reg_conference.paper_title}</td>
-              <td className="py-2">
-                <button
-                  className="btn btn-ghost btn-xs text-blue-950 underline"
-                  onClick={() => handleModalOpen(reg_conference.comments)}
-                >
-                  View comments
-                </button>
-              </td>
-              <td className="py-2">
-                {/* Conditionally render the Upload Revision button based on status */}
-                {reg_conference.status !== 'Accepted' && (
-                  <button
-                    className="btn btn-ghost btn-xs text-blue-950 underline">
-                    Upload Revision
-                  </button>
-                )}
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 mt-6">
+                <thead className="bg-gray-50">
+                <tr>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Conference Name
+                    </th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Paper Title
+                    </th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Comments
+                    </th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Action
+                    </th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                    </th>
+                </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                {filteredRegConferences.map((reg_conference) => (
+                    <tr key={reg_conference.id}>
+                    <td className="px-3 py-2 whitespace-normal break-words">
+                        <div className="text-xs font-medium text-gray-900">{reg_conference.conference.name}</div>
+                    </td>
+                    <td className="px-3 py-2 whitespace-normal break-words">
+                        <div className="text-xs text-gray-900">{reg_conference.paper_title}</div>
+                    </td>
+                    <td className="px-3 py-2 whitespace-normal break-words">
+                        <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen(reg_conference.comments)}>
+                        View comments
+                        </button>
+                    </td>
+                    <td className="px-3 py-2 whitespace-normal break-words">
+                        <a className="text-xs text-blue-950 underline hover:text-indigo-900" href={`/uploads/papers/${reg_conference.paper}`} target="_blank" rel="noopener noreferrer">
+                        View Paper
+                        </a>
+                    </td>
+                    <td className="px-3 py-2 whitespace-normal break-words">
+                        {reg_conference.status !== 'Accepted' && reg_conference.status !== 'Rejected' && (
+                          <button
+                            className="btn btn-ghost btn-xs text-blue-950 underline">
+                            Upload Revision
+                          </button>
+                        )}
+                        {reg_conference.status === 'Accepted' && (
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Accepted
+                        </span>
+                        )}
+                        {reg_conference.status === 'Pending' && (
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Pending
+                        </span>
+                        )}
+                        {reg_conference.status === 'Revision' && (
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            Need revision
+                        </span>
+                        )}
+                        {reg_conference.status === 'Rejected' && (
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Rejected
+                        </span>
+                        )}
+                    </td>
+                  </tr>
+                ))}
+                </tbody>
+            </table>
 
-                {/* Dynamic Badge Display */}
-                {reg_conference.status === 'Accepted' && (
-                  <div className="badge badge-success gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      className="inline-block h-4 w-4 stroke-current">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      ></path>
-                    </svg>
-                    <span className="text-xs">Accepted</span>
-                  </div>
-                )}
-
-                {reg_conference.status === 'Pending' && (
-                  <div className="badge badge-warning gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      className="inline-block h-4 w-4 stroke-current">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      ></path>
-                    </svg>
-                    <span className="text-xs">Pending</span>
-                  </div>
-                )}
-
-                {reg_conference.status === 'Under review' && (
-                  <div className="badge badge-info gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      className="inline-block h-4 w-4 stroke-current">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      ></path>
-                    </svg>
-                    <span className="text-xs">Under review</span>
-                  </div>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {isOpen && (
-        <div className="modal modal-open">
-          <div className="modal-box bg-white">
-            <h3 className="font-bold text-lg">Reviewer Comments</h3>
-            <p className="py-4">
-              {selectedComments
-                ? selectedComments
-                : 'No comments available'}
-            </p>
-            <div className="modal-action">
-              <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
+          {isOpen && (
+            <div className="modal modal-open">
+              <div className="modal-box bg-white">
+                <h3 className="font-bold text-lg">Reviewer Comments</h3>
+                <p className="py-4">
+                  {selectedComments
+                    ? selectedComments
+                    : 'No comments available'}
+                </p>
+                <div className="modal-action">
+                  <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
-    </div>
   );
 };
 

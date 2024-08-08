@@ -16,8 +16,8 @@ const WelcomeCard: React.FC = () => {
             />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">Welcome back, {session?.user?.name}</h1>
-            <p className="text-sm sm:text-base text-gray-500 mt-2">
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-800">Welcome back, {session?.user?.name}</h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-2">
               Here`s what`s happening with your projects today
             </p>
           </div>

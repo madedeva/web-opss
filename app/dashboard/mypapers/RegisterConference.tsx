@@ -159,11 +159,10 @@ const RegisterConference = ({conferences}: {conferences: Conference[]}) => {
                         </div>
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Abstract <span className="text-red-500">*</span></label>
-                            <input 
-                            type="text" 
-                            value={abstract}
-                            onChange={(e) => setAbstract(e.target.value)}
-                            className="input input-bordered bg-white" required/>
+                            <textarea 
+                                value={abstract}
+                                onChange={(e) => setAbstract(e.target.value)}
+                                id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write abstract here.." required></textarea>
                         </div>
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Keywords <span className="text-red-500">*</span></label>

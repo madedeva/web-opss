@@ -33,67 +33,41 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
 
     return (
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white mt-6 text-left border border-gray-200 rounded-lg">
-            <thead>
+        <table className="min-w-full divide-y divide-gray-200 mt-6">
+            <thead className="bg-gray-50">
                 <tr className="text-xs border-b border-gray-200">
-                    <th className="py-2 px-4 border-r border-gray-200 w-60">Conference Name</th>
-                    <th className="py-2 px-4 border-r border-gray-200">Conference Date</th>
-                    <th className="py-2 px-4 border-r border-gray-200">Submission Deadline</th>
-                    <th className="py-2 px-4 border-r border-gray-200">Statistic</th>
-                    <th className="py-2 px-4 border-r border-gray-200">Status</th>
-                    <th className="py-2 px-4">Action</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conference Name</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conference Date</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submission Deadline</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statistic</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
             <tbody>
                 {filteredConferences.map((conference) => (
                     <tr key={conference.id} className="text-gray-700 text-xs border-b border-gray-200">
-                        <td className="py-2 px-4 border-r border-gray-200">{conference.name}</td>
-                        <td className="py-2 px-4 border-r border-gray-200 w-60">
+                        <td className="py-2 px-4">{conference.name}</td>
+                        <td className="py-2 px-4 w-60">
                             <p className="text-xs">Conference Date</p>
                             <p>{getFormattedDate(conference.startDate)} - {getFormattedDate(conference.endDate)}</p>
                         </td>
-                        <td className="py-2 px-4 border-r border-gray-200 w-60">
+                        <td className="py-2 px-4 w-60">
                             <p className="text-xs">Full Paper Submission</p>
                             <p>{getFormattedDate(conference.submission_deadlineStart)} - {getFormattedDate(conference.submission_deadlineEnd)}</p>
                         </td>
-                        <td className="py-2 px-4 border-r border-gray-200">
+                        <td className="py-2 px-4">
                             <p><a className="underline text-blue-950 text-xs" href="/dashboard/papers">Submitted Paper: 10</a></p>
                         </td>
-                        <td className="py-2 px-4 border-r border-gray-200">
+                        <td className="py-2 px-4">
                             {conference.status === 'Active' ? (
-                                <div className="badge badge-success gap-2">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        className="inline-block h-4 w-4 stroke-current"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M5 13l4 4L19 7"
-                                        ></path>
-                                    </svg>
-                                    <span className="text-xs">Active</span>
-                                </div>
+                                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Active
+                                </span>
                             ) : (
-                                <div className="badge badge-error gap-2">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        className="inline-block h-4 w-4 stroke-current"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        ></path>
-                                    </svg>
-                                    <span className="text-xs">Inactive</span>
-                                </div>
+                                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    Inactive
+                                </span>
                             )}
                         </td>
                         <td className="py-2 px-4">

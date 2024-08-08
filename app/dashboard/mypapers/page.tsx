@@ -47,18 +47,17 @@ const MyConferences = async () => {
 
     return (
     <DashboardLayout>
-        <WelcomeCard />
+        {/* <WelcomeCard /> */}
 
-        <div className="bg-white p-6 rounded-lg mt-4">
+        <div className="bg-white p-6 rounded-lg">
         <div className="mt-6">
           <h3 className="text-lg font-medium">My Conferences</h3>
           <p className="text-sm text-gray-600">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Below is a list of the history of the papers you have submitted.
           </p>
           <div className="mt-2">
           <RegisterConference conferences={conference}/>
           </div>
-          <hr className="mt-2"/>
           <TableMyConference reg_conference={reg_conference} />
         </div>
       </div>
