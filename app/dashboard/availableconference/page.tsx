@@ -1,9 +1,6 @@
 'use client'
 import DashboardLayout from "@/app/components/DashboardLayout";
-import WelcomeCard from "@/app/components/WelcomeCard";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { useEffect, useState } from "react";
 
 const getOrdinalSuffix = (day: number) => {
   if (day > 3 && day < 21) return 'th';
@@ -24,27 +21,25 @@ const getFormattedDate = (date: Date | string): string => {
   return `${month} ${day}${suffix}, ${year}`;
 };
 
-const AvailableConference = async () => {
-  const conferences = await prisma.conference.findMany({
-    where: {
-        status: 'Active',
-    },
-    select: {
-        id: true,
-        name: true,
-        startDate: true,
-        submission_deadlineEnd: true,
-        submission_deadlineStart: true,
-        city: true,
-        country: true,
-        banner: true,
-        slug: true,
-        status: true,
-        endDate: true
-    },
-});
+const AvailableConference = () => {
+  const [conferences, setConferences] = useState([]);
+
+    useEffect(() => {
+        const fetchConferences = async () => {
+            try {
+                const response = await fetch('/api/allconferences'); // Replace with the correct API endpoint
+                const data = await response.json();
+                setConferences(data);
+            } catch (error) {
+                console.error('Failed to fetch conferences', error);
+            }
+        };
+
+        fetchConferences();
+    }, []);
 
   return (
+    
     <DashboardLayout>
       {/* <WelcomeCard /> */}
       <div className="bg-white p-6 rounded-lg">
@@ -63,7 +58,7 @@ const AvailableConference = async () => {
                 </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {conferences.map((conference) => (
+              {conferences.map((conference: any) => (
                     <tr key={conference.id} className="text-gray-700 text-xs">
                         <td className="py-2 px-4">{conference.name}</td>
                         <td className="py-2 px-4">

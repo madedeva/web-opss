@@ -1,7 +1,4 @@
-import { Conference, PrismaClient } from "@prisma/client";
-import Link from 'next/link';
-
-const prisma = new PrismaClient();
+import { useEffect, useState } from 'react';
 
 const imageUrls = [
     "https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29sbGVnZSUyMGNhbXB1c3xlbnwwfHwwfHx8MA%3D%3D",
@@ -30,27 +27,26 @@ const getFormattedDate = (date: Date | string): string => {
     return `${month} ${day}${suffix}, ${year}`;
 };
 
-const GetAllConference = async () => {
-    const conferences = await prisma.conference.findMany({
-        where: {
-            status: 'Active',
-        },
-        take: 8,
-        select: {
-            id: true,
-            name: true,
-            startDate: true,
-            submission_deadlineEnd: true,
-            city: true,
-            country: true,
-            banner: true,
-            slug: true
-        },
-    });
+const GetAllConference = () => {
+    const [conferences, setConferences] = useState([]);
+
+    useEffect(() => {
+        const fetchConferences = async () => {
+            try {
+                const response = await fetch('/api/allconferences'); // Replace with the correct API endpoint
+                const data = await response.json();
+                setConferences(data);
+            } catch (error) {
+                console.error('Failed to fetch conferences', error);
+            }
+        };
+
+        fetchConferences();
+    }, []);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-gray-500">
-            {conferences.map((conference) => (
+            {conferences.map((conference: any) => (
                 <a
                     key={conference.id}
                     href={`/conference-detail/${conference.slug}`}
