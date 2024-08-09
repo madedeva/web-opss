@@ -27,7 +27,7 @@ export const POST = async (request: Request) => {
 
         const con = await prisma.registerConference.create({
             data: {
-                paper_title: formData.get("paper_tile")?.valueOf().toString() ?? '',
+                paper_title: formData.get("paper_title")?.valueOf().toString() ?? '',
                 institution: formData.get("institution")?.valueOf().toString() ?? '',
                 topic: formData.get("topic")?.valueOf().toString() ?? '',
                 abstract: formData.get("abstract")?.valueOf().toString() ?? '',
