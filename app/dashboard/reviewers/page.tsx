@@ -54,16 +54,16 @@ const Reviewer = async () => {
       ...conf,
       reviewers: conRev.filter((cr) => cr.conferenceId === conf.id),
     };
-  }).filter(conf => conf.reviewers.length > 0); // Menyaring konferensi tanpa reviewer
+  }).filter(conf => conf.reviewers.length > 0);
 
   return (
     <DashboardLayout>
-      <WelcomeCard />
-      <div className="bg-white p-6 rounded-lg mt-4">
+      {/* <WelcomeCard /> */}
+      <div className="bg-white p-6 rounded-lg">
         <div className="mt-6">
           <h3 className="text-lg font-medium">Reviewers</h3>
           <p className="text-sm text-gray-600">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Below is a list of reviewers according to the conference you have.
           </p>
           <div className="mt-2">
             <AddReviewer conferences={conference} users={user} />
@@ -71,21 +71,20 @@ const Reviewer = async () => {
 
           {groupedByConference.length > 0 ? (
             groupedByConference.map((conf) => (
-              <div key={conf.id} className="mt-6">
-                <hr className="mt-2" />
+              <div key={conf.id} className="mt-12">
                 <h4 className="text-md font-medium mt-2">{conf.name}</h4>
-                <table className="table-auto min-w-full bg-white mt-2">
-                  <thead>
-                    <tr className="text-sm">
-                      <th className="py-2 text-start">Reviewer Name</th>
-                      <th className="py-2 text-start w-60">Organizer Institution</th>
-                      <th className="py-2 text-start">Organizer Email</th>
-                      <th className="py-2 text-start">Action</th>
+                <table className="min-w-full divide-y divide-gray-200 mt-6">
+                  <thead className="bg-gray-50">
+                    <tr className="text-xs border-b border-gray-200">
+                      <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reviewer Name</th>
+                      <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organizer Institution</th>
+                      <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organizer Email</th>
+                      <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {conf.reviewers.map((cr) => (
-                      <tr className="text-gray-700 text-sm" key={cr.id}>
+                      <tr className="text-gray-700 text-xs border-b border-gray-200" key={cr.id}>
                         <td className="py-2">{cr.user.name}</td>
                         <td className="py-2">{cr.conference.institution}</td>
                         <td className="py-2">{cr.conference.User?.email}</td>
