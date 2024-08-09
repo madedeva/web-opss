@@ -38,15 +38,15 @@ const UpdatePaper = ({ users, userId, conRevId }: UpdatePaperProps) => {
     return (
         <div>
             <button className="btn btn-ghost btn-xs text-blue-950 underline" onClick={handleModal}>
-                Assign Reviewer
+                Asign Reviewer
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
                 <div className="modal-box bg-white">
-                    <h3 className="font-bold text-lg">Assign Reviewer</h3>
+                    <h3 className="font-bold text-lg">Asign Reviewer</h3>
                     <form onSubmit={handleSubmit}>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Select Reviewer</label>
+                        <div className="form-control w-full mt-6">
+                            <p className="mb-2">Select Reviewer <span className="text-red-600">*</span></p>
                             <select 
                                 value={idUser}
                                 onChange={(e) => setUser(e.target.value)}
@@ -60,8 +60,8 @@ const UpdatePaper = ({ users, userId, conRevId }: UpdatePaperProps) => {
                             </select>
                         </div>
                         <div className="modal-action">
-                            <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
-                            <button type="submit" className="btn btn-accent text-white">Save</button>
+                            <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
+                            <button type="submit" className="btn btn-accent text-white">Asign this reviewer</button>
                         </div>
                     </form>
                 </div>

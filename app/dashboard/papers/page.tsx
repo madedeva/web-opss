@@ -63,7 +63,7 @@ const Papers = () => {
 
     // Pagination States
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 2;
+    const itemsPerPage = 3;
 
     const handleModalOpen = (paper: Paper) => {
         setSelectedPaper(paper);
@@ -78,7 +78,7 @@ const Papers = () => {
     useEffect(() => {
         const fetchPapers = async () => {
             try {
-                const response = await fetch('/api/registerconference');
+                const response = await fetch('/api/papersubmission');
                 const data: Paper[] = await response.json();
                 setPapers(data);
             } catch (error) {
@@ -171,13 +171,13 @@ const Papers = () => {
                                 <tr key={paper.id} className="text-gray-700 text-xs border-b border-gray-200">
                                     <td className="py-2 px-4">{paper.paper_title}</td>
                                     <td className="py-2 px-4">
-                                        {paper.user.name}, <p>({paper.institution}, {paper.user.email})</p>
+                                        <p className='font-bold'>{paper.user.name},</p><p>({paper.institution}, {paper.user.email})</p>
                                     </td>
                                     <td className="py-2 px-4">{getFormattedDate(paper.createdAt)}</td>
                                     <td className="py-2 px-4">
-                                        <p>Topic</p>
+                                        <p className='font-bold'>Topic</p>
                                         <p>{paper.topic}</p>
-                                        <p className="mt-4">Abstract</p>
+                                        <p className="mt-4 font-bold">Abstract</p>
                                         <button className="btn btn-ghost btn-xs text-blue-950 underline" onClick={() => handleModalOpen(paper)}>
                                             View abstract
                                         </button>
