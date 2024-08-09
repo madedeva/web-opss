@@ -54,12 +54,12 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
-                <div className="modal-box bg-white">
+                <div className="modal-box bg-white text-gray-700">
                     <h3 className="font-bold text-lg text-center">Add New Reviewer</h3>
                     <hr className="mb-4"/>
                     <form onSubmit={handleSubmit}>
                         <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Reviewer</label>
+                            <p className="mb-2">Select Reviewer <span className="text-red-600">*</span></p>
                             <select
                                 value={selectedUserId}
                                 onChange={(e) => setSelectedUserId(e.target.value)}
@@ -79,7 +79,7 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
                             </select>
                         </div>
                         <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Select Conference</label>
+                            <p className="mb-2">Select Conference <span className="text-red-600">*</span></p>
                             <select
                                 value={selectedConferenceId}
                                 onChange={(e) => setSelectedConferenceId(e.target.value)}

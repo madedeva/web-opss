@@ -72,7 +72,7 @@ const AvailableConference = () => {
                         <td className="py-2 px-4">
                           <button
                             className="btn btn-ghost btn-xs text-blue-950 underline">
-                            Register
+                            Create new submission
                           </button>
                           <button
                             className="btn btn-ghost btn-xs text-blue-950 underline">
