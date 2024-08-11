@@ -32,7 +32,8 @@ const ForgotPassword = () => {
       }
       
       const data = await res.json();
-      if (data.success) {
+      console.log(data);
+      if (data.status) {
         setMessage('Please check your email for a reset link.');
       } else {
         setError('Something went wrong, please try again.');

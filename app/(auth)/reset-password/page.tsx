@@ -1,22 +1,24 @@
 "use client"
 import { useState } from 'react';
-import { useParams } from "next/navigation";
+import { useSearchParams } from 'next/navigation';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const params = useParams();
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = params.token;
+    console.log(token);
     const res = await fetch('/api/auth/reset-password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token, password }),
     });
     const data = await res.json();
-    if (data.success) {
+    console.log("Data: ", data)
+    if (data.status) {
       setMessage('Password has been reset. Please sign in.');
       window.location.href = '/signin';
     } else {

@@ -1,22 +1,22 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { resetPassword } from '@/lib/user';
+import { NextResponse } from 'next/server';
+import { resetPassword, verifyPasswordResetToken } from '@/lib/user';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
-
-  const { token, newPassword } = req.body;
-
-  if (!token || !newPassword || typeof token !== 'string' || typeof newPassword !== 'string') {
-    return res.status(400).json({ message: 'Invalid request data' });
-  }
-
+export async function POST(req: Request) {
   try {
-    await resetPassword(token, newPassword);
-    res.status(200).json({ message: 'Password has been reset successfully' });
+    const body = await req.json();
+    const { token, password } = body;
+
+    if (!token || !password || typeof token !== 'string' || typeof password !== 'string') {
+      return NextResponse.json({ message: 'Invalid request data' }, { status: 400 });
+    }
+
+    const user = await verifyPasswordResetToken(token)
+
+    await resetPassword(user!.id.toString(), password);
+
+    return NextResponse.json({ status:true,  message: 'Password has been reset successfully' }, { status: 200 });
   } catch (error) {
     console.error('Error resetting password:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    return NextResponse.json({ status:false, message: 'Internal server error' }, { status: 500 });
   }
 }
