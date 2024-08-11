@@ -1,8 +1,11 @@
+import React from 'react';
 import { useState } from 'react';
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // const { data: session } = useSession();
 
   return (
     <header className="bg-blue-950 text-white">
@@ -33,6 +36,7 @@ const Header: React.FC = () => {
         <nav className="md:hidden bg-blue-950">
           <a href="/" className="block px-4 py-2">Home</a>
           <a href="/about" className="block px-4 py-2">About Us</a>
+          {/* <a href="/about" className="block px-4 py-2">{session?.user?.name}</a> */}
           <a href="/signin" className="block px-4 py-2">
             <button className="bg-orange-500 text-white py-2 px-4 rounded">Sign In</button>
           </a>

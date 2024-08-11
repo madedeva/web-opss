@@ -64,7 +64,7 @@ const MyReviews = () => {
     useEffect(() => {
         const fetchPapers = async () => {
             try {
-                const response = await fetch('/api/registerconference');
+                const response = await fetch('/api/submission');
                 const data: Paper[] = await response.json();
                 setPapers(data);
             } catch (error) {

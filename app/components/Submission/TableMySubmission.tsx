@@ -1,6 +1,7 @@
 'use client';
 import DeleteConference from "@/app/dashboard/conference/deleteConference";
 import UpdateConference from "@/app/dashboard/conference/updateConference";
+import UpdateSubmission from "@/app/dashboard/mypapers/updateSubmission";
 import { RegisterConference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -25,14 +26,20 @@ const getFormattedDate = (date: Date | string): string => {
 };
 
 type UserCon = {
-  country: string,
-  userId: number,
   id: number,
-  status: string,
   paper_title: string,
-  comments?: string,
+  topic: string,
+  abstract: string,
+  keywords: string,
+  paper: string,
+  institution: string,
+  country: string,
+  city: string,
+  status: string,
+  userId: number
+  comments?: string | null;
   createdAt: Date,
-  paper: string
+  conferenceId: number
   user: {
       name: string,
       email: string,
@@ -52,12 +59,12 @@ type UserCon = {
   }
 }
 
-const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) => {
+const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) => {
   const [selectedComments, setSelectedComments] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleModalOpen = (comments: string | undefined) => {
-    setSelectedComments(comments ?? null); // Convert undefined to null
+  const handleModalOpen = (comments: string | null | undefined) => {
+    setSelectedComments(comments ?? null); 
     setIsOpen(true);
   };
 
@@ -112,11 +119,8 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                         </a>
                     </td>
                     <td className="px-3 py-2 whitespace-normal break-words">
-                        {reg_conference.status !== 'Accepted' && reg_conference.status !== 'Rejected' && (
-                          <button
-                            className="btn btn-ghost btn-xs text-blue-950 underline">
-                            Upload Revision
-                          </button>
+                        {reg_conference.status !== 'Accepted' && reg_conference.status !== 'Rejected' && reg_conference.status !== 'Pending' && (
+                          <UpdateSubmission registerConference={reg_conference}/>
                         )}
                         {reg_conference.status === 'Accepted' && (
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -163,4 +167,4 @@ const TableMyConference = ({ reg_conference }: { reg_conference: UserCon[] }) =>
   );
 };
 
-export default TableMyConference;
+export default TableMySubmission;

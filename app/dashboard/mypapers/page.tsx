@@ -1,10 +1,37 @@
 import DashboardLayout from "@/app/components/DashboardLayout"
-import WelcomeCard from "@/app/components/WelcomeCard";
-import RegisterConference from "./RegisterConference";
+import RegisterConference from "./addSubmission";
 import { PrismaClient } from "@prisma/client";
-import TableMyConference from "@/app/components/MyConference/TableMyConference";
+import TableMySubmission from "@/app/components/Submission/TableMySubmission";
 
 const prisma = new PrismaClient();
+
+type UserCon = {
+  country: string,
+  userId: number,
+  id: number,
+  status: string,
+  paper_title: string,
+  comments?: string | null;
+  createdAt: Date,
+  paper: string
+  user: {
+      name: string,
+      email: string,
+  },
+  conference: {
+    id: number,
+    name: string,
+    description: string,
+    submission_deadlineStart: Date,
+    submission_deadlineEnd: Date,
+    paper_template: string,
+    acronym: string
+    User: {
+        name: string,
+        email: string,
+    };
+  }
+}
 
 const getRegisterConference = async () => {
   try {
@@ -47,8 +74,6 @@ const MyConferences = async () => {
 
     return (
     <DashboardLayout>
-        {/* <WelcomeCard /> */}
-
         <div className="bg-white p-6 rounded-lg">
         <div className="mt-6">
           <h3 className="text-lg font-medium">My Conferences</h3>
@@ -58,7 +83,7 @@ const MyConferences = async () => {
           <div className="mt-2">
           <RegisterConference conferences={conference}/>
           </div>
-          <TableMyConference reg_conference={reg_conference} />
+          <TableMySubmission reg_conference={reg_conference} />
         </div>
       </div>
     </DashboardLayout>
