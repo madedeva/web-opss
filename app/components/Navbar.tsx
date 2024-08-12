@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, SessionProvider } from "next-auth/react";
 
 interface NavbarProps {
   toggleSidebar: () => void;

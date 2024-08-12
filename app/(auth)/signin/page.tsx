@@ -34,7 +34,7 @@ const SignIn = () => {
       toast.error('Sign in failed' + error);
     } else {
       toast.success('Sign in success!');
-      router.push('/dashboard');
+      router.push('/');
     }
   };
 
