@@ -1,6 +1,7 @@
+'use client'
 import React from 'react';
 import { useState } from 'react';
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, SessionProvider } from "next-auth/react";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,6 +9,7 @@ const Header: React.FC = () => {
   // const { data: session } = useSession();
 
   return (
+    <SessionProvider>
     <header className="bg-blue-950 text-white">
       <div className="container mx-auto flex justify-between items-center py-6 px-4">
         <h1 className="text-xl font-bold">Online Paper Submission System</h1>
@@ -43,6 +45,7 @@ const Header: React.FC = () => {
         </nav>
       )}
     </header>
+    </SessionProvider>
   );
 };
 
