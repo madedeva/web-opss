@@ -10,6 +10,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Invalid request data' }, { status: 400 });
     }
 
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/;
+    if (!passwordRegex.test(password)) {
+      return NextResponse.json({ message: 'Password must be at least 8 characters long, contain an uppercase letter, and include a symbol.' }, { status: 400 });
+    }
+
     const user = await verifyPasswordResetToken(token)
 
     await resetPassword(user!.id.toString(), password);

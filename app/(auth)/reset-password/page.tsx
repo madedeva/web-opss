@@ -1,12 +1,15 @@
 "use client"
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import CustomAlert from "@/app/components/Alert/CustomAlert";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+
+  const [alert, setAlert] = useState<{ type: 'info' | 'danger' | 'success' | 'warning' | 'dark'; message: string } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,27 +22,30 @@ const ResetPassword = () => {
     const data = await res.json();
     console.log("Data: ", data)
     if (data.status) {
-      setMessage('Password has been reset. Please sign in.');
+      setAlert({ type: 'success', message: 'Password has been reset. Please sign in.' });
+      // setMessage('Password has been reset. Please sign in.');
       window.location.href = '/signin';
     } else {
-      setMessage('Something went wrong, please try again.');
+      setAlert({ type: 'danger', message: 'Password must be at least 8 characters long, contain an uppercase letter, and include a symbol.' });
+      // setMessage('Something went wrong, please try again.');
     }
   };
 
   return (
-    <div className="container mx-auto">
-      <h2 className="text-2xl font-semibold text-center">Reset Password</h2>
+    <div className="container max-w-md mx-auto px-4">
+      <h2 className="text-2xl font-semibold text-center mt-6">Reset Password</h2>
       <form onSubmit={handleSubmit} className="mt-4">
+      {alert && <CustomAlert type={alert.type} message={alert.message} />}
         <label htmlFor="password">New Password</label>
         <input
           id="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 w-full"
+          className="border p-2 w-full rounded-lg bg-white"
           required
         />
-        <button type="submit" className="mt-4 bg-blue-500 text-white p-2">Reset Password</button>
+        <button type="submit" className="mt-4 bg-blue-950 text-white p-2 rounded-lg">Reset Password</button>
       </form>
       {message && <p className="mt-4">{message}</p>}
     </div>
