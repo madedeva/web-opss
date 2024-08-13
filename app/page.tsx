@@ -4,6 +4,7 @@ import Header from './components/HomePage/Header';
 import Footer from './components/HomePage/Footer';
 import HeadNav from './components/HomePage/Head';
 import GetAllConference from './components/Conference/getAllConference';
+import { SessionProvider } from 'next-auth/react';
 
     export default function Home () {
 
@@ -50,6 +51,7 @@ import GetAllConference from './components/Conference/getAllConference';
 
 
     return (
+        <SessionProvider>
         <div>
         
         <HeadNav />
@@ -130,5 +132,6 @@ import GetAllConference from './components/Conference/getAllConference';
                 </button>
             )}
         </div>
+        </SessionProvider>
         );
     }

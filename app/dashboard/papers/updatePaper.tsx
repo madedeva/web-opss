@@ -7,10 +7,9 @@ import axios from "axios";
 type UpdatePaperProps = {
     users: User[];
     userId: number;
-    conRevId: number;
 };
 
-const UpdatePaper = ({ users, userId, conRevId }: UpdatePaperProps) => {
+const UpdatePaper = ({ users, userId }: UpdatePaperProps) => {
     const [idUser, setUser] = useState(userId.toString());
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
@@ -19,13 +18,12 @@ const UpdatePaper = ({ users, userId, conRevId }: UpdatePaperProps) => {
         e.preventDefault();
 
         try {
-            await axios.patch(`/api/myconference/${conRevId}`, {
+            await axios.patch(`/api/papersubmission}`, {
                 userId: parseInt(idUser)
             });
 
-            // Refresh the page or update the UI
             router.refresh();
-            setIsOpen(false); // Close the modal
+            setIsOpen(false);
         } catch (error) {
             console.error("Error updating reviewer:", error);
         }
