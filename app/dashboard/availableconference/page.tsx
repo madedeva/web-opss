@@ -41,7 +41,6 @@ const AvailableConference = () => {
   return (
     
     <DashboardLayout>
-      {/* <WelcomeCard /> */}
       <div className="bg-white p-6 rounded-lg">
         <div className="mt-6">
           <h3 className="text-lg font-medium">Available Conference</h3>

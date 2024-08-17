@@ -1,6 +1,5 @@
 "use client";
 import { useState, SyntheticEvent, useEffect} from "react";
-import type { Brand } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -44,10 +43,10 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
     const [institution, setInstitution] = useState(conference.institution || '');
     const [paper_template, setPaperTemplate] = useState<File | null>(null);
     const [payment_info, setPaymentInfo] = useState(conference.payment_info || '');
-    const [submission_deadlineStart, setSubmissionDeadlineStart] = useState(conference.submission_deadlineStart);
-    const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState(conference.submission_deadlineEnd);
-    const [startDate, setStartDate] = useState(conference.startDate);
-    const [endDate, setEndDate] = useState(conference.endDate);
+    const [submission_deadlineStart, setSubmissionDeadlineStart] = useState(conference.submission_deadlineStart.toDateString());
+    const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState(conference.submission_deadlineEnd.toDateString());
+    const [startDate, setStartDate] = useState(conference.startDate.toDateString());
+    const [endDate, setEndDate] = useState(conference.endDate.toDateString());
     const [status, setStatus] = useState(conference.status);
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
@@ -99,10 +98,10 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
         formData.append('institution', institution);
         formData.append('paper_template', paper_template || '');
         formData.append('payment_info', payment_info);
-        formData.append('submission_deadlineStart', submission_deadlineStart.toISOString());
-        formData.append('submission_deadlineEnd', submission_deadlineEnd.toISOString());
-        formData.append('startDate', startDate.toISOString());
-        formData.append('endDate', endDate.toISOString());
+        formData.append('submission_deadlineStart', new Date(submission_deadlineStart).toISOString());
+        formData.append('submission_deadlineEnd', new Date(submission_deadlineEnd).toISOString());
+        formData.append('startDate', new Date(startDate).toISOString());
+        formData.append('endDate', new Date(endDate).toISOString());
         formData.append('status', status);
 
         await axios.put(`/api/conferences/${conference.id}`, formData, {
@@ -306,7 +305,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                 <input
                                 type="datetime-local"
                                 value={submission_deadlineStart.toString()}
-                                onChange={(e) => setSubmissionDeadlineStart(new Date(e.target.value))}
+                                onChange={(e) => setSubmissionDeadlineStart(e.target.value)}
                                 className="input input-bordered bg-white"
                                 placeholder="Submission Deadline"
                                 />
@@ -316,7 +315,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                 <input
                                 type="datetime-local"
                                 value={submission_deadlineEnd.toString()}
-                                onChange={(e) => setSubmissionDeadlineEnd(new Date(e.target.value))}
+                                onChange={(e) => setSubmissionDeadlineEnd(e.target.value)}
                                 className="input input-bordered bg-white"
                                 placeholder="Submission Deadline"
                                 />
@@ -330,7 +329,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                 <input
                                     type="datetime-local"
                                     value={startDate.toString()}
-                                    onChange={(e) => setStartDate(new Date(e.target.value))}
+                                    onChange={(e) => setStartDate(e.target.value)}
                                     className="input input-bordered bg-white"
                                     placeholder="Start Date"
                                 />
@@ -342,7 +341,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                 <input
                                     type="datetime-local"
                                     value={endDate.toString()}
-                                    onChange={(e) => setEndDate(new Date(e.target.value))}
+                                    onChange={(e) => setEndDate(e.target.value)}
                                     className="input input-bordered bg-white"
                                     placeholder="End Date"
                                 />

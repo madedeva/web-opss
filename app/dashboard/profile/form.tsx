@@ -59,7 +59,7 @@ const Form = () => {
         setLoading(true);
 
         try{
-            if (form.password == form.passwordConfirm && (form.password !== '' || form.passwordConfirm !== '')){
+            if (form.passwordNew == form.passwordConfirm && (form.passwordNew !== '' || form.passwordConfirm !== '')){
                 const response = await axios.patch('/api/profile', form);
 
                 if (response.status === 200) {

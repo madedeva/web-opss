@@ -1,6 +1,4 @@
 'use client';
-import DeleteConference from "@/app/dashboard/conference/deleteConference";
-import UpdateConference from "@/app/dashboard/conference/updateConference";
 import UpdateSubmission from "@/app/dashboard/mypapers/updateSubmission";
 import { RegisterConference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";

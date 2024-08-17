@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/HomePage/Header';
 import Footer from '../components/HomePage/Footer';
 import HeadNav from '../components/HomePage/Head';
-import GetAllConference from '../components/Conference/getAllConference';
 
     const ConferenceDetail = () => {
 

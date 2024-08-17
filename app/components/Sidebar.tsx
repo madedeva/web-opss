@@ -45,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
           <span className="ml-2">Conferences</span>
         </a>
         </li>
-        <li className={`relative ${currentPath === '/dashboard/reviewers' ? 'bg-orange-500 rounded' : ''}`}>
+        {/* <li className={`relative ${currentPath === '/dashboard/reviewers' ? 'bg-orange-500 rounded' : ''}`}>
         <a href="/dashboard/reviewers" className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-white font-semibold text-ellipsis whitespace-nowrap rounded hover:text-white hover:bg-orange-500 mt-2 transition duration-300 ease-in-out">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-pencil-square mr-2" viewBox="0 0 16 16">
             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -53,7 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
           </svg>
           Reviewers
         </a>
-        </li>
+        </li> */}
         <li className={`relative ${currentPath === '/dashboard/papers' ? 'bg-orange-500 rounded' : ''}`}>
         <a href="/dashboard/papers" className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-white font-semibold text-ellipsis whitespace-nowrap rounded hover:text-white hover:bg-orange-500 mt-2 transition duration-300 ease-in-out">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-file-earmark-bar-graph-fill" viewBox="0 0 16 16">

@@ -26,9 +26,7 @@ const getFormattedDate = (date: Date | string): string => {
 const TableConference = ({conference}:{ conference:  Conference[]}) => {
 
     const { data: session } = useSession();
-
     const user = session?.user as User;
-
     const filteredConferences = conference.filter(conference => conference.userId === user?.id);
 
     return (
