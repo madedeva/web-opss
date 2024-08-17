@@ -17,7 +17,6 @@ const AddSubmission = ({conferences}: {conferences: Conference[]}) => {
 
     const [selectedConferenceId, setSelectedConferenceId] = useState('');
     const [paper_title, setPaperTitle] = useState ("");
-    // const [topic, setTopic] = useState ("");
     const [topicOptions, setTopicOptions] = useState<string[]>([]);
     const [selectedTopic, setSelectedTopic] = useState("");
     const [abstract, setAbstract] = useState ("");
@@ -63,7 +62,7 @@ const AddSubmission = ({conferences}: {conferences: Conference[]}) => {
         if (selectedConference) {
             const topics = selectedConference.topic.split(',').map(topic => topic.trim());
             setTopicOptions(topics);
-            setSelectedTopic(topics[0] || ""); // Set the first topic as the default selected topic
+            setSelectedTopic(topics[0] || "");
         } else {
             setTopicOptions([]);
             setSelectedTopic("");
@@ -74,7 +73,6 @@ const AddSubmission = ({conferences}: {conferences: Conference[]}) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('paper_title', paper_title);
-        // formData.append('topic', topic);
         formData.append('topic', selectedTopic);
         formData.append('abstract', abstract);
         formData.append('keywords', keywords);
@@ -96,7 +94,6 @@ const AddSubmission = ({conferences}: {conferences: Conference[]}) => {
             });
     
             setPaperTitle('');
-            // setTopic('');
             setSelectedTopic('');
             setAbstract('');
             setKeywords('');
@@ -264,7 +261,7 @@ const AddSubmission = ({conferences}: {conferences: Conference[]}) => {
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
-                            <button className="btn btn-primary text-white">Register</button>
+                            <button className="btn bg-blue-950 text-white">Submit</button>
                         </div>
                     </form>
                 </div>

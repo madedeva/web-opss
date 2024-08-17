@@ -23,7 +23,6 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     const [paper_title, setPaperTitle] = useState (registerConference.paper_title);
     const [topicOptions, setTopicOptions] = useState<string[]>([]);
     const [selectedTopic, setSelectedTopic] = useState(registerConference.topic || '');
-    // const [topic, setTopic] = useState (registerConference.topic || '');
     const [abstract, setAbstract] = useState (registerConference.abstract);
     const [keywords, setKeywords] = useState (registerConference.keywords);
     const [paper, setPaper] = useState<File | null>(null);
@@ -79,7 +78,6 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         const formData = new FormData();
         formData.append('paper_title', paper_title);
         formData.append('topic', selectedTopic);
-        // formData.append('topic', topic || '');
         formData.append('abstract', abstract || '');
         formData.append('keywords', keywords || '');
         formData.append('paper', paper || '');
@@ -145,14 +143,6 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                                 ))}
                             </select>
                         </div>
-                        {/* <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Topic</label>
-                            <input 
-                            type="text" 
-                            value={topic}
-                            onChange={(e) => setTopic(e.target.value)}
-                            className="input input-bordered bg-white" required/>
-                        </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Abstract</label>
                             <textarea 
@@ -225,7 +215,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
-                            <button className="btn btn-primary text-white">Upload Revision</button>
+                            <button className="btn bg-blue-950 text-white">Upload Revision</button>
                         </div>
                     </form>
                 </div>

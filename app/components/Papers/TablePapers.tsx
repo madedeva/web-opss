@@ -62,7 +62,6 @@ const TablePapers = () => {
     const [users, setUser] = useState<User[]>([]);
     const [selectedConference, setSelectedConference] = useState<string | null>(null);
 
-    // Pagination States
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3;
 
@@ -99,7 +98,7 @@ const TablePapers = () => {
 
     const handleConferenceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedConference(e.target.value || null);
-        setCurrentPage(1); // Reset to the first page when changing filter
+        setCurrentPage(1);
     };
 
     const uniqueConferenceIds = Array.from(new Set(papers.map((paper) => paper.conferenceId)));
@@ -108,7 +107,6 @@ const TablePapers = () => {
         ? papers.filter((paper) => paper.conferenceId.toString() === selectedConference)
         : papers;
 
-    // Pagination Logic
     const startIndex = (currentPage - 1) * itemsPerPage;
     const paginatedPapers = filteredPapers.slice(startIndex, startIndex + itemsPerPage);
     const totalPages = Math.ceil(filteredPapers.length / itemsPerPage);

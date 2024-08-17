@@ -60,7 +60,7 @@ const UpdatePaper = ({ users, paperId }: UpdatePaperProps) => {
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
-                            <button type="submit" className="btn btn-accent text-white">Asign this reviewer</button>
+                            <button type="submit" className="btn bg-blue-950 text-white">Asign reviewer</button>
                         </div>
                     </form>
                 </div>

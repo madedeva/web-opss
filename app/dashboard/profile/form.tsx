@@ -49,10 +49,6 @@ const Form = () => {
         });
     };
 
-    if (status === 'loading') {
-        return <div>Loading...</div>;
-    }
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -87,7 +83,7 @@ const Form = () => {
     return (
         <form onSubmit={handleSubmit}>
             <ToastContainer/>
-            <h2 className="text-xl font-semibold mb-4 mt-4">Profile Information</h2>
+            <h2 className="text-xl font-semibold mb-4">Profile</h2>
             <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="col-span-1">
                     <label className="block mb-2 text-sm font-medium">Name</label>
@@ -95,7 +91,7 @@ const Form = () => {
                     type="text"
                     name="name"
                     value={form.name} 
-                    onChange={handleChange}/>
+                    onChange={handleChange} disabled/>
                 </div>
                 <div className="col-span-1">
                     <label className="block mb-2 text-sm font-medium">Email</label>
@@ -103,7 +99,7 @@ const Form = () => {
                     type="email"
                     name="email"
                     value={form.email}
-                    onChange={handleChange}/>
+                    onChange={handleChange} disabled/>
                 </div>
             </div>
             <h2 className="text-xl font-semibold mb-4">Update Password</h2>
@@ -134,7 +130,7 @@ const Form = () => {
                 </div>
             </div>
             <div className="mt-6 text-right">
-                <button className="px-4 py-2 bg-blue-700 text-white rounded-md shadow-sm">
+                <button className="px-4 py-2 bg-blue-950 text-white rounded-md shadow-sm">
                     {loading ? 'Updating...' : 'Update Profile'}
                 </button>
             </div>
