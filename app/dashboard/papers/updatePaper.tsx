@@ -6,11 +6,11 @@ import axios from "axios";
 
 type UpdatePaperProps = {
     users: User[];
-    userId: number;
+    paperId: number;
 };
 
-const UpdatePaper = ({ users, userId }: UpdatePaperProps) => {
-    const [idUser, setUser] = useState(userId.toString());
+const UpdatePaper = ({ users, paperId }: UpdatePaperProps) => {
+    const [idUser, setUser] = useState(paperId.toString());
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
@@ -18,8 +18,9 @@ const UpdatePaper = ({ users, userId }: UpdatePaperProps) => {
         e.preventDefault();
 
         try {
-            await axios.patch(`/api/papersubmission}`, {
-                userId: parseInt(idUser)
+            await axios.post(`/api/assignreviewer`, {
+                reviewerId: parseInt(idUser),
+                registerConferenceId: paperId,
             });
 
             router.refresh();

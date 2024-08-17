@@ -13,11 +13,13 @@ export const GET = async (request: Request) => {
         }
 
         const submissions = await prisma.registerConference.findMany({
-            where: {
-                conrevId: userId
-            },
             include: {
-                conference: true
+                conference: true,
+                ReviewPaper: {
+                    where: {
+                        reviewerId: userId
+                    }
+                },
             }
         });
 
