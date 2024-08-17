@@ -10,8 +10,12 @@ export const POST = async (request: Request) => {
     const body: User = await request.json();
     
     // Validasi password
-    if (!body.password || body.password.length < 8) {
-      return NextResponse.json({ error: "Password harus memiliki minimal 8 karakter." }, { status: 400 });
+    // if (!body.password || body.password.length < 8) {
+    //   return NextResponse.json({ error: "Password harus memiliki minimal 8 karakter." }, { status: 400 });
+    // }
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/;
+    if (!body.password || !passwordRegex.test(body.password)) {
+      return NextResponse.json({ error: "Password harus memiliki minimal 8 karakter, mengandung huruf kapital, dan simbol." }, { status: 400 });
     }
     
     // Validasi email

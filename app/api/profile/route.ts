@@ -5,9 +5,20 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+type PasswordNew = {
+    id: number,
+    name: string,
+    email: string,
+    password: string,
+    passwordNew: string,
+    passwordConfirm: string
+}
+
 export const PATCH = async (request: Request) => {
     try {
-        const body: User = await request.json()
+        const body: PasswordNew = await request.json()
+
+        // validasi current password
 
         //validasi password
         if (!body.email || !/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(body.email)) {
@@ -15,7 +26,7 @@ export const PATCH = async (request: Request) => {
         }
 
         // Enkripsi password
-        const hashedPassword = await bcrypt.hash(body.password, 10);
+        const hashedPassword = await bcrypt.hash(body.passwordNew, 10);
 
         const user = await prisma.user.update({
             where: {

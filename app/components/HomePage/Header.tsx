@@ -1,11 +1,12 @@
+'use client'
 import React from 'react';
 import { useState } from 'react';
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, SessionProvider } from "next-auth/react";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
 
   return (
     <header className="bg-blue-950 text-white">
@@ -13,6 +14,7 @@ const Header: React.FC = () => {
         <h1 className="text-xl font-bold">Online Paper Submission System</h1>
         <nav className="hidden md:flex items-center">
           <a href="/" className="px-4">Home</a>
+          <a href="/about" className="block px-4 py-2">{session?.user?.name}</a>
           <a href="/about-us" className="px-4">About Us</a>
           <a href="/signin" className="px-4">
             <button className="bg-orange-500 text-white py-2 px-4 rounded">Sign In</button>
@@ -36,7 +38,7 @@ const Header: React.FC = () => {
         <nav className="md:hidden bg-blue-950">
           <a href="/" className="block px-4 py-2">Home</a>
           <a href="/about" className="block px-4 py-2">About Us</a>
-          {/* <a href="/about" className="block px-4 py-2">{session?.user?.name}</a> */}
+          <a href="/about" className="block px-4 py-2">{session?.user?.name}</a>
           <a href="/signin" className="block px-4 py-2">
             <button className="bg-orange-500 text-white py-2 px-4 rounded">Sign In</button>
           </a>
