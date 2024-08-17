@@ -5,6 +5,7 @@ import Footer from './components/HomePage/Footer';
 import HeadNav from './components/HomePage/Head';
 import GetAllConference from './components/Conference/getAllConference';
 import { SessionProvider } from 'next-auth/react';
+import PartnerSlider from './components/PartnerSlider';
 
     export default function Home () {
 
@@ -89,7 +90,7 @@ import { SessionProvider } from 'next-auth/react';
 
             <section className="bg-blue-950 text-white py-20" id="conference">
                 <div className="container mx-auto text-center">
-                    <h2 className="text-3xl font-bold mb-4">Latest Conference</h2>
+                    <h2 className="text-3xl font-bold mb-8">Latest Conference</h2>
                     <GetAllConference />
                     <div className="flex justify-center">
                     <a href="/dashboard/availableconference"><button className="mt-8 bg-orange-500 text-white py-2 px-6 rounded flex items-center transform transition duration-300 hover:scale-105">
@@ -105,7 +106,8 @@ import { SessionProvider } from 'next-auth/react';
                     </div>
                 </div>
             </section>
-
+            
+            <PartnerSlider />
 
             <section className="py-20 text-center">
             <h2 className="text-3xl font-bold mb-4 text-white">Get in Touch with Us</h2>

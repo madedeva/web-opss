@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserIcon, EnvelopeIcon, LockClosedIcon, ArrowRightCircleIcon} from '@heroicons/react/24/solid';
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -20,7 +21,6 @@ const SignUp = () => {
   const [roles, setRoles] = useState<Role[]>([]);
 
   useEffect(() => {
-    // Ambil data role dari API
     const fetchRoles = async () => {
       try {
         const response = await axios.get('/api/roles');
@@ -70,49 +70,61 @@ const SignUp = () => {
         <div className="m-auto w-full max-w-md p-8 bg-white rounded-md shadow-md">
           <h2 className="text-2xl font-semibold text-center text-orange-500">Create New Account</h2>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={form.name}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-              />
+            <div className="relative">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name <span className="text-red-600">*</span></label>
+              <div className="mt-1 flex items-center border border-orange-400 rounded-md shadow-sm">
+                <UserIcon className="w-5 h-5 text-gray-400 ml-3" aria-hidden="true" />
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border-none text-xs bg-white rounded-md focus:outline-none focus:ring-0"
+                  placeholder='Prof/Dr/-(optional). Your Name, S.T/M.T/-(optional)' required
+                />
+              </div>
+            </div>
+            <div className="relative">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className="text-red-600">*</span></label>
+              <div className="mt-1 flex items-center border border-orange-400 rounded-md shadow-sm">
+                <EnvelopeIcon className="w-5 h-5 text-gray-400 ml-3" aria-hidden="true" />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="w-full text-sm px-3 py-2 border-none bg-white rounded-md focus:outline-none focus:ring-0"
+                  placeholder='youremail@example.com' required
+                />
+              </div>
+            </div>
+            <div className="relative">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password <span className="text-red-600">*</span></label>
+              <div className="mt-1 flex items-center border border-orange-400 rounded-md shadow-sm">
+                <LockClosedIcon className="w-5 h-5 text-gray-400 ml-3" aria-hidden="true" />
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  className="w-full text-sm px-3 py-2 border-none bg-white rounded-md focus:outline-none focus:ring-0"
+                  placeholder='********' required
+                />
+              </div>
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={form.email}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={form.password}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">Select Role</label>
+              <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">Select Role <span className="text-red-600">*</span></label>
               <select
                 id="roleId"
                 name="roleId"
                 value={form.roleId}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-orange-400 rounded-md bg-white shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                className="mt-1 block w-full px-3 py-2 border border-orange-400 rounded-md bg-white shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500" required
               >
-                <option value="" className='disable'>Select role</option>
+                <option value="" className='disable'>select role..</option>
                 {filteredRoles.map(role => (
                   <option key={role.id} value={role.id}>{role.name}</option>
                 ))}
@@ -121,8 +133,9 @@ const SignUp = () => {
             <div>
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-orange-500 text-white font-semibold rounded-md shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                className="w-full py-2 px-4 bg-orange-500 text-white font-semibold rounded-md shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 flex items-center justify-center"
               >
+                <ArrowRightCircleIcon className="w-5 h-5 text-white mr-2" aria-hidden="true" />
                 Create Account
               </button>
             </div>

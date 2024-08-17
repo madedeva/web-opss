@@ -201,7 +201,7 @@ const AddConference = () => {
                                 </div>
                             ))}
                             <div className="mt-2">
-                                <button type="button" className="btn btn-accent btn-sm text-white mt-2" onClick={addTopicField}>Add new topic or track</button>
+                                <button type="button" className="btn bg-blue-950 btn-sm text-white mt-2" onClick={addTopicField}>Add new topic or track</button>
                             </div>
                         </div>
 
@@ -381,7 +381,7 @@ const AddConference = () => {
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
-                            <button type="submit" className="btn btn-accent text-white">Add Conference</button>
+                            <button type="submit" className="btn bg-blue-950 text-white">Add Conference</button>
                         </div>
                     </form>
                 </div>

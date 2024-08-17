@@ -27,7 +27,7 @@ const AvailableConference = () => {
     useEffect(() => {
         const fetchConferences = async () => {
             try {
-                const response = await fetch('/api/allconferences'); // Replace with the correct API endpoint
+                const response = await fetch('/api/allconferences');
                 const data = await response.json();
                 setConferences(data);
             } catch (error) {
