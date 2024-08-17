@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { User } from '@prisma/client';
 import UpdatePaper from '@/app/dashboard/papers/updatePaper';
 
@@ -13,6 +12,7 @@ const getOrdinalSuffix = (day: number) => {
         default: return 'th';
     }
 };
+
 
 const getFormattedDate = (date: Date | string): string => {
     const dateObj = typeof date === 'string' ? new Date(date) : date;
@@ -59,6 +59,7 @@ const TablePapers = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
     const [papers, setPapers] = useState<Paper[]>([]);
+    const [users, setUser] = useState<User[]>([]);
     const [selectedConference, setSelectedConference] = useState<string | null>(null);
 
     // Pagination States
@@ -86,6 +87,13 @@ const TablePapers = () => {
             }
         };
 
+        const getUser = async () => {
+            const res = await fetch('/api/users');
+            const data: User[] = await res.json();
+            setUser(data);
+        };
+
+        getUser();
         fetchPapers();
     }, []);
 
@@ -213,7 +221,7 @@ const TablePapers = () => {
                                 </a>
                             </td>
                             <td className="py-2 px-4">
-                                <UpdatePaper users={[]} userId={0} />
+                                <UpdatePaper users={users} paperId={paper.id} />
                             </td>
                         </tr>
                     ))}
