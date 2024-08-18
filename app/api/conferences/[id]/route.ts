@@ -3,11 +3,11 @@ import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import fs from "node:fs/promises";
 
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-};
+// export const config = {
+//     api: {
+//       bodyParser: false,
+//     },
+// };
 
 const prisma = new PrismaClient();
 
