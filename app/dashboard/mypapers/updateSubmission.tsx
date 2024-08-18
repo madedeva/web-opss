@@ -86,7 +86,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         formData.append('institution', institution || '');
         formData.append('country', country || '');
         formData.append('city', city || '');
-        formData.append('status', status);
+        formData.append('status', 'Pending');
 
         try{
             await axios.put(`/api/submission/${registerConference.id}`, formData, {
