@@ -1,5 +1,6 @@
 'use client'
 import DashboardLayout from "@/app/components/DashboardLayout";
+import RegisterConference from "./addSubmission";
 import { useEffect, useState } from "react";
 
 const getOrdinalSuffix = (day: number) => {
@@ -53,6 +54,7 @@ const AvailableConference = () => {
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conference Name</th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conference Date</th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submission Deadline</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paper Template</th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
@@ -69,10 +71,16 @@ const AvailableConference = () => {
                             <p>{getFormattedDate(conference.submission_deadlineStart)} - {getFormattedDate(conference.submission_deadlineEnd)}</p>
                         </td>
                         <td className="py-2 px-4">
-                          <button
-                            className="btn btn-ghost btn-xs text-blue-950 underline">
-                            Create new submission
-                          </button>
+                          <a
+                            className="underline text-blue-950"
+                            href={`/uploads/paper_template/${conference.paper_template}`}
+                            download
+                          >
+                            Download paper template
+                          </a>
+                        </td>
+                        <td className="py-2 px-4">
+                        {/* <RegisterConference conferences={conference}/> */}
                           <button
                             className="btn btn-ghost btn-xs text-blue-950 underline">
                             View details

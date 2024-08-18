@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { User } from '@prisma/client';
 import UpdatePaper from '@/app/dashboard/papers/updatePaper';
+import { useSession } from 'next-auth/react';
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -61,6 +62,8 @@ const TablePapers = () => {
     const [papers, setPapers] = useState<Paper[]>([]);
     const [users, setUser] = useState<User[]>([]);
     const [selectedConference, setSelectedConference] = useState<string | null>(null);
+    const { data: session, status, update } = useSession()
+    const [user, setUserSession] = useState<User>();
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3;
@@ -76,9 +79,14 @@ const TablePapers = () => {
     };
 
     useEffect(() => {
+        if (session?.user) {
+            const user = session.user as User;
+            setUserSession(user);
+        }
+
         const fetchPapers = async () => {
             try {
-                const response = await fetch('/api/papersubmission');
+                const response = await fetch(`/api/papersubmission?userId=${user!.id}`);
                 const data: Paper[] = await response.json();
                 setPapers(data);
             } catch (error) {
@@ -94,7 +102,7 @@ const TablePapers = () => {
 
         getUser();
         fetchPapers();
-    }, []);
+    }, [session]);
 
     const handleConferenceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedConference(e.target.value || null);

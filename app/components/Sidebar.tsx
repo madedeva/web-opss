@@ -2,18 +2,21 @@
 import React from 'react';
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react';
+import { User } from '@prisma/client';
 
 interface SidebarProps {
   isVisible: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
-  // const { data: session, status } = useSession();
+  
+  const { data: session, status } = useSession();
   const currentPath = usePathname();
 
-  // if (!session?.user) return null;
+  if (!session?.user) return null;
 
-  // const userRole = session.user.roleId;
+  const user = session.user as User;
+  const roleId = user.roleId
   
   return (
     <div className={`w-64 h-full bg-blue-950 px-1 absolute transition-transform ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
@@ -21,8 +24,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
             <a href="/"><img src="/logo/opss-logo.png" alt="OPSS Logo" className="w-36"/></a>
         </div>
 
-        {/* oprator */}
-        <ul className="relative mt-4">
+        
+          <ul className="relative mt-4">
           <li className={`relative ${currentPath === '/dashboard' ? 'bg-orange-500 rounded' : ''}`}>
               <a href="/dashboard" className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-white font-semibold text-ellipsis whitespace-nowrap rounded hover:text-white hover:bg-orange-500 transition duration-300 ease-in-out">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-speedometer2" viewBox="0 0 16 16">
@@ -33,8 +36,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
               </a>
           </li>
         </ul>
+
       
-      {/* role opeator */}
+      {roleId === 2 && (
       <ul className="relative mt-2">
         <li className={`relative ${currentPath === '/dashboard/conference' ? 'bg-orange-500 rounded' : ''}`}>
         <a href="/dashboard/conference" className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-white font-semibold text-ellipsis whitespace-nowrap rounded hover:text-white hover:bg-orange-500 mt-2 transition duration-300 ease-in-out">
@@ -55,9 +59,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
         </a>
         </li>
       </ul>
+      )}
 
-      {/* role author */}
-      <hr />
+      {roleId === 1 && (
       <ul>
         <li className={`relative ${currentPath === '/dashboard/mypapers' ? 'bg-orange-500 rounded' : ''}`}>
         <a href="/dashboard/mypapers" className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-white font-semibold text-ellipsis whitespace-nowrap rounded hover:text-white hover:bg-orange-500 mt-2 transition duration-300 ease-in-out">
@@ -76,9 +80,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
         </a>
         </li>
       </ul>
+      )}
 
-      {/* role reviewer */}
-      <hr />
+      {roleId === 3 && (
       <ul>
         <li className={`relative ${currentPath === '/dashboard/myreviews' ? 'bg-orange-500 rounded' : ''}`}>
         <a href="/dashboard/myreviews" className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-white font-semibold text-ellipsis whitespace-nowrap rounded hover:text-white hover:bg-orange-500 mt-2 transition duration-300 ease-in-out">
@@ -90,6 +94,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible }) => {
         </a>
         </li>
       </ul>
+      )}
+
+
       <hr />
       <ul>
         <li className={`relative ${currentPath === '/dashboard/profile' ? 'bg-orange-500 rounded' : ''}`}>

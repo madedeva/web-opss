@@ -3,9 +3,21 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const GET = async () => {
+export const GET = async (request: Request) => {
     try {
+        const url = new URL(request.url);
+        const userId = Number(url.searchParams.get('userId'));
+
+        if (isNaN(userId)) {
+            return NextResponse.json({ error: 'Invalid userId' }, { status: 400 });
+        }
+
         const papers = await prisma.registerConference.findMany({
+            where : {
+              conference : {
+                userId : userId
+              }
+            },
             include:{
                 conference: {
                     include: {
@@ -25,6 +37,8 @@ export const GET = async () => {
                   },
                 }
             });
+        
+            console.log(userId)
         return NextResponse.json(papers);
     } catch (e) {
         console.error(e);

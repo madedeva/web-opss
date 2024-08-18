@@ -49,6 +49,10 @@ const UpdatePaper = ({ users, paperId }: UpdatePaperProps) => {
                             <select 
                                 value={idUser}
                                 onChange={(e) => setUser(e.target.value)}
+                                onClick={(e) => {
+                                    const target = e.target as HTMLSelectElement;
+                                    setUser(target.value);
+                                }}
                                 className="select select-bordered bg-white"
                                 required
                             >

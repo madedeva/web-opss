@@ -14,15 +14,12 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
     setSidebarVisible(!isSidebarVisible);
   };
 
-  // Example function to simulate loading data
   const fetchData = async () => {
     setIsLoading(true);
-    // Simulate data fetching delay
     await new Promise((resolve) => setTimeout(resolve, 500));
     setIsLoading(false);
   };
 
-  // Simulate fetching data on mount
   React.useEffect(() => {
     fetchData();
   }, []);

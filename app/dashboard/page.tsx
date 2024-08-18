@@ -1,8 +1,18 @@
+'use client'
 import React from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import WelcomeCard from '../components/WelcomeCard';
+import { useSession } from 'next-auth/react';
+import { User } from '@prisma/client';
 
 const Dashboard = () => {
+
+  // const { data: session, status } = useSession();
+
+  // if (!session?.user) return null;
+
+  // const user = session.user as User;
+  // const roleId = user.roleId
 
   return (
     <DashboardLayout>

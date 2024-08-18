@@ -13,16 +13,20 @@ export const GET = async (request: Request) => {
         }
 
         const submissions = await prisma.registerConference.findMany({
-            include: {
-                conference: true,
+            where: {
                 ReviewPaper: {
-                    where: {
+                    some: {
                         reviewerId: userId
                     }
-                },
+                }
+            },
+            include: {
+                conference: true,
+                ReviewPaper: true,
             }
         });
 
+        console.log(submissions)
         return NextResponse.json(submissions, { status: 200 });
     } catch (error) {
         console.error('Failed to fetch submissions', error);

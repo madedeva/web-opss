@@ -61,7 +61,7 @@ const MyReviewTable = () => {
     const [selectedPaper2, setSelectedPaper2] = useState<Paper | null>(null);
     const [isOpen2, setIsOpen2] = useState(false);
     const [papers, setPapers] = useState<Paper[]>([]);
-    const [comment, setComment] = useState('');
+    const [comments, setComment] = useState('');
     const [statusPaper, setStatusPaper] = useState('Pending');
     const [paperId, setPaperId] = useState<number>();
     const { data: session, status, update } = useSession()
@@ -100,10 +100,6 @@ const MyReviewTable = () => {
     
         fetchPapers();
     }, [user, session]);
-    
-    if (status === 'loading') {
-        return <div>Loading...</div>;
-    }
 
     const handleModalOpen = (paper: Paper) => {
         setSelectedPaper(paper);
@@ -131,7 +127,7 @@ const MyReviewTable = () => {
         
         try {
             await axios.put(`/api/reviewsubmission/${paperId}`, {
-                comments: comment,
+                comments: comments,
                 status: statusPaper,
             });
     
@@ -261,24 +257,30 @@ const MyReviewTable = () => {
 
                     {isOpen2 && selectedPaper2 && (
                         <div className="modal modal-open">
+                            <div className="modal-box bg-white w-full max-w-5xl text-black">
                             <form onSubmit={handleSubmit}>
-                            <div className="modal-box bg-white">
                                 <h3 className="font-bold text-lg">Paper Title: {selectedPaper2.paper_title}</h3>
                                 <hr className="mt-4" />
                                 <p className="py-4">
                                     {selectedPaper2.abstract}
-
                                         <input type="hidden" name="peperId" value={selectedPaper2.id}/>
                                         <div className="form-control w-full mt-6">
+                                            <label className="label font-bold">Comments Review</label>
+                                            <textarea 
+                                            value={comments}
+                                            onChange={(e) => setComment(e.target.value)}
+                                            id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your comments"></textarea>
+                                        </div>
+                                        {/* <div className="form-control w-full mt-6">
                                             <p className="mb-2">Comment <span className="text-red-600">*</span></p>
                                             <input 
                                             type="text" 
-                                            value={comment}
+                                            value={comments}
                                             onChange={(e) => setComment(e.target.value)}
                                             className="input input-bordered bg-white" required/>
-                                        </div>
+                                        </div> */}
                                         <div className="form-control w-full mt-6">
-                                            <p className="mb-2">Status <span className="text-red-600">*</span></p>
+                                            <p className="mb-2">Status</p>
                                             <select 
                                             value={statusPaper}
                                             onChange={(e) => setStatusPaper(e.target.value)}
@@ -287,7 +289,7 @@ const MyReviewTable = () => {
                                                 setStatusPaper(target.value);
                                             }}
                                             className="select select-bordered bg-white" required>
-                                            <option selected disabled>-- Pilih Status --</option>
+                                            <option selected disabled>-- Select Status --</option>
                                             <option value="Accepted">Accepted</option>
                                             <option value="Revision">Revision</option>
                                             <option value="Rejected">Rejected</option>
@@ -295,11 +297,11 @@ const MyReviewTable = () => {
                                         </div>
                                 </p>
                                 <div className="modal-action">
-                                    <button type="submit" className="btn text-white" onClick={handleSubmit}>Submit</button>
-                                    <button type="button" className="btn text-white" onClick={handleModalClose2}>Close</button>
+                                    <button type="button" className="btn text-white" onClick={handleModalClose2}>Cancel</button>
+                                    <button type="submit" className="btn bg-blue-950 text-white" onClick={handleSubmit}>Submit Review</button>
                                 </div>
+                                </form>
                             </div>
-                            </form>
                         </div>
                     )}
                 </div>
