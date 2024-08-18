@@ -20,7 +20,8 @@ export const GET = async () => {
                 city: true,
                 country: true,
                 banner: true,
-                slug: true
+                slug: true,
+                paper_template: true,
             },
         }) 
         return NextResponse.json(conferences); 

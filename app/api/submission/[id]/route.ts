@@ -42,11 +42,11 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
                 city: formData.get("city")?.valueOf().toString() ?? '',
                 status: formData.get("status")?.valueOf().toString() ?? '',
                 paper: paper.name,
-                userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
+                // userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
                 conferenceId: conference.id,
             }
         });
-        revalidatePath("/");
+        // revalidatePath("/");
         return NextResponse.json({ status: "success", data: updateRegisterConference });
 
     }catch (e){

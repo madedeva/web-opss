@@ -81,10 +81,10 @@ const AvailableConference = () => {
                         </td>
                         <td className="py-2 px-4">
                         {/* <RegisterConference conferences={conference}/> */}
-                          <button
+                          <a href={`/conference-detail/${conference.slug}`}
                             className="btn btn-ghost btn-xs text-blue-950 underline">
                             View details
-                          </button>
+                          </a>
                         </td>
                     </tr>
                 ))}

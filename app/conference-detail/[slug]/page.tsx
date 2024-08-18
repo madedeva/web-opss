@@ -1,11 +1,35 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { SessionProvider } from 'next-auth/react';
-import HeadNav from '../components/HomePage/Head';
-import Header from '../components/HomePage/Header';
-import Footer from '../components/HomePage/Footer';
+import HeadNav from '../../components/HomePage/Head';
+import Header from '../../components/HomePage/Header';
+import Footer from '../../components/HomePage/Footer';
+import { Conference } from '@prisma/client';
 
-const ConferenceDetail = () => {
+const ConferenceDetail = ({params}: {params: {slug: string}}) => {
+
+  const [loading, setLoading ] = useState(false);
+  const [conference, setConference] = useState<Conference>();
+
+    const fetchPapers = async () => {
+        try {
+            const response = await fetch(`/api/slug-conferences/${params.slug}`);
+            if (response.ok) {
+                const data = await response.json();
+                setConference(data);
+            } else {
+                console.error('Failed to fetch papers:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching papers:', error);
+        }
+    };
+
+    useEffect(() => {
+    
+        fetchPapers();
+    }, []);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -55,8 +79,9 @@ const ConferenceDetail = () => {
         <Header />
 
         <main>
+        {/* https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29sbGVnZSUyMGNhbXB1c3xlbnwwfHwwfHx8MA%3D%3D */}
           <section className="bg-cover bg-center text-center py-32" style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29sbGVnZSUyMGNhbXB1c3xlbnwwfHwwfHx8MA%3D%3D")',
+            backgroundImage: `url("${conference?.banner}")`,
           }}>
             <div className="container mx-auto">
               <h1 className="text-4xl font-bold text-white">Manage Your Conference with Online Paper Submission System (OPSS)</h1>
@@ -68,8 +93,9 @@ const ConferenceDetail = () => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Conference Description</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p className="mb-4 max-w-2xl mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-              <p className="mb-4 max-w-2xl mx-auto">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              {conference?.description}
+              {/* <p className="mb-4 max-w-2xl mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <p className="mb-4 max-w-2xl mx-auto">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> */}
             </div>
           </section>
 
@@ -77,9 +103,9 @@ const ConferenceDetail = () => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Organizer Information</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p>City/Country: Singaraja, Indonesia</p>
-              <p>Institution: Universitas Pendidikan Ganesha</p>
-              <p>Venue: Universitas Pendidikan Ganesha</p>
+              <p>City/Country: {conference?.city}</p>
+              <p>Institution: {conference?.institution}</p>
+              <p>Venue: {conference?.venue}</p>
             </div>
           </section>
 
@@ -87,9 +113,9 @@ const ConferenceDetail = () => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Important Dates</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p>Conference Date Start: January 26, 2024</p>
-              <p>Conference Date End: February 26, 2024</p>
-              <p>Submission Deadline: February 14, 2024</p>
+              <p>Conference Date Start: {conference?.startDate.toString()}</p>
+              <p>Conference Date End: {conference?.endDate.toString()}</p>
+              <p>Submission Deadline: {conference?.submission_deadlineEnd.toString()}</p>
             </div>
           </section>
 
@@ -97,7 +123,7 @@ const ConferenceDetail = () => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Available Topics</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p>Topics: Example Topic 1, Example Topic 2, Example Topic 3</p>
+              <p>Topics: {conference?.topic}</p>
             </div>
           </section>
 
@@ -105,7 +131,7 @@ const ConferenceDetail = () => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Payment Information</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p className="max-w-2xl mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <p className="max-w-2xl mx-auto">{conference?.payment_info}</p>
             </div>
           </section>
 
@@ -113,10 +139,10 @@ const ConferenceDetail = () => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Contact Information</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p>Email: deva.kerti@undiksha.ac.id</p>
-              <p>Address: Jl. Udayana No.11, Banjar Tegal, Singaraja, Kabupaten Buleleng, Bali 81116</p>
-              <p>Paper Template: <a href="#" className="text-blue-950 hover:underline">Download paper template</a></p>
-              <p>Register Conference: <a href="#" className="text-blue-950 hover:underline">Click to register</a></p>
+              <p>Email: {conference?.email}</p>
+              <p>Address: {conference?.address}</p>
+              <p>Paper Template: <a download href={"/uploads/paper_template/" + conference?.paper_template} className="text-blue-950 hover:underline">Download paper template</a></p>
+              <p>Register Conference: <a href="/dashboard/" className="text-blue-950 hover:underline">Click to register</a></p>
             </div>
           </section>
         </main>

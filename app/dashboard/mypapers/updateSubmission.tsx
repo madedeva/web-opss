@@ -30,6 +30,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     const [country, setCountry] = useState(registerConference.country);
     const [city, setCity] = useState(registerConference.city);
     const [status, setStatus] = useState(registerConference.status);
+    const [conferenceId, setConferenceId] = useState(registerConference.conferenceId);
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -76,6 +77,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         e.preventDefault();
 
         const formData = new FormData();
+        formData.append('conferenceId', conferenceId.toString());
         formData.append('paper_title', paper_title);
         formData.append('topic', selectedTopic);
         formData.append('abstract', abstract || '');
@@ -84,7 +86,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         formData.append('institution', institution || '');
         formData.append('country', country || '');
         formData.append('city', city || '');
-        formData.append('status', status);
+        formData.append('status', 'Pending');
 
         try{
             await axios.put(`/api/submission/${registerConference.id}`, formData, {
