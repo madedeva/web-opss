@@ -63,11 +63,11 @@ const AvailableConference = () => {
                     <tr key={conference.id} className="text-gray-700 text-xs">
                         <td className="py-2 px-4">{conference.name}</td>
                         <td className="py-2 px-4">
-                            <p className="text-xs">Conference Date</p>
+                            <p className="text-xs font-bold">Conference Date</p>
                             <p>{getFormattedDate(conference.startDate)} - {getFormattedDate(conference.endDate)}</p>
                         </td>
                         <td className="py-2 px-4">
-                            <p className="text-xs">Full Paper Submission</p>
+                            <p className="text-xs font-bold">Full Paper Submission</p>
                             <p>{getFormattedDate(conference.submission_deadlineStart)} - {getFormattedDate(conference.submission_deadlineEnd)}</p>
                         </td>
                         <td className="py-2 px-4">

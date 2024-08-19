@@ -5,7 +5,7 @@ import HeadNav from '../../components/HomePage/Head';
 import Header from '../../components/HomePage/Header';
 import Footer from '../../components/HomePage/Footer';
 import { Conference } from '@prisma/client';
-import { DocumentArrowDownIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
+import { DocumentArrowDownIcon, PencilSquareIcon, InformationCircleIcon, CalendarIcon, ChatBubbleBottomCenterTextIcon, CreditCardIcon, PhoneIcon } from '@heroicons/react/24/solid';
 
 const imageUrls = [
   "https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29sbGVnZSUyMGNhbXB1c3xlbnwwfHwwfHx8MA%3D%3D",
@@ -91,15 +91,6 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
         <Header />
 
         <main>
-        {/* https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29sbGVnZSUyMGNhbXB1c3xlbnwwfHwwfHx8MA%3D%3D */}
-          <section className="bg-cover bg-center text-center py-32" style={{
-            backgroundImage: `url("${conference?.banner}")`,
-          }}>
-            <div className="container mx-auto">
-              <h1 className="text-4xl font-bold text-white">{conference?.name}</h1>
-            </div>
-          </section>
-
           <section className="bg-gray-100 text-gray-700">
             <img
               src={conference?.banner ? `/uploads/banner/${conference.banner}` : getRandomImageUrl()}
@@ -108,53 +99,66 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
             />
           </section>
 
+          <section className="bg-cover bg-center bg-white text-center items-center py-16">
+            <div className="container mx-auto max-w-4xl">
+              <h1 className="text-4xl font-bold text-gray-700">{conference?.name} ({conference?.acronym})</h1>
+              <p className="text-2xl mt-4 text-gray-400">{conference?.institution && conference.institution.toUpperCase()}</p>
+              <p className="text-2xl mt-4 text-gray-400">{conference?.city && conference.city.toUpperCase()}, {conference?.country && conference.country.toUpperCase()}</p>
+            </div>
+          </section>
+
           <section className="py-20 bg-gray-100 text-gray-700">
-            <div className="container mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Conference Description</h2>
+            <div className="container mx-auto text-center max-w-4xl">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
+                <InformationCircleIcon className="h-12 w-12 mr-2 text-gray-600" />
+                Conference Description
+              </h2>
               <hr className="w-1/5 mx-auto my-4" />
               {conference?.description}
             </div>
           </section>
 
           <section className="py-20 bg-white text-gray-700">
-            <div className="container mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Organizer Information</h2>
-              <hr className="w-1/5 mx-auto my-4" />
-              <span>City,Country: <p className='font-bold mb-4'>{conference?.city}, {conference?.country}</p></span>
-              <span>Organizer Institution: <p className='font-bold mb-4'>{conference?.institution}</p></span>
-              <span>Conference Venue: <p className='font-bold mb-4'>{conference?.venue}</p></span>
-            </div>
-          </section>
-
-          <section className="py-20 bg-gray-100 text-gray-700">
-            <div className="container mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Important Dates</h2>
+            <div className="container mx-auto text-center max-w-4xl">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
+                <CalendarIcon className="h-12 w-12 mr-2 text-gray-600" />
+                Important Dates
+              </h2>
               <hr className="w-1/5 mx-auto my-4" />
               <span>Conference Date: <p className='font-bold mb-4'>{getFormattedDate(conference?.startDate)} - {getFormattedDate(conference?.endDate)}</p></span>
               <span>Full Paper Submission: <p className='font-bold'>{getFormattedDate(conference?.submission_deadlineStart)} - {getFormattedDate(conference?.submission_deadlineEnd)}</p></span>
             </div>
           </section>
 
-          <section className="py-20 bg-white text-gray-700">
-            <div className="container mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Available Topics</h2>
+          <section className="py-20 bg-gray-100 text-gray-700">
+            <div className="container mx-auto text-center max-w-4xl">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
+                <ChatBubbleBottomCenterTextIcon className="h-12 w-12 mr-2 text-gray-600" />
+                Available Topics
+              </h2>
               <hr className="w-1/5 mx-auto my-4" />
               <span>Topics: <p className='font-bold mb-4'>{conference?.topic}</p></span>
             </div>
           </section>
 
-          <section className="py-20 bg-gray-100 text-gray-700">
-            <div className="container mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Payment Information</h2>
+          <section className="py-20 bg-white text-gray-700">
+            <div className="container mx-auto text-center max-w-4xl">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
+                <CreditCardIcon className="h-12 w-12 mr-2" />
+                Payment Information
+              </h2>
               <hr className="w-1/5 mx-auto my-4" />
               <p className="max-w-2xl mx-auto">{conference?.payment_info}</p>
             </div>
           </section>
 
-          <section className="py-20 bg-white text-gray-700">
-            <div className="container mx-auto flex flex-col items-center text-center">
-              <h2 className="text-3xl font-bold mb-4">Contact Information</h2>
-              <hr className="w-1/5 mx-auto my-4" />
+          <section className="py-20 bg-gray-100 text-gray-700">
+            <div className="container mx-auto flex flex-col items-center text-center max-w-4xl">
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
+                <PhoneIcon className="h-12 w-12 mr-2" />
+                Contact Information
+              </h2>
+              <hr className="w-1/5 mx-auto mb-4" />
               <span className="mb-4">Organizer Email Contact: <p className='font-bold'>{conference?.email}</p></span>
               <span className="mb-4">Conference Address: <p className='font-bold'>{conference?.address}</p></span>
               <p className="mb-4">

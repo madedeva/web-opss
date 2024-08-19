@@ -1,8 +1,31 @@
 'use client'
 import DeleteConference from "@/app/dashboard/conference/deleteConference";
 import UpdateConference from "@/app/dashboard/conference/updateConference";
-import { Conference, PrismaClient, User } from "@prisma/client";
+import { RegisterConference, Conference, PrismaClient, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
+
+const prisma = new PrismaClient();
+
+export async function getConferencesWithRegistrations() {
+    const conferences = await prisma.conference.findMany({
+      select: {
+        id: true,
+        name: true,
+        startDate: true,
+        endDate: true,
+        submission_deadlineStart: true,
+        submission_deadlineEnd: true,
+        status: true,
+        userId: true,
+        _count: {
+          select: {
+            RegisterConference: true,
+          },
+        },
+      },
+    });
+    return conferences;
+  }
 
 const getOrdinalSuffix = (day: number) => {
   if (day > 3 && day < 21) return 'th';
@@ -23,7 +46,13 @@ const getFormattedDate = (date: Date | string): string => {
   return `${month} ${day}${suffix}, ${year}`;
 };
 
-const TableConference = ({conference}:{ conference:  Conference[]}) => {
+interface ConferenceWithCount extends Conference {
+    _count: {
+      RegisterConference: number;
+    };
+  }
+  
+  const TableConference = ({ conference }: { conference: ConferenceWithCount[] }) => {
 
     const { data: session } = useSession();
     const user = session?.user as User;
@@ -47,15 +76,15 @@ const TableConference = ({conference}:{ conference:  Conference[]}) => {
                     <tr key={conference.id} className="text-gray-700 text-xs border-b border-gray-200">
                         <td className="py-2 px-4">{conference.name}</td>
                         <td className="py-2 px-4 w-60">
-                            <p className="text-xs">Conference Date</p>
+                            <p className="text-xs font-bold">Conference Date</p>
                             <p>{getFormattedDate(conference.startDate)} - {getFormattedDate(conference.endDate)}</p>
                         </td>
                         <td className="py-2 px-4 w-60">
-                            <p className="text-xs">Full Paper Submission</p>
+                            <p className="text-xs font-bold">Full Paper Submission</p>
                             <p>{getFormattedDate(conference.submission_deadlineStart)} - {getFormattedDate(conference.submission_deadlineEnd)}</p>
                         </td>
                         <td className="py-2 px-4">
-                            <p><a className="underline text-blue-950 text-xs" href="/dashboard/papers">Submitted Paper: 10</a></p>
+                            <p><a className="underline text-blue-950 text-xs" href="/dashboard/papers">Submitted Paper ({conference._count?.RegisterConference ?? 0})</a></p>
                         </td>
                         <td className="py-2 px-4">
                             {conference.status === 'Active' ? (
