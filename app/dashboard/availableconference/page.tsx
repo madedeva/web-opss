@@ -80,7 +80,7 @@ const AvailableConference = () => {
                           </a>
                         </td>
                         <td className="py-2 px-4">
-                        {/* <RegisterConference conferences={conference}/> */}
+                          <a className="btn btn-ghost btn-xs text-blue-950 underline" href="/dashboard/create-submission">Create new submission</a>
                           <a href={`/conference-detail/${conference.slug}`}
                             className="btn btn-ghost btn-xs text-blue-950 underline">
                             View details

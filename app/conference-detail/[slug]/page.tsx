@@ -5,6 +5,35 @@ import HeadNav from '../../components/HomePage/Head';
 import Header from '../../components/HomePage/Header';
 import Footer from '../../components/HomePage/Footer';
 import { Conference } from '@prisma/client';
+import { DocumentArrowDownIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
+
+const imageUrls = [
+  "https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29sbGVnZSUyMGNhbXB1c3xlbnwwfHwwfHx8MA%3D%3D",
+];
+
+const getRandomImageUrl = () => {
+  return imageUrls[Math.floor(Math.random() * imageUrls.length)];
+};
+
+const getOrdinalSuffix = (day: number) => {
+  if (day > 3 && day < 21) return 'th';
+  switch (day % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+  }
+};
+
+const getFormattedDate = (date: Date | string | undefined): string => {
+  if (!date) return '';
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const day = dateObj.getDate();
+  const month = dateObj.toLocaleString('en-US', { month: 'long' });
+  const year = dateObj.getFullYear();
+  const suffix = getOrdinalSuffix(day);
+  return `${month} ${day}${suffix}, ${year}`;
+};
 
 const ConferenceDetail = ({params}: {params: {slug: string}}) => {
 
@@ -30,16 +59,6 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
         fetchPapers();
     }, []);
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      window.scrollTo({
-        behavior: 'smooth',
-        top: element.offsetTop,
-      });
-    }
-  };
-
   const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
@@ -64,13 +83,6 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
     }
   };
 
-  const openVideo = () => {
-    const url = 'https://www.youtube.com/watch?v=J5U5of0jBog';
-    if (typeof window !== 'undefined' && url) {
-      window.open(url, '_blank');
-    }
-  };
-
   return (
     <SessionProvider>
       <div>
@@ -84,9 +96,16 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
             backgroundImage: `url("${conference?.banner}")`,
           }}>
             <div className="container mx-auto">
-              <h1 className="text-4xl font-bold text-white">Manage Your Conference with Online Paper Submission System (OPSS)</h1>
-              <p className="text-white mt-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum.</p>
+              <h1 className="text-4xl font-bold text-white">{conference?.name}</h1>
             </div>
+          </section>
+
+          <section className="bg-gray-100 text-gray-700">
+            <img
+              src={conference?.banner ? `/uploads/banner/${conference.banner}` : getRandomImageUrl()}
+              alt={conference?.name}
+              className="rounded w-full max-h-64 object-cover"
+            />
           </section>
 
           <section className="py-20 bg-gray-100 text-gray-700">
@@ -94,8 +113,6 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
               <h2 className="text-3xl font-bold mb-4">Conference Description</h2>
               <hr className="w-1/5 mx-auto my-4" />
               {conference?.description}
-              {/* <p className="mb-4 max-w-2xl mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-              <p className="mb-4 max-w-2xl mx-auto">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> */}
             </div>
           </section>
 
@@ -103,9 +120,9 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Organizer Information</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p>City/Country: {conference?.city}</p>
-              <p>Institution: {conference?.institution}</p>
-              <p>Venue: {conference?.venue}</p>
+              <span>City,Country: <p className='font-bold mb-4'>{conference?.city}, {conference?.country}</p></span>
+              <span>Organizer Institution: <p className='font-bold mb-4'>{conference?.institution}</p></span>
+              <span>Conference Venue: <p className='font-bold mb-4'>{conference?.venue}</p></span>
             </div>
           </section>
 
@@ -113,9 +130,8 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Important Dates</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p>Conference Date Start: {conference?.startDate.toString()}</p>
-              <p>Conference Date End: {conference?.endDate.toString()}</p>
-              <p>Submission Deadline: {conference?.submission_deadlineEnd.toString()}</p>
+              <span>Conference Date: <p className='font-bold mb-4'>{getFormattedDate(conference?.startDate)} - {getFormattedDate(conference?.endDate)}</p></span>
+              <span>Full Paper Submission: <p className='font-bold'>{getFormattedDate(conference?.submission_deadlineStart)} - {getFormattedDate(conference?.submission_deadlineEnd)}</p></span>
             </div>
           </section>
 
@@ -123,7 +139,7 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
             <div className="container mx-auto text-center">
               <h2 className="text-3xl font-bold mb-4">Available Topics</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p>Topics: {conference?.topic}</p>
+              <span>Topics: <p className='font-bold mb-4'>{conference?.topic}</p></span>
             </div>
           </section>
 
@@ -136,13 +152,30 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
           </section>
 
           <section className="py-20 bg-white text-gray-700">
-            <div className="container mx-auto text-center">
+            <div className="container mx-auto flex flex-col items-center text-center">
               <h2 className="text-3xl font-bold mb-4">Contact Information</h2>
               <hr className="w-1/5 mx-auto my-4" />
-              <p>Email: {conference?.email}</p>
-              <p>Address: {conference?.address}</p>
-              <p>Paper Template: <a download href={"/uploads/paper_template/" + conference?.paper_template} className="text-blue-950 hover:underline">Download paper template</a></p>
-              <p>Register Conference: <a href="/dashboard/" className="text-blue-950 hover:underline">Click to register</a></p>
+              <span className="mb-4">Organizer Email Contact: <p className='font-bold'>{conference?.email}</p></span>
+              <span className="mb-4">Conference Address: <p className='font-bold'>{conference?.address}</p></span>
+              <p className="mb-4">
+                <button 
+                  onClick={() => window.location.href = "/uploads/paper_template/" + conference?.paper_template}
+                  className="bg-blue-950 text-white py-2 px-4 rounded flex items-center hover:bg-orange-500"
+                >
+                  <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
+                  Download Paper Template
+                </button>
+              </p>
+              
+              <p>
+                <button 
+                  onClick={() => window.location.href = "/dashboard/create-submission"}
+                  className="bg-green-600 text-white py-2 px-4 rounded flex items-center hover:bg-green-700"
+                >
+                  <PencilSquareIcon className="h-5 w-5 mr-2" />
+                  Submit New Paper
+                </button>
+              </p>
             </div>
           </section>
         </main>

@@ -33,6 +33,7 @@ type Paper = {
     createdAt: Date;
     updatedAt: Date; 
     abstract: string;
+    comments: string;
     conrevId: Number;
     conference: {
         id: number;
@@ -171,9 +172,6 @@ const MyReviewTable = () => {
                                         Status
                                     </th>
                                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Last Updated
-                                    </th>
-                                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Actions
                                     </th>
                                 </tr>
@@ -220,11 +218,6 @@ const MyReviewTable = () => {
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="px-3 py-2 whitespace-normal break-words">
-                                            <div className="text-xs text-gray-500">
-                                                {getFormattedDate(paper.updatedAt)}
-                                            </div>
-                                        </td>
                                         <td className="px-3 py-2 whitespace-normal break-words text-xs font-medium">
                                             {paper.status === 'Accepted' ? (
                                                 <span className="text-green-600">Review complete</span>
@@ -261,8 +254,8 @@ const MyReviewTable = () => {
                             <form onSubmit={handleSubmit}>
                                 <h3 className="font-bold text-lg">Paper Title: {selectedPaper2.paper_title}</h3>
                                 <hr className="mt-4" />
-                                <p className="py-4">
-                                    {selectedPaper2.abstract}
+                                    <p className="font-bold mt-4">Paper Abstract: </p>
+                                    <p className="py-2">{selectedPaper2.abstract}</p>
                                         <input type="hidden" name="peperId" value={selectedPaper2.id}/>
                                         <div className="form-control w-full mt-6">
                                             <label className="label font-bold">Comments Review</label>
@@ -280,7 +273,7 @@ const MyReviewTable = () => {
                                             className="input input-bordered bg-white" required/>
                                         </div> */}
                                         <div className="form-control w-full mt-6">
-                                            <p className="mb-2">Status</p>
+                                            <label className="mb-2">Status</label>
                                             <select 
                                             value={statusPaper}
                                             onChange={(e) => setStatusPaper(e.target.value)}
@@ -289,13 +282,13 @@ const MyReviewTable = () => {
                                                 setStatusPaper(target.value);
                                             }}
                                             className="select select-bordered bg-white" required>
-                                            <option selected disabled>-- Select Status --</option>
-                                            <option value="Accepted">Accepted</option>
-                                            <option value="Revision">Revision</option>
-                                            <option value="Rejected">Rejected</option>
+                                                <option value="" disabled>-- Select Status --</option>
+                                                <option value="Accepted">Accepted</option>
+                                                <option value="Revision">Revision</option>
+                                                <option value="Rejected">Rejected</option>
                                             </select>
                                         </div>
-                                </p>
+                                
                                 <div className="modal-action">
                                     <button type="button" className="btn text-white" onClick={handleModalClose2}>Cancel</button>
                                     <button type="submit" className="btn bg-blue-950 text-white" onClick={handleSubmit}>Submit Review</button>

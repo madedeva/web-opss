@@ -54,7 +54,7 @@ export default function AboutUs() {
                     height="120"
                   />
                   <h3 className="text-xl font-bold mb-2">I Made Deva Kerti Wijaya</h3>
-                  <p>Developer</p>
+                  <p>Mahasiswa Bimbingan</p>
                 </div>
                 <div className="bg-white p-6 rounded shadow">
                   <img
