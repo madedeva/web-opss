@@ -160,7 +160,7 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
               <p className="mb-4">
                 <button 
                   onClick={() => window.location.href = "/uploads/paper_template/" + conference?.paper_template}
-                  className="bg-blue-950 text-white py-2 px-4 rounded flex items-center hover:bg-orange-500"
+                  className="bg-blue-950 text-white py-2 px-4 rounded flex items-center hover:bg-ora"
                 >
                   <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
                   Download Paper Template
@@ -173,7 +173,7 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
                   className="bg-green-600 text-white py-2 px-4 rounded flex items-center hover:bg-green-700"
                 >
                   <PencilSquareIcon className="h-5 w-5 mr-2" />
-                  Submit New Paper
+                  Submit Paper
                 </button>
               </p>
             </div>
