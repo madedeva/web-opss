@@ -1,10 +1,33 @@
 'use client'
 import DashboardLayout from "@/app/components/DashboardLayout";
+import { Conference } from "@prisma/client";
 import { useEffect, useState } from "react";
 
-const Profile = () => {
+const Profile = ({params}: {params: {slug: string}}) => {
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
+    const [topics, setTopics] = useState<string[]>();
+
+    const [conference, setConference] = useState<Conference>();
+
+    const fetchPapers = async () => {
+        try {
+            const response = await fetch(`/api/slug-conferences/${params.slug}`);
+            if (response.ok) {
+                const data = await response.json();
+                setConference(data);
+            } else {
+                console.error('Failed to fetch papers:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching papers:', error);
+        }
+    };
+
+    useEffect(() => {
+    
+        fetchPapers();
+    }, []);
 
     useEffect(() => {
         const fetchCountries = async () => {
@@ -20,7 +43,10 @@ const Profile = () => {
         };
 
         fetchCountries();
-    }, []);
+
+        const str = conference?.topic ?? "";
+        setTopics(str.split(", "));
+    }, [conference?.topic]);
 
 
   return (
@@ -35,7 +61,7 @@ const Profile = () => {
           <form>
             <div className="form-control w-full mt-6">
                 <p className="mb-2">Conference Name<span className="text-red-600">*</span></p>
-                <input className="block w-full p-2 border bg-white rounded" 
+                <input className="block w-full p-2 border bg-white rounded" value={conference?.name}
                 type="text"
                 />
             </div>
@@ -52,9 +78,11 @@ const Profile = () => {
                     className="select select-bordered bg-white"
                     required
                     >
-                    {/* {topicOptions.map((topic, index) => ( */}
-                    <option ></option>
-                    {/* ))} */}
+                    {topics?.map((topic, index) => (
+                        <option key={topic} value={topic}>
+                        {topic}
+                        </option>
+                    ))}
                 </select>
             </div>
             <div className="form-control w-full mt-6">
