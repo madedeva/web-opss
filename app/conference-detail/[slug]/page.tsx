@@ -173,7 +173,7 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
               
               <p>
                 <button 
-                  onClick={() => window.location.href = "/dashboard/create-submission"}
+                  onClick={() => window.location.href = "/dashboard/create-submission/" + conference?.slug }
                   className="bg-green-600 text-white py-2 px-4 rounded flex items-center hover:bg-green-700"
                 >
                   <PencilSquareIcon className="h-5 w-5 mr-2" />
