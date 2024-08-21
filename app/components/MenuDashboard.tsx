@@ -51,7 +51,7 @@ const MenuDashboard = () => {
                 </ul>
             </section>
             <section className="bg-white p-4 rounded">
-                <h3 className="text-lg mb-2">Available Conference</h3>
+                <h3 className="text-lg mb-2">Available Conferences</h3>
                 <hr className="mb-4 mt-4" />
                 <ul>
                 <li><a href="/dashboard/availableconference" className="text-blue-950 underline">Available Conference List</a></li>
@@ -67,7 +67,7 @@ const MenuDashboard = () => {
             <div className="mt-4">
             <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <section className="bg-white p-4 rounded">
-                <h3 className="text-lg mb-2">My Papers</h3>
+                <h3 className="text-lg mb-2">My Reviews</h3>
                 <hr className="mb-4 mt-4" />
                 <ul>
                 <li><a href="/dashboard/myreviews" className="text-blue-950 underline">My Papers Review</a></li>

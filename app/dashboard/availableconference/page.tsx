@@ -1,6 +1,5 @@
 'use client'
 import DashboardLayout from "@/app/components/DashboardLayout";
-import RegisterConference from "./addSubmission";
 import { useEffect, useState } from "react";
 
 const getOrdinalSuffix = (day: number) => {
@@ -80,11 +79,20 @@ const AvailableConference = () => {
                           </a>
                         </td>
                         <td className="py-2 px-4">
-                          <a className="btn btn-ghost btn-xs text-blue-950 underline" href={"/dashboard/create-submission/" + conference.slug }>Create new submission</a>
-                          <a href={`/conference-detail/${conference.slug}`}
-                            className="btn btn-ghost btn-xs text-blue-950 underline">
-                            View details
-                          </a>
+                          <div className="flex flex-col">
+                            <a
+                              className="text-xs text-blue-950 underline hover:text-indigo-900 mb-1 text-nowrap"
+                              href={"/dashboard/create-submission/" + conference.slug}
+                            >
+                              Create new submission
+                            </a>
+                            <a
+                              href={`/conference-detail/${conference.slug}`}
+                              className="text-xs text-blue-950 underline hover:text-indigo-900 text-nowrap"
+                            >
+                              View details
+                            </a>
+                          </div>
                         </td>
                     </tr>
                 ))}

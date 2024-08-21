@@ -36,7 +36,7 @@ const UpdatePaper = ({ users, paperId }: UpdatePaperProps) => {
 
     return (
         <div>
-            <button className="btn btn-ghost btn-xs text-blue-950 underline" onClick={handleModal}>
+            <button className="text-xs text-blue-950 hover:text-indigo-900 underline" onClick={handleModal}>
                 Asign Reviewer
             </button>
 

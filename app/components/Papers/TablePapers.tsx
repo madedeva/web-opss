@@ -190,10 +190,10 @@ const TablePapers = () => {
                                 <p className='font-bold'>Topic</p>
                                 <p>{paper.topic}</p>
                                 <p className="mt-4 font-bold">Abstract</p>
-                                <button className="btn btn-ghost btn-xs text-blue-950 underline" onClick={() => handleModalOpen(paper)}>
+                                <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen(paper)}>
                                     View abstract
                                 </button>
-                                <p className="mt-4">Keywords</p>
+                                <p className="mt-4 font-bold">Keywords</p>
                                 <p>{paper.keywords}</p>
                             </td>
                             <td className="py-2 px-4">{paper.city}, {paper.country}</td>
