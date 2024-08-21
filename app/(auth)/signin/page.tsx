@@ -63,7 +63,7 @@ const SignIn = () => {
                     value={form.email}
                     onChange={handleChange}
                     className="block w-full text-sm pl-10 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-                    placeholder='youremail@example.com'
+                    placeholder='Email'
                     required
                   />
                 </div>
@@ -81,7 +81,7 @@ const SignIn = () => {
                     value={form.password}
                     onChange={handleChange}
                     className="block w-full text-sm pl-10 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-                    placeholder='********'
+                    placeholder='Password'
                     required
                   />
                 </div>

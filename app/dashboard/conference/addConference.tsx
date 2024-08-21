@@ -158,7 +158,7 @@ const AddConference = () => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="input input-bordered bg-white text-sm"
-                                placeholder="Add conference name.."
+                                placeholder="Conference name"
                                 required
                             />
                         </div>
@@ -169,7 +169,7 @@ const AddConference = () => {
                                 value={acronym}
                                 onChange={(e) => setAcronym(e.target.value)}
                                 className="input input-bordered bg-white text-sm"
-                                placeholder="Example: Concerence Example (CE)"
+                                placeholder="Example (EC 2024)"
                             />
                         </div>
                         <div className="form-control w-full mt-6">
@@ -177,14 +177,14 @@ const AddConference = () => {
                             <textarea 
                                 value={theme}
                                 onChange={(e) => setTheme(e.target.value)}
-                                id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your theme here..."></textarea>
+                                id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Conferece theme"></textarea>
                         </div>
                         <div className="form-control w-full mt-6">
                             <p className="mb-2">Description <span className="text-red-600">*</span></p>
                             <textarea 
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                                id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your description here..."></textarea>
+                                id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Conference description"></textarea>
                         </div>
                         <div className="w-full gap-4 mt-6">
                             {topic.map((topic, index) => (
@@ -195,7 +195,7 @@ const AddConference = () => {
                                         value={topic}
                                         onChange={(e) => handleTopicChange(index, e.target.value)}
                                         className="input input-bordered bg-white text-sm"
-                                        placeholder='Add topic or track here..'
+                                        placeholder='Add topic or track'
                                         required
                                     />
                                 </div>
@@ -239,7 +239,7 @@ const AddConference = () => {
                                 value={venue}
                                 onChange={(e) => setVenue(e.target.value)}
                                 className="input input-bordered bg-white text-sm"
-                                placeholder="Add conference venue.."
+                                placeholder="Conference venue"
                             />
                         </div>
                         <div className="form-control w-full mt-6">
@@ -249,7 +249,7 @@ const AddConference = () => {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 className="input input-bordered bg-white text-sm"
-                                placeholder="Add your conference address.."
+                                placeholder="Conference address"
                             />
                         </div>
                         <div className="form-control w-full mt-6">
@@ -259,7 +259,7 @@ const AddConference = () => {
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
                                 className="input input-bordered bg-white text-sm"
-                                placeholder="example: Jakarta"
+                                placeholder="Example: Jakarta"
                             />
                         </div>
                         <div className="form-control w-full mt-6">
@@ -285,7 +285,7 @@ const AddConference = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="input input-bordered bg-white text-sm"
-                                placeholder="example@organizer.com"
+                                placeholder="Organizer email"
                             />
                         </div>
                         <div className="form-control w-full mt-6">
@@ -295,7 +295,7 @@ const AddConference = () => {
                                 value={institution}
                                 onChange={(e) => setInstitution(e.target.value)}
                                 className="input input-bordered bg-white text-sm"
-                                placeholder="Add organizer institution.."
+                                placeholder="Organizer institution"
                             />
                         </div>
 
@@ -332,7 +332,7 @@ const AddConference = () => {
                                 value={payment_info}
                                 onChange={(e) => setPaymentInfo(e.target.value)}
                                 className="input input-bordered bg-white text-sm"
-                                placeholder="Add bank account or dash ( - )"
+                                placeholder="Bank account/dash (-)"
                             />
                         </div>
                         <div className="flex w-full gap-4 mt-6">

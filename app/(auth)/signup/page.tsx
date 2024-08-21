@@ -80,8 +80,8 @@ const SignUp = () => {
                   type="text"
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border-none text-xs bg-white rounded-md focus:outline-none focus:ring-0"
-                  placeholder='Prof/Dr/-(optional). Your Name, S.T/M.T/-(optional)' required
+                  className="w-full px-3 py-2 border-none text-sm bg-white rounded-md focus:outline-none focus:ring-0"
+                  placeholder='Full name' required
                 />
               </div>
             </div>
@@ -96,7 +96,7 @@ const SignUp = () => {
                   value={form.email}
                   onChange={handleChange}
                   className="w-full text-sm px-3 py-2 border-none bg-white rounded-md focus:outline-none focus:ring-0"
-                  placeholder='youremail@example.com' required
+                  placeholder='Email' required
                 />
               </div>
             </div>
@@ -111,7 +111,7 @@ const SignUp = () => {
                   value={form.password}
                   onChange={handleChange}
                   className="w-full text-sm px-3 py-2 border-none bg-white rounded-md focus:outline-none focus:ring-0"
-                  placeholder='********' required
+                  placeholder='Password' required
                 />
               </div>
             </div>
