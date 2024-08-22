@@ -153,6 +153,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                 onChange={(e) => setPaperTitle(e.target.value)}
                 />
             </div>
+
             <div className="form-control w-full mt-6">
                 <p className="mb-2">Topic or Track <span className="text-red-600">*</span></p>
                 <select
