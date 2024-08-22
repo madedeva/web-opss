@@ -153,7 +153,7 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
           </section>
 
           <section className="py-20 bg-gray-100 text-gray-700">
-            <div className="container mx-auto flex flex-col items-center text-center max-w-4xl">
+            <div className="container mx-auto flex flex-col items-center text-center ">
               <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
                 <PhoneIcon className="h-12 w-12 mr-2" />
                 Contact Information
@@ -173,7 +173,7 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
               
               <p>
                 <button 
-                  onClick={() => window.location.href = "/dashboard/create-submission/" + conference?.slug }
+                  onClick={() => window.location.href = "/dashboard/create-submission"}
                   className="bg-green-600 text-white py-2 px-4 rounded flex items-center hover:bg-green-700"
                 >
                   <PencilSquareIcon className="h-5 w-5 mr-2" />
