@@ -21,7 +21,6 @@ model User {
   roleId             Int
   password           String
   conId              Conference[]
-  // Con_Reviewer       Con_Reviewer[]
   RegisterConference RegisterConference[]
   PasswordResetToken PasswordResetToken[]
   ReviewPaper        ReviewPaper[]
@@ -68,18 +67,8 @@ model Conference {
   status                   String
   User                     User                 @relation(fields: [userId], references: [id])
   userId                   Int
-  // Con_Reviewer             Con_Reviewer[]
   RegisterConference       RegisterConference[]
 }
-
-// model Con_Reviewer {
-//   id                 Int                  @id @default(autoincrement())
-//   conference         Conference           @relation(fields: [conferenceId], references: [id])
-//   conferenceId       Int
-//   user               User                 @relation(fields: [userId], references: [id])
-//   userId             Int
-//   RegisterConference RegisterConference[]
-// }
 
 model RegisterConference {
   id           Int           @id @default(autoincrement())
@@ -87,18 +76,16 @@ model RegisterConference {
   conferenceId Int
   user         User          @relation(fields: [userId], references: [id])
   userId       Int
-  // con_reviewer Con_Reviewer? @relation(fields: [conrevId], references: [id])
-  // conrevId     Int?
   paper_title  String
   topic        String
   abstract     String
   keywords     String
   paper        String
-  comments     String? //edit by reviewer
+  comments     String?
   institution  String
   country      String
   city         String
-  status       String //edit by reviewer
+  status       String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   ReviewPaper  ReviewPaper[]
