@@ -29,6 +29,8 @@ type Conference = {
 }
 
 const UpdateConference = ({ conference }: { conference: Conference }) => {
+    const parseDate = (date: Date | string) => new Date(date);
+    
     const [name, setName] = useState(conference.name);
     const [acronym, setAcronym] = useState(conference.acronym || '');
     const [theme, setTheme] = useState(conference.theme || '');
@@ -43,10 +45,10 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
     const [institution, setInstitution] = useState(conference.institution || '');
     const [paper_template, setPaperTemplate] = useState<File | null>(null);
     const [payment_info, setPaymentInfo] = useState(conference.payment_info || '');
-    const [submission_deadlineStart, setSubmissionDeadlineStart] = useState(conference.submission_deadlineStart.toDateString());
-    const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState(conference.submission_deadlineEnd.toDateString());
-    const [startDate, setStartDate] = useState(conference.startDate.toDateString());
-    const [endDate, setEndDate] = useState(conference.endDate.toDateString());
+    const [submission_deadlineStart, setSubmissionDeadlineStart] = useState(parseDate(conference.submission_deadlineStart).toISOString().slice(0,16));
+    const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState(parseDate(conference.submission_deadlineEnd).toISOString().slice(0,16));
+    const [startDate, setStartDate] = useState(parseDate(conference.startDate).toISOString().slice(0,16));
+    const [endDate, setEndDate] = useState(parseDate(conference.endDate).toISOString().slice(0,16));
     const [status, setStatus] = useState(conference.status);
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
