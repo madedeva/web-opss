@@ -24,6 +24,7 @@ model User {
   RegisterConference RegisterConference[]
   PasswordResetToken PasswordResetToken[]
   ReviewPaper        ReviewPaper[]
+  // Con_Reviewer       Con_Reviewer[]
 }
 
 model PasswordResetToken {
@@ -88,15 +89,27 @@ model RegisterConference {
   status       String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  // Con_Reviewer             Con_Reviewer[]
   ReviewPaper  ReviewPaper[]
 }
 
+// model Con_Reviewer {
+//   id                 Int                  @id @default(autoincrement())
+//   conference         Conference           @relation(fields: [conferenceId], references: [id])
+//   conferenceId       Int
+//   user               User                 @relation(fields: [userId], references: [id])
+//   userId             Int
+//   RegisterConference RegisterConference[]
+// }
+
 model ReviewPaper {
   id                   Int                @id @default(autoincrement())
-  reviewer             User               @relation(fields: [reviewerId], references: [id])
-  reviewerId           Int
+  reviewer             User               @relation(fields: [reviewerId], references: [id]) //ganti dengan di comment
+  reviewerId           Int //ganti dengan di comment
   registerConference   RegisterConference @relation(fields: [registerConferenceId], references: [id])
   registerConferenceId Int
+  // reviewer Con_Reviewer? @relation(fields: [conrevId], references: [id])
+  // reviewerId     Int?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 
