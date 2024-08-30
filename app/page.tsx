@@ -4,6 +4,8 @@ import Header from './components/HomePage/Header';
 import Footer from './components/HomePage/Footer';
 import HeadNav from './components/HomePage/Head';
 import GetAllConference from './components/Conference/getAllConference';
+import { SessionProvider } from 'next-auth/react';
+import PartnerSlider from './components/PartnerSlider';
 
     export default function Home () {
 
@@ -50,6 +52,7 @@ import GetAllConference from './components/Conference/getAllConference';
 
 
     return (
+        <SessionProvider>
         <div>
         
         <HeadNav />
@@ -87,10 +90,10 @@ import GetAllConference from './components/Conference/getAllConference';
 
             <section className="bg-blue-950 text-white py-20" id="conference">
                 <div className="container mx-auto text-center">
-                    <h2 className="text-3xl font-bold mb-4">Latest Conference</h2>
+                    <h2 className="text-3xl font-bold mb-8">Latest Conference</h2>
                     <GetAllConference />
                     <div className="flex justify-center">
-                    <button className="mt-8 bg-orange-500 text-white py-2 px-6 rounded flex items-center transform transition duration-300 hover:scale-105">
+                    <a href="/dashboard/availableconference"><button className="mt-8 bg-orange-500 text-white py-2 px-6 rounded flex items-center transform transition duration-300 hover:scale-105">
                         Explore More
                         <svg className="ml-2" width="32px" height="32px" viewBox="-6 -6 36.00 36.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -99,11 +102,12 @@ import GetAllConference from './components/Conference/getAllConference';
                             <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                         </g>
                         </svg>
-                    </button>
+                    </button></a>
                     </div>
                 </div>
             </section>
-
+            
+            <PartnerSlider />
 
             <section className="py-20 text-center">
             <h2 className="text-3xl font-bold mb-4 text-white">Get in Touch with Us</h2>
@@ -130,5 +134,6 @@ import GetAllConference from './components/Conference/getAllConference';
                 </button>
             )}
         </div>
+        </SessionProvider>
         );
     }

@@ -4,17 +4,30 @@ import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import { SessionProvider } from 'next-auth/react';
+import LoadingOverlay from './LoadingOverlay';
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
+  const fetchData = async () => {
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setIsLoading(false);
+  };
+
+  React.useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <SessionProvider>
     <div className="flex h-screen overflow-hidden">
+    {isLoading && <LoadingOverlay />}
       <Sidebar isVisible={isSidebarVisible} />
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarVisible ? 'ml-64' : 'ml-0'}`}>
         <Navbar toggleSidebar={toggleSidebar} />

@@ -1,6 +1,5 @@
 "use client";
-import { useState, SyntheticEvent} from "react";
-import type { Brand } from "@prisma/client";
+import { useState, SyntheticEvent, useEffect} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -30,6 +29,8 @@ type Conference = {
 }
 
 const UpdateConference = ({ conference }: { conference: Conference }) => {
+    const parseDate = (date: Date | string) => new Date(date);
+    
     const [name, setName] = useState(conference.name);
     const [acronym, setAcronym] = useState(conference.acronym || '');
     const [theme, setTheme] = useState(conference.theme || '');
@@ -44,14 +45,42 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
     const [institution, setInstitution] = useState(conference.institution || '');
     const [paper_template, setPaperTemplate] = useState<File | null>(null);
     const [payment_info, setPaymentInfo] = useState(conference.payment_info || '');
-    const [submission_deadlineStart, setSubmissionDeadlineStart] = useState(conference.submission_deadlineStart);
-    const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState(conference.submission_deadlineEnd);
-    const [startDate, setStartDate] = useState(conference.startDate);
-    const [endDate, setEndDate] = useState(conference.endDate);
+    const [submission_deadlineStart, setSubmissionDeadlineStart] = useState(parseDate(conference.submission_deadlineStart).toISOString().slice(0,16));
+    const [submission_deadlineEnd, setSubmissionDeadlineEnd] = useState(parseDate(conference.submission_deadlineEnd).toISOString().slice(0,16));
+    const [startDate, setStartDate] = useState(parseDate(conference.startDate).toISOString().slice(0,16));
+    const [endDate, setEndDate] = useState(parseDate(conference.endDate).toISOString().slice(0,16));
     const [status, setStatus] = useState(conference.status);
+    const [countries, setCountries] = useState<string[]>([]);
+    const [fetchError, setFetchError] = useState<string | null>(null);
 
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const response = await fetch('/countries.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                setCountries(data);
+            } catch (error) {
+                console.error('Error fetching countries:', error);
+                setFetchError('Failed to load countries');
+            }
+        };
+
+        fetchCountries();
+    }, []);
+
+    // const handleTopicChange = (index: number, value: string) => {
+    //     const newTopics = [...topic];
+    //     newTopics[index] = value;
+    //     setTopic(newTopics);
+    // }
+
+    // const addTopicField = () => {
+    //     setTopic([...topic, '']);
+    // }
 
     const handleUpdate = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -71,10 +100,10 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
         formData.append('institution', institution);
         formData.append('paper_template', paper_template || '');
         formData.append('payment_info', payment_info);
-        formData.append('submission_deadlineStart', submission_deadlineStart.toISOString());
-        formData.append('submission_deadlineEnd', submission_deadlineEnd.toISOString());
-        formData.append('startDate', startDate.toISOString());
-        formData.append('endDate', endDate.toISOString());
+        formData.append('submission_deadlineStart', new Date(submission_deadlineStart).toISOString());
+        formData.append('submission_deadlineEnd', new Date(submission_deadlineEnd).toISOString());
+        formData.append('startDate', new Date(startDate).toISOString());
+        formData.append('endDate', new Date(endDate).toISOString());
         formData.append('status', status);
 
         await axios.put(`/api/conferences/${conference.id}`, formData, {
@@ -97,7 +126,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
-                <div className="modal-box bg-white w-full max-w-5xl">
+                <div className="modal-box bg-white text-gray-700 w-full max-w-5xl">
                     <h3 className="font-bold text-lg text-center">Update {conference.name}</h3>
                     <hr className="mb-4"/>
                     <form onSubmit={handleUpdate}>
@@ -123,14 +152,14 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                             />
                         </div>
                         <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Theme <span className="text-red-500">*</span></label>
+                            <label className="label font-bold">Theme</label>
                             <textarea 
                             value={theme}
                             onChange={(e) => setTheme(e.target.value)}
                             id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your thoughts here..."></textarea>
                         </div>
                         <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Description <span className="text-red-500">*</span></label>
+                            <label className="label font-bold">Description</label>
                             <textarea 
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -149,6 +178,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
 
                         <div className="w-full mt-6">
                             <p className="font-bold">Banner Image</p>
+                            <span className="text-xs">.jpg .jpeg or .png - max. 2mb</span>
                             <label
                                 className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2">
                                 <span className="flex items-center space-x-2">
@@ -159,7 +189,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                     </svg>
                                     <span className="font-medium text-gray-600">
                                         Drop files to Attach, or
-                                        <span className="text-blue-600 underline">browse</span>
+                                        <span className="text-blue-950 underline ml-1">browse</span>
                                     </span>
                                 </span>
                                 <input 
@@ -170,15 +200,6 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                 />
                             </label>
                         </div>
-
-                        {/* <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Banner Image</label>
-                            <input
-                                type="file"
-                                onChange={(e) => e.target.files && setBanner(e.target.files[0])}
-                                className="input input-bordered bg-white"
-                            />
-                        </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Conference Venue</label>
                             <input
@@ -211,13 +232,19 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                         </div>
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Country</label>
-                            <input
-                            type="text"
-                            value={country}
-                            onChange={(e) => setCountry(e.target.value)}
-                            className="input input-bordered bg-white"
-                            placeholder="Country"
-                            />
+                            <select
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                className="select select-bordered bg-white"
+                                required
+                            >
+                                <option value="" disabled>Select Country</option>
+                                {countries.map((country) => (
+                                    <option key={country} value={country}>
+                                        {country}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Organizer Email</label>
@@ -241,6 +268,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                         </div>
                         <div className="w-full mt-6">
                             <p className="font-bold">Paper Template</p>
+                            <span className="text-xs">.docx .doc</span>
                             <label
                                 className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2">
                                 <span className="flex items-center space-x-2">
@@ -251,7 +279,7 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                     </svg>
                                     <span className="font-medium text-gray-600">
                                         Drop files to Attach, or
-                                        <span className="text-blue-600 underline">browse</span>
+                                        <span className="text-blue-950 underline ml-1">browse</span>
                                     </span>
                                 </span>
                                 <input 
@@ -262,14 +290,6 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                 />
                             </label>
                         </div>
-                        {/* <div className="form-control w-full mt-6">
-                            <label className="label font-bold">Paper Template</label>
-                            <input
-                                type="file"
-                                onChange={(e) => e.target.files && setPaperTemplate(e.target.files[0])}
-                                className="input input-bordered bg-white"
-                            />
-                        </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Payment Information</label>
                             <input
@@ -283,21 +303,21 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
 
                         <div className="flex w-full gap-4 mt-6">
                             <div className="form-control w-1/2">
-                                <label className="label font-bold">Submission Start Date<span className="text-red-500">*</span></label>
+                                <label className="label font-bold">Submission Start Date</label>
                                 <input
                                 type="datetime-local"
                                 value={submission_deadlineStart.toString()}
-                                onChange={(e) => setSubmissionDeadlineStart(new Date(e.target.value))}
+                                onChange={(e) => setSubmissionDeadlineStart(e.target.value)}
                                 className="input input-bordered bg-white"
                                 placeholder="Submission Deadline"
                                 />
                             </div>
                             <div className="form-control w-1/2">
-                                <label className="label font-bold">Submission End Date<span className="text-red-500">*</span></label>
+                                <label className="label font-bold">Submission End Date</label>
                                 <input
                                 type="datetime-local"
                                 value={submission_deadlineEnd.toString()}
-                                onChange={(e) => setSubmissionDeadlineEnd(new Date(e.target.value))}
+                                onChange={(e) => setSubmissionDeadlineEnd(e.target.value)}
                                 className="input input-bordered bg-white"
                                 placeholder="Submission Deadline"
                                 />
@@ -306,24 +326,24 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                         <div className="flex w-full gap-4 mt-6">
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">
-                                    Conference Start Date <span className="text-red-500">*</span>
+                                    Conference Start Date
                                 </label>
                                 <input
                                     type="datetime-local"
                                     value={startDate.toString()}
-                                    onChange={(e) => setStartDate(new Date(e.target.value))}
+                                    onChange={(e) => setStartDate(e.target.value)}
                                     className="input input-bordered bg-white"
                                     placeholder="Start Date"
                                 />
                             </div>
                             <div className="form-control w-1/2">
                                 <label className="label font-bold">
-                                Conference End Date <span className="text-red-500">*</span>
+                                Conference End Date
                                 </label>
                                 <input
                                     type="datetime-local"
                                     value={endDate.toString()}
-                                    onChange={(e) => setEndDate(new Date(e.target.value))}
+                                    onChange={(e) => setEndDate(e.target.value)}
                                     className="input input-bordered bg-white"
                                     placeholder="End Date"
                                 />

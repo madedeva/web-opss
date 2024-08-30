@@ -1,30 +1,27 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import { sendResetPasswordEmail } from '@/lib/mail';
 import { findUserByEmail, createPasswordResetToken } from '@/lib/user';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
-
-  const { email } = req.body;
-
-  if (!email || typeof email !== 'string') {
-    return res.status(400).json({ message: 'Invalid email address' });
-  }
-
+export async function POST(req: Request) {
   try {
+    const body = await req.json();
+    const { email } = body;
+
+    if (!email || typeof email !== 'string') {
+      return NextResponse.json({ message: 'Invalid email address' }, { status: 400 });
+    }
+
     const user = await findUserByEmail(email);
     if (!user) {
-      return res.status(404).json({ message: 'No user found with this email address' });
+      return NextResponse.json({ message: 'No user found with this email address' }, { status: 404 });
     }
 
     const token = await createPasswordResetToken(user.id.toString());
     await sendResetPasswordEmail(email, token);
 
-    res.status(200).json({ message: 'Password reset link has been sent to your email' });
+    return NextResponse.json({ status:true, message: 'Password reset link has been sent to your email' }, { status: 200 });
   } catch (error) {
     console.error('Error processing forgot password request:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    return NextResponse.json({ status:false, message: 'Internal server error' }, { status: 500 });
   }
 }
