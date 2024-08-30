@@ -1,5 +1,5 @@
 "use client";
-import { useState, SyntheticEvent } from "react";
+import { useState, SyntheticEvent, useEffect } from "react";
 import type { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -7,12 +7,23 @@ import axios from "axios";
 type UpdatePaperProps = {
     users: User[];
     paperId: number;
+    conferenceId: number;
 };
 
-const UpdatePaper = ({ users, paperId }: UpdatePaperProps) => {
+const UpdatePaper = ({ users, paperId, conferenceId }: UpdatePaperProps) => {
     const [idUser, setUser] = useState(paperId.toString());
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
+    const [usersRev, setUsersRev] = useState<User[]>([]);
+
+    const fetchDataReviewer = async () => {
+      try {
+        const response = await axios.get(`/api/userReviewer?paperId=${conferenceId}`);
+        setUsersRev(response.data);
+      } catch (error) {
+        console.error('Gagal mengambil data role', error);
+      }
+    };
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -31,8 +42,16 @@ const UpdatePaper = ({ users, paperId }: UpdatePaperProps) => {
     };
 
     const handleModal = () => {
+        fetchDataReviewer();
         setIsOpen(!isOpen);
     };
+
+    useEffect(() => {
+        if (isOpen) {
+          fetchDataReviewer();
+        }
+      }, [paperId, isOpen]);
+      
 
     return (
         <div>
@@ -47,6 +66,7 @@ const UpdatePaper = ({ users, paperId }: UpdatePaperProps) => {
                         <div className="form-control w-full mt-6">
                             <p className="mb-2">Select Reviewer <span className="text-red-600">*</span></p>
                             <select 
+                                id={paperId.toString()}
                                 value={idUser}
                                 onChange={(e) => setUser(e.target.value)}
                                 onClick={(e) => {
@@ -56,9 +76,9 @@ const UpdatePaper = ({ users, paperId }: UpdatePaperProps) => {
                                 className="select select-bordered bg-white"
                                 required
                             >
-                                <option value="" disabled>Select Reviewer</option>
-                                {users.map((user) => (
-                                    <option key={user.id} value={user.id}>{user.name}</option>
+                                <option id={paperId.toString()} value="" disabled>Select Reviewer</option>
+                                {usersRev.map((user) => (
+                                    <option key={paperId.toString() + "." + user.id} id={paperId.toString() + "." +  user.id} value={user.id}>{user.name}</option>
                                 ))}
                             </select>
                         </div>

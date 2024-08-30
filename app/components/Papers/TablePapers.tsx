@@ -78,6 +78,8 @@ const TablePapers = () => {
         setIsOpen(false);
     };
 
+
+
     useEffect(() => {
         if (session?.user) {
             const user = session.user as User;
@@ -101,7 +103,9 @@ const TablePapers = () => {
         };
 
         getUser();
-        fetchPapers();
+        if (status != 'loading'){
+            fetchPapers();
+        }
     }, [session]);
 
     const handleConferenceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -227,7 +231,7 @@ const TablePapers = () => {
                                 </a>
                             </td>
                             <td className="py-2 px-4">
-                                <UpdatePaper users={users} paperId={paper.id} />
+                                <UpdatePaper users={users} paperId={paper.id} conferenceId={paper.conferenceId} />
                             </td>
                         </tr>
                     ))}

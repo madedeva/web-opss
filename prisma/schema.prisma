@@ -25,6 +25,7 @@ model User {
   PasswordResetToken PasswordResetToken[]
   ReviewPaper        ReviewPaper[]
   // Con_Reviewer       Con_Reviewer[]
+  Con_Reviewer       Con_Reviewer[]
 }
 
 model PasswordResetToken {
@@ -69,38 +70,41 @@ model Conference {
   User                     User                 @relation(fields: [userId], references: [id])
   userId                   Int
   RegisterConference       RegisterConference[]
+  Con_Reviewer             Con_Reviewer[]
 }
 
 model RegisterConference {
-  id           Int           @id @default(autoincrement())
-  conference   Conference    @relation(fields: [conferenceId], references: [id])
-  conferenceId Int
-  user         User          @relation(fields: [userId], references: [id])
-  userId       Int
-  paper_title  String
-  topic        String
-  abstract     String
-  keywords     String
-  paper        String
-  comments     String?
-  institution  String
-  country      String
-  city         String
-  status       String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id             Int           @id @default(autoincrement())
+  conference     Conference    @relation(fields: [conferenceId], references: [id])
+  conferenceId   Int
+  user           User          @relation(fields: [userId], references: [id])
+  userId         Int
+  paper_title    String
+  topic          String
+  abstract       String
+  keywords       String
+  paper          String
+  comments       String?
+  institution    String
+  country        String
+  city           String
+  status         String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
   // Con_Reviewer             Con_Reviewer[]
-  ReviewPaper  ReviewPaper[]
+  ReviewPaper    ReviewPaper[]
+  Con_Reviewer   Con_Reviewer? @relation(fields: [con_ReviewerId], references: [id])
+  con_ReviewerId Int?
 }
 
-// model Con_Reviewer {
-//   id                 Int                  @id @default(autoincrement())
-//   conference         Conference           @relation(fields: [conferenceId], references: [id])
-//   conferenceId       Int
-//   user               User                 @relation(fields: [userId], references: [id])
-//   userId             Int
-//   RegisterConference RegisterConference[]
-// }
+model Con_Reviewer {
+  id                 Int                  @id @default(autoincrement())
+  conference         Conference           @relation(fields: [conferenceId], references: [id])
+  conferenceId       Int
+  user               User                 @relation(fields: [userId], references: [id])
+  userId             Int
+  RegisterConference RegisterConference[]
+}
 
 model ReviewPaper {
   id                   Int                @id @default(autoincrement())
