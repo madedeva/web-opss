@@ -87,7 +87,7 @@ const Reviewer = async () => {
                       <tr className="text-gray-700 text-xs border-b border-gray-200" key={cr.id}>
                         <td className="py-2">{cr.user.name}</td>
                         <td className="py-2">{cr.conference.institution}</td>
-                        <td className="py-2">{cr.conference.User?.email}</td>
+                        <td className="py-2">{cr.user.email}</td>
                         <td className="flex py-2">
                           <UpdateReviewer
                             conferences={conference}
