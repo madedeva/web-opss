@@ -64,3 +64,22 @@ export const POST = async (req: Request) => {
         return NextResponse.json({ status: "fail", error: e });
       }
 }
+
+export const GET = async (request: Request, { params }: { params: { userId: string } }) => {
+  try {
+    const conferences = await prisma.conference.findMany({
+      where: {
+        userId: Number(params.userId),
+      },
+    });
+
+    if (!conferences) {
+      return NextResponse.json({ error: 'No conferences found' }, { status: 404 });
+    }
+
+    return NextResponse.json(conferences, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching conferences:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+};

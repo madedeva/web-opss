@@ -26,7 +26,7 @@ const AddSubmission = ({conferences}: {conferences: Conference[]}) => {
     const [institution, setInstitution] = useState ("");
     const [country, setCountry] = useState("");
     const [city, setCity] = useState("");
-    const [status, setStatus] = useState("Pending");
+    const [status, setStatus] = useState("Submitted");
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -101,7 +101,7 @@ const AddSubmission = ({conferences}: {conferences: Conference[]}) => {
             setInstitution('');
             setCountry('');
             setCity('');
-            setStatus('Pending');
+            setStatus('Submitted');
             setSelectedConferenceId('');
             
             setAlert({ type: 'success', message: 'Submission success!' });
@@ -254,7 +254,7 @@ const AddSubmission = ({conferences}: {conferences: Conference[]}) => {
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
                             className="select select-bordered bg-white" required>
-                            <option value="Pending">Pending</option>
+                            <option value="Submitted">Submitted</option>
                             <option value="Approved">Accepted</option>
                             <option value="Rejected">Rejected</option>
                             </select>

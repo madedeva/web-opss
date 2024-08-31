@@ -16,3 +16,41 @@ export const POST = async (request: Request) => {
 
     return NextResponse.json(reviewer, {status: 201});
 }
+
+export const GET = async (request: Request) => {
+    const { searchParams } = new URL(request.url);
+    const conferenceId = searchParams.get("conferenceId");
+
+    let reviewers;
+
+    if (conferenceId) {
+        reviewers = await prisma.con_Reviewer.findMany({
+            where: {
+                conferenceId: Number(conferenceId),
+            },
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                        email: true,
+                    },
+                },
+                conference: true,
+            },
+        });
+    } else {
+        reviewers = await prisma.con_Reviewer.findMany({
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                        email: true,
+                    },
+                },
+                conference: true,
+            },
+        });
+    }
+
+    return NextResponse.json(reviewers, { status: 200 });
+};

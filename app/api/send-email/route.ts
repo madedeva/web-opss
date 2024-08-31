@@ -1,31 +1,52 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { PrismaClient } from '@prisma/client';
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-});
+const prisma = new PrismaClient();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
-        const { to, subject, text } = req.body;
+export async function POST(request: Request) {
+  try {
+    const { userIds, subject, messageTemplate } = await request.json();
 
-        try {
-            await transporter.sendMail({
-                from: process.env.EMAIL_USER,
-                to,
-                subject,
-                text,
-            });
-            res.status(200).json({ message: 'Email sent successfully' });
-        } catch (error) {
-            res.status(500).json({ error: 'Error sending email' });
-        }
-    } else {
-        res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+      return NextResponse.json({ error: 'User IDs tidak valid' }, { status: 400 });
     }
+
+    if (!subject || !messageTemplate) {
+      return NextResponse.json({ error: 'Subject dan message diperlukan' }, { status: 400 });
+    }
+
+    const users = await prisma.user.findMany({
+      where: { id: { in: userIds } },
+    });
+
+    if (users.length === 0) {
+      return NextResponse.json({ error: 'Tidak ada pengguna ditemukan' }, { status: 404 });
+    }
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'deva.kerti@undiksha.ac.id',
+            pass: 'zntegtyxgvnqojbn'
+        }
+    });
+
+    const emailPromises = users.map(user => {
+      const message = messageTemplate.replace(/<name>/g, user.name);
+      return transporter.sendMail({
+        from: 'deva.kerti@undiksha.ac.id',
+        to: user.email,
+        subject,
+        text: message,
+      });
+    });
+
+    await Promise.all(emailPromises);
+
+    return NextResponse.json({ message: 'Email berhasil dikirim' });
+  } catch (error) {
+    console.error('Error sending emails:', error);
+    return NextResponse.json({ error: 'Gagal mengirim email' }, { status: 500 });
+  }
 }

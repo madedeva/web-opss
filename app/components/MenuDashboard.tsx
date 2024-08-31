@@ -33,6 +33,13 @@ const MenuDashboard = () => {
                 <li><a href="/dashboard/papers" className="text-blue-950 underline">Submitted Papers</a></li>
                 </ul>
             </section>
+            <section className="bg-white p-4 rounded">
+                <h3 className="text-lg mb-2">Reviewers</h3>
+                <hr className="mb-4 mt-4" />
+                <ul>
+                <li><a href="/dashboard/reviewers" className="text-blue-950 underline">Conference Reviewers</a></li>
+                </ul>
+            </section>
             </main>
         </div>
         );

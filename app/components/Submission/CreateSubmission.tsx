@@ -22,7 +22,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
     const [institution, setInstitution] = useState ("");
     const [country, setCountry] = useState("");
     const [city, setCity] = useState("");
-    const [status, setStatus] = useState("Pending");
+    const [status, setStatus] = useState("Submitted");
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
     const [topics, setTopics] = useState<string[]>();
@@ -111,7 +111,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
             setInstitution('');
             setCountry('');
             setCity('');
-            setStatus('Pending');
+            setStatus('Submitted');
             setSelectedConferenceId('');
             
             setAlert({ type: 'success', message: 'Submission success!' });

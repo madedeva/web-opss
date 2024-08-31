@@ -77,14 +77,14 @@ interface UserWithRole extends User {
           <hr className="mt-2" />
 
           <div className="mb-4">
-            <label htmlFor="role-select" className="block text-sm font-medium text-gray-900 mt-4">
+            <label htmlFor="role-select" className="block text-sm font-medium text-gray-900 mt-4 mb-2">
               Filter by Role
             </label>
             <select
               id="role-select"
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md bg-white"
+              className="block w-full pl-4 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-950 focus:border-blue-950 sm:text-sm rounded-lg bg-white shadow-sm transition duration-200 ease-in-out"
             >
               <option value="">All Roles</option>
               {roles.map((role) => (

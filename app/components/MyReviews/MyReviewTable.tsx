@@ -202,9 +202,9 @@ const MyReviewTable = () => {
                                                     Accepted
                                                 </span>
                                             )}
-                                            {paper.status === 'Pending' && (
+                                            {paper.status === 'Submitted' && (
                                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                    Pending
+                                                    Submitted
                                                 </span>
                                             )}
                                             {paper.status === 'Revision' && (
@@ -264,14 +264,6 @@ const MyReviewTable = () => {
                                             onChange={(e) => setComment(e.target.value)}
                                             id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your comments"></textarea>
                                         </div>
-                                        {/* <div className="form-control w-full mt-6">
-                                            <p className="mb-2">Comment <span className="text-red-600">*</span></p>
-                                            <input 
-                                            type="text" 
-                                            value={comments}
-                                            onChange={(e) => setComment(e.target.value)}
-                                            className="input input-bordered bg-white" required/>
-                                        </div> */}
                                         <div className="form-control w-full mt-6">
                                             <label className="mb-2">Status</label>
                                             <select 
