@@ -34,7 +34,7 @@ export const POST = async (request: Request) => {
                 keywords: formData.get("keywords")?.valueOf().toString() ?? '',
                 country: formData.get("country")?.valueOf().toString() ?? '',
                 city: formData.get("city")?.valueOf().toString() ?? '',
-                status: 'Pending',
+                status: 'Submitted',
                 paper: paper.name,
                 userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
                 conferenceId: parseInt(formData.get("conferenceId")?.valueOf().toString() ?? '0'),
