@@ -114,6 +114,7 @@ import PartnerSlider from './components/PartnerSlider';
             <p className="mb-8">We`re here to help. Reach out for any questions or support.</p>
             <form className="max-w-xl mx-auto">
                 <input type="text" placeholder="Your name" className="w-full mb-4 p-2 border rounded" />
+                <input type="email" placeholder="Your email" className="w-full mb-4 p-2 border rounded" />
                 <textarea placeholder="Your message" className="w-full mb-4 p-2 border rounded" rows={4}></textarea>
                 <div className="flex justify-center">
                 <button className="bg-orange-500 text-white py-2 px-6 rounded flex items-center transform transition duration-300 hover:scale-105">
