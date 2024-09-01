@@ -24,7 +24,6 @@ model User {
   RegisterConference RegisterConference[]
   PasswordResetToken PasswordResetToken[]
   ReviewPaper        ReviewPaper[]
-  // Con_Reviewer       Con_Reviewer[]
   Con_Reviewer       Con_Reviewer[]
 }
 

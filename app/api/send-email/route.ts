@@ -6,9 +6,11 @@ const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
-    const { userIds, subject, messageTemplate } = await request.json();
+    const { userId, subject, messageTemplate } = await request.json();
 
-    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+    console.log(userId)
+
+    if (!userId || !Array.isArray(userId) || userId.length === 0) {
       return NextResponse.json({ error: 'User IDs tidak valid' }, { status: 400 });
     }
 
@@ -17,7 +19,7 @@ export async function POST(request: Request) {
     }
 
     const users = await prisma.user.findMany({
-      where: { id: { in: userIds } },
+      where: { id: { in: userId } },
     });
 
     if (users.length === 0) {

@@ -60,6 +60,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
             try {
                 const response = await axios.get(`/api/conferences/${registerConference.conferenceId}`);
                 const conference = response.data;
+                
                 const topics = conference.topic.split(',').map((t: string) => t.trim());
                 setTopicOptions(topics);
                 setSelectedTopic(topics.includes(registerConference.topic) ? registerConference.topic : topics[0] || '');

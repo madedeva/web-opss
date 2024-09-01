@@ -11,6 +11,7 @@ export const GET = async () => {
                     include: {
                       User: {
                         select: {
+                          id: true,
                           name: true,
                           email: true,
                         },
@@ -19,6 +20,7 @@ export const GET = async () => {
                   },
                   user: {
                     select: {
+                      id: true,
                       name: true,
                       email: true,
                     },

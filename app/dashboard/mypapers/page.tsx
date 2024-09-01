@@ -80,9 +80,9 @@ const MyConferences = async () => {
           <p className="text-sm text-gray-600">
           Below is a list of the history of the papers you have submitted.
           </p>
-          <div className="mt-2">
+          {/* <div className="mt-2">
           <RegisterConference conferences={conference}/>
-          </div>
+          </div> */}
           <TableMySubmission reg_conference={reg_conference} />
         </div>
       </div>

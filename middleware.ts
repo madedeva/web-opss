@@ -20,7 +20,8 @@ export async function middleware(request: NextRequest) {
     const restrictedRoutesForRole1 = [
       "/dashboard/mypapers",
       "/dashboard/availableconference",
-      "/dashboard/create-submission"
+      "/dashboard/create-submission",
+      "/dashboard/reviewers",
     ];
 
     if (restrictedRoutesForRole1.some(route => pathname.startsWith(route)) && userRoleId !== 1) {

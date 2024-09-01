@@ -137,16 +137,17 @@ const TablePapers = () => {
         );
       };
       
-    const handleSelectAll = () => {
+     const handleSelectAll = () => {
         setSelectedUserId(prev => {
           return prev.length === paginatedPapers.length 
             ? [] 
-            : paginatedPapers.map(paper => paper.user.id);
+            : paginatedPapers.map(paper => paper.userId);
         });
       };
 
       useEffect(() => {
         console.log("Selected User IDs:", selectedUserId);
+        console.log("Selected User paper:", papers);
       }, [selectedUserId]);
 
       const handleSubmit = async (e: React.FormEvent) => {
@@ -320,6 +321,7 @@ const TablePapers = () => {
                         <tr className="text-xs border-b border-gray-200">
                             <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex">
                                 <input
+                                id="allpaper"
                                 className='mr-2'
                                 type="checkbox"
                                 checked={selectedUserId.length === paginatedPapers.length && paginatedPapers.length > 0}
@@ -358,9 +360,10 @@ const TablePapers = () => {
                             <tr key={paper.id} className="text-gray-700 text-xs border-b border-gray-200">
                                 <td className="px-4 py-2 text-center">
                                     <input
+                                    id={paper.id.toString()}
                                     type="checkbox"
-                                    checked={selectedUserId.includes(paper.user.id)}
-                                    onChange={() => handleCheckboxChange(paper.user.id)}
+                                    checked={selectedUserId.includes(paper.userId)}
+                                    onChange={() => handleCheckboxChange(paper.userId)}
                                     />
                                 </td>
                                 <td className="py-2 px-4">{paper.paper_title}</td>
@@ -437,10 +440,10 @@ const TablePapers = () => {
                         <h3 className="font-bold text-lg">Send email to:</h3>
                         <hr className="mt-4" />
                         <ul className="list-disc pl-5 mb-4">
-                            {users
-                            .filter((user) => selectedUserId.includes(user.id))
-                            .map((user) => (
-                                <li key={user.id}>{user.email}</li>
+                            {papers
+                            .filter((paper) => selectedUserId.includes(paper.userId))
+                            .map((paper) => (
+                                <li key={paper.userId}>{paper.user.email}</li>
                             ))}
                         </ul>
                         <form onSubmit={handleSubmit}>

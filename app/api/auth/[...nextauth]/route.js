@@ -35,6 +35,8 @@ const handler = NextAuth({
             name: user.name,
             email: user.email,
             roleId: user.roleId,
+            authorAccess: user.authorAccess,
+            reviewerAccess: user.reviewerAccess
           };
         } catch (error) {
           console.error(error);
@@ -62,12 +64,16 @@ const handler = NextAuth({
       if (user) {
         token.id = user.id;
         token.roleId = user.roleId;
+        token.authorAccess = user.authorAccess;
+        token.reviewerAccess = user.reviewerAccess;
       }
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.roleId = token.roleId;
+      session.user.authorAccess = token.authorAccess;
+      session.user.reviewerAccess = token.reviewerAccess;
       return session;
     },
   },
