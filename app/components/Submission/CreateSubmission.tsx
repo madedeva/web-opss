@@ -16,7 +16,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
     const [topicOptions, setTopicOptions] = useState<string[]>([]);
     const [selectedTopic, setSelectedTopic] = useState("");
     const [abstract, setAbstract] = useState ("");
-    const [keywords, setKeywords] = useState ("");
+    const [keywords, setKeywords] = useState<string[]>(['']);
     const [paper, setPaper] = useState<any>();
     const paperInput = useRef<HTMLInputElement>(null);
     const [institution, setInstitution] = useState ("");
@@ -79,13 +79,23 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
         setTopics(str.split(", "));
     }, [conference?.topic]);
 
+    const handleKeywordsChange = (index: number, value: string) => {
+        const newKeywords = [...keywords];
+        newKeywords[index] = value;
+        setKeywords(newKeywords);
+    }
+
+    const addKeywordsField = () => {
+        setKeywords([...keywords, '']);
+    }
+
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('paper_title', paper_title);
         formData.append('topic', selectedTopic);
         formData.append('abstract', abstract);
-        formData.append('keywords', keywords);
+        formData.append('keywords', keywords.join(', '));
         formData.append("paper", paperInput?.current?.files?.[0]!);
         formData.append('institution', institution);
         formData.append('country', country);
@@ -106,7 +116,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
             setPaperTitle('');
             setSelectedTopic('');
             setAbstract('');
-            setKeywords('');
+            setKeywords(['']);
             setPaper(null);
             setInstitution('');
             setCountry('');
@@ -177,14 +187,32 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                     id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write abstract here.." required>
                 </textarea>
             </div>
-            <div className="form-control w-full mt-6">
+            <div className="w-full gap-4 mt-6">
+                {keywords.map((keywords, index) => (
+                <div className="form-control w-full mt-2" key={index}>
+                    <p className="mb-2">Keywords <span className="text-red-600">*</span></p>
+                    <input
+                        type="text"
+                        value={keywords}
+                        onChange={(e) => handleKeywordsChange(index, e.target.value)}
+                        className="input input-bordered bg-white text-sm"
+                        placeholder='Add keywords'
+                        required
+                    />
+                 </div>
+                 ))}
+                <div className="mt-2">
+                    <button type="button" className="btn bg-blue-950 btn-sm text-white mt-2" onClick={addKeywordsField}>Add new keywords</button>
+                </div>
+            </div>
+            {/* <div className="form-control w-full mt-6">
                 <p className="mb-2">Keywords <span className="text-red-600">*</span></p>
                 <input 
                 type="text" 
                 value={keywords}
                 onChange={(e) => setKeywords(e.target.value)}
                 className="input input-bordered bg-white" required/>
-            </div>
+            </div> */}
             <div className="w-full mt-6">
                 <p>Full Paper <span className="text-red-600">*</span></p>
                 <p className="text-xs mb-2">only .pdf allowed</p>

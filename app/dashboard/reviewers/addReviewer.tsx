@@ -102,7 +102,7 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
                             <button type="button" className="btn text-white" onClick={handleModalToggle}>
                                 Close
                             </button>
-                            <button type="submit" className="btn btn-accent text-white">
+                            <button type="submit" className="btn bg-blue-950 text-white">
                                 Save Reviewer
                             </button>
                         </div>

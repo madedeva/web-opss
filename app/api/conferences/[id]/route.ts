@@ -86,9 +86,9 @@ export const DELETE = async (request: Request, {params}: {params: {id: string}})
 }
 
 export const GET = async (request: Request, {params}: {params: {id: string}}) => {
-    const con = await prisma.conference.findUnique({
+    const con = await prisma.conference.findMany({
         where: {
-            id: Number(params.id)
+            userId: Number(params.id)
         }
     });
 

@@ -58,8 +58,9 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     useEffect(() => {
         const fetchConferenceTopics = async () => {
             try {
-                const response = await axios.get(`/api/conferences/${registerConference.conferenceId}`);
+                const response = await axios.get(`/api/updateconference/${registerConference.conferenceId}`);
                 const conference = response.data;
+                
                 const topics = conference.topic.split(',').map((t: string) => t.trim());
                 setTopicOptions(topics);
                 setSelectedTopic(topics.includes(registerConference.topic) ? registerConference.topic : topics[0] || '');
