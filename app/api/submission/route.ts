@@ -6,11 +6,11 @@ import { revalidatePath } from "next/cache";
 import fs from "node:fs/promises";
 import path from 'path';
 
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-};
+// export const config = {
+//     api: {
+//       bodyParser: false,
+//     },
+// };
 
 const prisma = new PrismaClient();
 
@@ -25,10 +25,13 @@ export const POST = async (request: Request) => {
             await fs.writeFile(`./public/uploads/papers/${paper.name}`, bufferPaper);
         }
 
+        const authorInstitutionPairs = formData.get("authorInstitutionPairs")?.valueOf().toString() ?? '';
+        const authors = formData.get("authors")?.valueOf().toString() ?? '';
+
         const con = await prisma.registerConference.create({
             data: {
                 paper_title: formData.get("paper_title")?.valueOf().toString() ?? '',
-                institution: formData.get("institution")?.valueOf().toString() ?? '',
+                institution: authorInstitutionPairs,
                 topic: formData.get("topic")?.valueOf().toString() ?? '',
                 abstract: formData.get("abstract")?.valueOf().toString() ?? '',
                 keywords: formData.get("keywords")?.valueOf().toString() ?? '',
@@ -38,6 +41,7 @@ export const POST = async (request: Request) => {
                 paper: paper.name,
                 userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
                 conferenceId: parseInt(formData.get("conferenceId")?.valueOf().toString() ?? '0'),
+                authors: authors, 
             }
         });
         revalidatePath("/");

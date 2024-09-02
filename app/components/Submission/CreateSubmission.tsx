@@ -1,5 +1,4 @@
 'use client'
-import DashboardLayout from "@/app/components/DashboardLayout";
 import { Conference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
@@ -13,13 +12,15 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
     
     const [selectedConferenceId, setSelectedConferenceId] = useState('');
     const [paper_title, setPaperTitle] = useState ("");
+    const [authors, setAuthors] = useState<string[]>([]);
     const [topicOptions, setTopicOptions] = useState<string[]>([]);
     const [selectedTopic, setSelectedTopic] = useState("");
     const [abstract, setAbstract] = useState ("");
     const [keywords, setKeywords] = useState<string[]>(['']);
     const [paper, setPaper] = useState<any>();
     const paperInput = useRef<HTMLInputElement>(null);
-    const [institution, setInstitution] = useState ("");
+    // const [institution, setInstitution] = useState ("");
+    const [institution, setInstitution] = useState<string[]>([]);
     const [country, setCountry] = useState("");
     const [city, setCity] = useState("");
     const [status, setStatus] = useState("Submitted");
@@ -89,15 +90,37 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
         setKeywords([...keywords, '']);
     }
 
+    const handleAddAuthorInstitution = () => {
+        setAuthors([...authors, ""]);
+        setInstitution([...institution, ""]);
+    };
+
+    const handleAuthorChange = (index: number, value: string) => {
+        const newAuthors = [...authors];
+        newAuthors[index] = value;
+        setAuthors(newAuthors);
+    };
+
+    const handleInstitutionChange = (index: number, value: string) => {
+        const newInstitutions = [...institution];
+        newInstitutions[index] = value;
+        setInstitution(newInstitutions);
+    };
+
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
+
+        const authorInstitutionPairs = authors.map((author, index) => `(${author}, ${institution[index]})`);
+        const authorInstitutionString = authorInstitutionPairs.join(", ");
+
         const formData = new FormData();
         formData.append('paper_title', paper_title);
         formData.append('topic', selectedTopic);
         formData.append('abstract', abstract);
         formData.append('keywords', keywords.join(', '));
         formData.append("paper", paperInput?.current?.files?.[0]!);
-        formData.append('institution', institution);
+        // formData.append('institution', institution);
+        formData.append('institution', authorInstitutionString);
         formData.append('country', country);
         formData.append('city', city);
         formData.append('status', status);
@@ -118,7 +141,9 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
             setAbstract('');
             setKeywords(['']);
             setPaper(null);
-            setInstitution('');
+            setAuthors([]);
+            setInstitution([]);
+            // setInstitution('');
             setCountry('');
             setCity('');
             setStatus('Submitted');
@@ -163,7 +188,6 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                 onChange={(e) => setPaperTitle(e.target.value)}
                 />
             </div>
-
             <div className="form-control w-full mt-6">
                 <p className="mb-2">Topic or Track <span className="text-red-600">*</span></p>
                 <select
@@ -202,7 +226,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                  </div>
                  ))}
                 <div className="mt-2">
-                    <button type="button" className="btn bg-blue-950 btn-sm text-white mt-2" onClick={addKeywordsField}>Add new keywords</button>
+                    <button type="button" className="btn btn-outline bg-blue-950 btn-md text-white mt-2" onClick={addKeywordsField}>Add keywords</button>
                 </div>
             </div>
             {/* <div className="form-control w-full mt-6">
@@ -239,14 +263,37 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                     />
                 </label>
             </div>
-            <div className="form-control w-full mt-6">
+            {authors.map((_, index) => (
+            <div key={index} className="flex space-x-4 mt-6">
+                <div className="form-control w-full">
+                    <p className="mb-2">Author Name <span className="text-red-600">*</span></p>
+                    <input 
+                    type="text" 
+                    value={authors[index]}
+                    onChange={(e) => handleAuthorChange(index, e.target.value)}
+                    className="input input-bordered bg-white" required/>
+                </div>
+                <div className="form-control w-full">
+                    <p className="mb-2">Institution <span className="text-red-600">*</span></p>
+                    <input 
+                    type="text" 
+                    value={institution[index]}
+                    onChange={(e) => handleInstitutionChange(index, e.target.value)}
+                    className="input input-bordered bg-white" required/>
+                </div>
+            </div>
+            ))}
+            <button type="button" className="btn btn-outline bg-blue-950 text-white mt-6" onClick={handleAddAuthorInstitution}>
+                + Add authors
+            </button>
+            {/* <div className="form-control w-full mt-6">
                 <p className="mb-2">Institution <span className="text-red-600">*</span></p>
                 <input 
                 type="text" 
                 value={institution}
                 onChange={(e) => setInstitution(e.target.value)}
                 className="input input-bordered bg-white" required/>
-            </div>
+            </div> */}
             <div className="form-control w-full mt-6">
                 <p className="mb-2">Country <span className="text-red-600">*</span></p>
                 <select
