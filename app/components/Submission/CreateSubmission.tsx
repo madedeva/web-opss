@@ -202,7 +202,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                  </div>
                  ))}
                 <div className="mt-2">
-                    <button type="button" className="btn bg-blue-950 btn-sm text-white mt-2" onClick={addKeywordsField}>Add new keywords</button>
+                    <button type="button" className="btn bg-blue-950 btn-md btn-outline text-white mt-2" onClick={addKeywordsField}>Add new keywords</button>
                 </div>
             </div>
             {/* <div className="form-control w-full mt-6">
