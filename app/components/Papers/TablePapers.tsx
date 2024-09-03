@@ -5,6 +5,7 @@ import UpdatePaper from '@/app/dashboard/papers/updatePaper';
 import { useSession } from 'next-auth/react';
 import axios from "axios";
 import DownloadButton from '../Conference/DownloadButton';
+import DOMPurify from 'dompurify';
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -424,9 +425,7 @@ const TablePapers = () => {
                         <div className="modal-box bg-white">
                             <h3 className="font-bold text-lg">Paper Title: {selectedPaper.paper_title}</h3>
                             <hr className="mt-4" />
-                            <p className="py-4">
-                                {selectedPaper.abstract}
-                            </p>
+                            <div className="py-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedPaper.abstract) }} />
                             <div className="modal-action">
                                 <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
                             </div>

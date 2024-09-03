@@ -94,6 +94,7 @@ model RegisterConference {
   ReviewPaper    ReviewPaper[]
   Con_Reviewer   Con_Reviewer? @relation(fields: [con_ReviewerId], references: [id])
   con_ReviewerId Int?
+  Authors        Authors[]
 }
 
 model Con_Reviewer {
@@ -117,4 +118,13 @@ model ReviewPaper {
   updatedAt            DateTime           @updatedAt
 
   @@unique([reviewerId, registerConferenceId])
+}
+
+model Authors {
+  id           Int                @id @default(autoincrement())
+  name         String
+  email        String
+  institution  String
+  submissionId Int
+  submission   RegisterConference @relation(fields: [submissionId], references: [id])
 }

@@ -3,6 +3,7 @@ import { useState, SyntheticEvent, useRef, useEffect} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import CustomAlert from "@/app/components/Alert/CustomAlert";
+import { Editor } from '@tinymce/tinymce-react';
 
 type Submission = {
     id: number,
@@ -24,7 +25,9 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     const [topicOptions, setTopicOptions] = useState<string[]>([]);
     const [selectedTopic, setSelectedTopic] = useState(registerConference.topic || '');
     const [abstract, setAbstract] = useState (registerConference.abstract);
-    const [keywords, setKeywords] = useState (registerConference.keywords);
+    const [keywordsInput, setKeywordsInput] = useState('');
+    const [keywords, setKeywords] = useState<string[]>(registerConference.keywords.split(',').map(k => k.trim()));
+    // const [keywords, setKeywords] = useState (registerConference.keywords);
     const [paper, setPaper] = useState<File | null>(null);
     const [institution, setInstitution] = useState (registerConference.institution);
     const [country, setCountry] = useState(registerConference.country);
@@ -33,6 +36,8 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     const [conferenceId, setConferenceId] = useState(registerConference.conferenceId);
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
+
+    const [fileName, setFileName] = useState<string | null>(null);
 
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +87,8 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         formData.append('paper_title', paper_title);
         formData.append('topic', selectedTopic);
         formData.append('abstract', abstract || '');
-        formData.append('keywords', keywords || '');
+        formData.append('keywords', keywords.join(', '));
+        // formData.append('keywords', keywords || '');
         formData.append('paper', paper || '');
         formData.append('institution', institution || '');
         formData.append('country', country || '');
@@ -110,6 +116,26 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
 
     const handleModal = () => {
         setIsOpen(!isOpen);
+    };
+
+    const handleAddKeyword = () => {
+        if (keywordsInput.trim() && !keywords.includes(keywordsInput.trim())) {
+            setKeywords([...keywords, keywordsInput.trim()]);
+            setKeywordsInput('');
+        }
+    };
+
+    const handleRemoveKeyword = (keyword: string) => {
+        setKeywords(keywords.filter(k => k !== keyword));
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files ? event.target.files[0] : null;
+        if (file) {
+            setFileName(file.name);
+        } else {
+            setFileName(null);
+        }
     };
 
     return(
@@ -147,21 +173,99 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                             </select>
                         </div>
                         <div className="form-control w-full mt-6">
+                            <p className="mb-2">Abstract <span className="text-red-600">*</span></p>
+                            <Editor
+                                apiKey="0lu8tnu2h88qx3czxhxiluopabt3eubgk2ftrw8qfu489ruu"
+                                value={abstract}
+                                init={{
+                                    height: 400,
+                                    menubar: false,
+                                }}
+                                onEditorChange={(newContent) => setAbstract(newContent)}
+                            />
+                        </div>
+                        {/* <div className="form-control w-full mt-6">
                             <label className="label font-bold">Abstract</label>
                             <textarea 
                                 value={abstract}
                                 onChange={(e) => setAbstract(e.target.value)}
                                 id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write abstract here.." required></textarea>
-                        </div>
+                        </div> */}
                         <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Keywords</label>
+                            <div className="flex items-center">
+                                <input
+                                    type="text"
+                                    value={keywordsInput}
+                                    onChange={(e) => setKeywordsInput(e.target.value)}
+                                    className="input input-bordered bg-white w-3/4"
+                                    placeholder="Add a keyword"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleAddKeyword}
+                                    className="btn bg-blue-950 btn-outline text-white ml-2"
+                                >
+                                    Add
+                                </button>
+                            </div>
+                            <ul className="list-disc mt-2 pl-5">
+                                {keywords.map((keyword, index) => (
+                                    <li key={index} className="flex items-center mb-1">
+                                        <span className="flex-1">{keyword}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveKeyword(keyword)}
+                                            className="btn btn-xs btn-error text-white px-1 py-0.5 text-xs ml-2"
+                                        >
+                                            Remove
+                                        </button>
+                                    </li>                                
+                                ))}
+                            </ul>
+                        </div>
+                        {/* <div className="form-control w-full mt-6">
                             <label className="label font-bold">Keywords</label>
                             <input 
                             type="text" 
                             value={keywords}
                             onChange={(e) => setKeywords(e.target.value)}
                             className="input input-bordered bg-white" required/>
-                        </div>
+                        </div> */}
                         <div className="w-full mt-6">
+                            <p className="font-bold">Full Paper</p>
+                            <label
+                                className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2"
+                            >
+                                <span className="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <span className="font-medium text-gray-600">
+                                        Drop files to Attach, or
+                                        <span className="text-blue-950 underline ml-1">browse</span>
+                                    </span>
+                                </span>
+                                <input
+                                    type="file"
+                                    accept=".pdf"
+                                    onChange={(e) => {
+                                        if (e.target.files) {
+                                            setPaper(e.target.files[0]);
+                                            setFileName(e.target.files[0].name);
+                                        }
+                                    }}
+                                    name="file_upload"
+                                    className="hidden"
+                                />
+                            </label>
+                            {fileName && (
+                                <p className="mt-2 text-sm text-gray-700">
+                                    Selected file: <span className="font-medium">{fileName}</span>
+                                </p>
+                            )}
+                        </div>
+                        {/* <div className="w-full mt-6">
                             <p className="font-bold">Full Paper</p>
                             <label
                                 className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2">
@@ -178,12 +282,13 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                                 </span>
                                 <input 
                                 type="file"
+                                accept=".pdf"
                                 onChange={(e) => e.target.files && setPaper(e.target.files[0])}
                                 name="file_upload"
                                 className="hidden" 
                                 />
                             </label>
-                        </div>
+                        </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Institution</label>
                             <input 

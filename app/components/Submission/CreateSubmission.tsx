@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Editor } from '@tinymce/tinymce-react';
 
 const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
 
@@ -28,6 +29,8 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
     const [topics, setTopics] = useState<string[]>();
 
     const [conference, setConference] = useState<Conference>();
+
+    const [fileName, setFileName] = useState<string | null>(null);
 
     const router = useRouter();
 
@@ -88,6 +91,15 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
     const addKeywordsField = () => {
         setKeywords([...keywords, '']);
     }
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files ? event.target.files[0] : null;
+        if (file) {
+            setFileName(file.name);
+        } else {
+            setFileName(null);
+        }
+    };
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -181,12 +193,24 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
             </div>
             <div className="form-control w-full mt-6">
                 <p className="mb-2">Abstract <span className="text-red-600">*</span></p>
+                <Editor
+                    apiKey="0lu8tnu2h88qx3czxhxiluopabt3eubgk2ftrw8qfu489ruu"
+                    value={abstract}
+                    init={{
+                        height: 400,
+                        menubar: false,
+                    }}
+                    onEditorChange={(newContent) => setAbstract(newContent)}
+                />
+            </div>
+            {/* <div className="form-control w-full mt-6">
+                <p className="mb-2">Abstract <span className="text-red-600">*</span></p>
                 <textarea 
                     value={abstract}
                     onChange={(e) => setAbstract(e.target.value)}
                     id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write abstract here.." required>
                 </textarea>
-            </div>
+            </div> */}
             <div className="w-full gap-4 mt-6">
                 {keywords.map((keywords, index) => (
                 <div className="form-control w-full mt-2" key={index}>
@@ -202,7 +226,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                  </div>
                  ))}
                 <div className="mt-2">
-                    <button type="button" className="btn bg-blue-950 btn-sm text-white mt-2" onClick={addKeywordsField}>Add new keywords</button>
+                    <button type="button" className="btn bg-blue-950 btn-md btn-outline text-white mt-2" onClick={addKeywordsField}>Add new keywords</button>
                 </div>
             </div>
             {/* <div className="form-control w-full mt-6">
@@ -213,7 +237,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                 onChange={(e) => setKeywords(e.target.value)}
                 className="input input-bordered bg-white" required/>
             </div> */}
-            <div className="w-full mt-6">
+            {/* <div className="w-full mt-6">
                 <p>Full Paper <span className="text-red-600">*</span></p>
                 <p className="text-xs mb-2">only .pdf allowed</p>
                 <label
@@ -238,6 +262,38 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                     className="hidden" 
                     />
                 </label>
+            </div> */}
+            <div className="w-full mt-6">
+                <p>Full Paper <span className="text-red-600">*</span></p>
+                <p className="text-xs mb-2">Only .pdf files are allowed</p>
+                <label
+                    className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2"
+                    htmlFor="file-upload"
+                >
+                    <span className="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <span className="font-medium text-gray-600">
+                            Drop files to Attach, or
+                            <span className="text-blue-950 ml-1 underline">browse</span>
+                        </span>
+                    </span>
+                </label>
+                <input 
+                    id="file-upload"
+                    type="file"
+                    accept=".pdf"
+                    ref={paperInput}
+                    onChange={handleFileChange}
+                    name="file_upload"
+                    className="hidden"
+                />
+                {fileName && (
+                    <p className="mt-2 text-sm text-gray-700">
+                        Selected file: <span className="font-medium">{fileName}</span>
+                    </p>
+                )}
             </div>
             <div className="form-control w-full mt-6">
                 <p className="mb-2">Institution <span className="text-red-600">*</span></p>

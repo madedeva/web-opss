@@ -32,6 +32,8 @@ const AddConference = () => {
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
 
+    const [fileName, setFileName] = useState<string | null>(null);
+
     type User = {
         id: number;
         name: string;
@@ -68,6 +70,15 @@ const AddConference = () => {
     const addTopicField = () => {
         setTopics([...topic, '']);
     }
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files ? event.target.files[0] : null;
+        if (file) {
+            setFileName(file.name);
+        } else {
+            setFileName(null);
+        }
+    };
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -201,11 +212,45 @@ const AddConference = () => {
                                 </div>
                             ))}
                             <div className="mt-2">
-                                <button type="button" className="btn bg-blue-950 btn-sm text-white mt-2" onClick={addTopicField}>Add new topic or track</button>
+                                <button type="button" className="btn bg-blue-950 btn-md text-white mt-2" onClick={addTopicField}>Add new topic or track</button>
                             </div>
                         </div>
 
                         <div className="w-full mt-6">
+                            <p>Banner Image <span className="text-red-600">*</span></p>
+                            <p className="text-xs mb-2">Only .jpg .png .jpeg files are allowed</p>
+                            <label
+                                className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2"
+                                htmlFor="file-upload"
+                            >
+                                <span className="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <span className="font-medium text-gray-600">
+                                        Drop files to Attach, or
+                                        <span className="text-blue-950 ml-1 underline">browse</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <input 
+                                id="file-upload"
+                                type="file"
+                                accept=".jpg, .jpeg, .png"
+                                ref={fileInput}
+                                value={banner}
+                                onChange={(e) => setBanner(e.target.value)}
+                                name="file_upload"
+                                className="hidden"
+                            />
+                            {fileName && (
+                                <p className="mt-2 text-sm text-gray-700">
+                                    Selected file: <span className="font-medium">{fileName}</span>
+                                </p>
+                            )}
+                        </div>
+
+                        {/* <div className="w-full mt-6">
                             <p>Upload Banner Image <span className="text-red-600">*</span></p>
                             <span className="text-sm">.jpg .jpeg or .png - max. 2mb</span>
                             <label
@@ -231,7 +276,7 @@ const AddConference = () => {
                                 className="hidden" 
                                 />
                             </label>
-                        </div>
+                        </div> */}
                         <div className="form-control w-full mt-6">
                             <p className="mb-2">Conference Venue <span className="text-red-600">*</span></p>
                             <input
@@ -299,7 +344,7 @@ const AddConference = () => {
                             />
                         </div>
 
-                        <div className="w-full mt-6">
+                        {/* <div className="w-full mt-6">
                             <p>Upload Paper Template <span className="text-red-600">*</span></p>
                             <span className="text-sm">.docx .doc</span>
                             <label
@@ -324,6 +369,40 @@ const AddConference = () => {
                                 className="hidden" 
                                 />
                             </label>
+                        </div> */}
+
+                        <div className="w-full mt-6">
+                            <p>Paper Template <span className="text-red-600">*</span></p>
+                            <p className="text-xs mb-2">Only .doc .docx files are allowed</p>
+                            <label
+                                className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none mt-2"
+                                htmlFor="file-upload"
+                            >
+                                <span className="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <span className="font-medium text-gray-600">
+                                        Drop files to Attach, or
+                                        <span className="text-blue-950 ml-1 underline">browse</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <input 
+                                id="file-upload"
+                                type="file"
+                                accept=".docx, .doc"
+                                ref={fileInput2}
+                                value={paper_template}
+                                onChange={(e) => setPaperTemplate(e.target.value)}
+                                name="file_upload"
+                                className="hidden"
+                            />
+                            {fileName && (
+                                <p className="mt-2 text-sm text-gray-700">
+                                    Selected file: <span className="font-medium">{fileName}</span>
+                                </p>
+                            )}
                         </div>
                         <div className="form-control w-full mt-6">
                             <p className="mb-2">Payment Information <span className="text-red-600">*</span></p>

@@ -76,7 +76,7 @@ const MyConferences = async () => {
     <DashboardLayout>
         <div className="bg-white p-6 rounded-lg">
         <div className="mt-6">
-          <h3 className="text-lg font-medium">My Conferences</h3>
+          <h3 className="text-lg font-medium">My Papers</h3>
           <p className="text-sm text-gray-600">
           Below is a list of the history of the papers you have submitted.
           </p>
