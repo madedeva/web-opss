@@ -25,7 +25,9 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     const [topicOptions, setTopicOptions] = useState<string[]>([]);
     const [selectedTopic, setSelectedTopic] = useState(registerConference.topic || '');
     const [abstract, setAbstract] = useState (registerConference.abstract);
-    const [keywords, setKeywords] = useState (registerConference.keywords);
+    const [keywordsInput, setKeywordsInput] = useState('');
+    const [keywords, setKeywords] = useState<string[]>(registerConference.keywords.split(',').map(k => k.trim()));
+    // const [keywords, setKeywords] = useState (registerConference.keywords);
     const [paper, setPaper] = useState<File | null>(null);
     const [institution, setInstitution] = useState (registerConference.institution);
     const [country, setCountry] = useState(registerConference.country);
@@ -85,7 +87,8 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         formData.append('paper_title', paper_title);
         formData.append('topic', selectedTopic);
         formData.append('abstract', abstract || '');
-        formData.append('keywords', keywords || '');
+        formData.append('keywords', keywords.join(', '));
+        // formData.append('keywords', keywords || '');
         formData.append('paper', paper || '');
         formData.append('institution', institution || '');
         formData.append('country', country || '');
@@ -113,6 +116,17 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
 
     const handleModal = () => {
         setIsOpen(!isOpen);
+    };
+
+    const handleAddKeyword = () => {
+        if (keywordsInput.trim() && !keywords.includes(keywordsInput.trim())) {
+            setKeywords([...keywords, keywordsInput.trim()]);
+            setKeywordsInput('');
+        }
+    };
+
+    const handleRemoveKeyword = (keyword: string) => {
+        setKeywords(keywords.filter(k => k !== keyword));
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,12 +193,45 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                         </div> */}
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Keywords</label>
+                            <div className="flex items-center">
+                                <input
+                                    type="text"
+                                    value={keywordsInput}
+                                    onChange={(e) => setKeywordsInput(e.target.value)}
+                                    className="input input-bordered bg-white w-3/4"
+                                    placeholder="Add a keyword"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleAddKeyword}
+                                    className="btn bg-blue-950 btn-outline text-white ml-2"
+                                >
+                                    Add
+                                </button>
+                            </div>
+                            <ul className="list-disc mt-2 pl-5">
+                                {keywords.map((keyword, index) => (
+                                    <li key={index} className="flex items-center mb-1">
+                                        <span className="flex-1">{keyword}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveKeyword(keyword)}
+                                            className="btn btn-xs btn-error text-white px-1 py-0.5 text-xs ml-2"
+                                        >
+                                            Remove
+                                        </button>
+                                    </li>                                
+                                ))}
+                            </ul>
+                        </div>
+                        {/* <div className="form-control w-full mt-6">
+                            <label className="label font-bold">Keywords</label>
                             <input 
                             type="text" 
                             value={keywords}
                             onChange={(e) => setKeywords(e.target.value)}
                             className="input input-bordered bg-white" required/>
-                        </div>
+                        </div> */}
                         <div className="w-full mt-6">
                             <p className="font-bold">Full Paper</p>
                             <label
