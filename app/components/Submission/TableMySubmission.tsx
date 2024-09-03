@@ -1,4 +1,5 @@
 'use client';
+import AddAuthors from "@/app/dashboard/mypapers/addAuthors";
 import UpdateSubmission from "@/app/dashboard/mypapers/updateSubmission";
 import { RegisterConference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -54,7 +55,13 @@ type UserCon = {
         name: string,
         email: string,
     };
-  }
+  },
+  authors: {
+    id: number,
+    name: string,
+    email: string,
+    institution: string
+  }[]
 }
 
 const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) => {
@@ -87,6 +94,9 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                     Paper Title
                     </th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Authors
+                    </th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Comments
                     </th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -107,16 +117,30 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                         <div className="text-xs text-gray-900">{reg_conference.paper_title}</div>
                     </td>
                     <td className="px-3 py-2 whitespace-normal break-words">
+                      <div className="text-xs text-gray-900">
+                        <p className='font-bold'>{reg_conference.user.name}</p> ({reg_conference.user.email}, {reg_conference.institution})
+                      </div>
+                      <div className="text-xs text-gray-900 mt-2">
+                        {reg_conference.authors?.map((author, index) => (
+                          <p key={author.id}>
+                            <span className="font-bold">{author.name}</span> ({author.email}, {author.institution})
+                            {index < reg_conference.authors.length - 1 && ', '}
+                          </p>
+                        )) || <span>No authors available</span>}
+                      </div>
+                    </td>
+                    <td className="px-3 py-2 whitespace-normal break-words">
                         <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen(reg_conference.comments)}>
                         View comments
                         </button>
                     </td>
-                    <td className="px-3 py-2 whitespace-normal break-words">
+                    <td className="px-3 py-2 whitespace-normal text-nowrap">
                         <a className="text-xs text-blue-950 underline hover:text-indigo-900" href={`/uploads/papers/${reg_conference.paper}`} target="_blank" rel="noopener noreferrer">
                         View Paper
                         </a>
+                        <AddAuthors paperId={reg_conference.id} />
                     </td>
-                    <td className="px-3 py-2 whitespace-normal break-words">
+                    <td className="px-3 py-2 whitespace-normal text-nowrap">
                         {reg_conference.status !== 'Accepted' && reg_conference.status !== 'Rejected' && reg_conference.status !== 'Submitted' && (
                           <UpdateSubmission registerConference={reg_conference}/>
                         )}
