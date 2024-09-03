@@ -21,14 +21,12 @@ const AddAuthors = ({ paperId, author }: AddAuthorsProps) => {
 
         try {
             if (authorId) {
-                // Update existing author
                 await axios.put(`/api/authors/${authorId}`, {
                     name,
                     email,
                     institution,
                 });
             } else {
-                // Add new author
                 await axios.post(`/api/addauthors`, {
                     name,
                     email,
@@ -37,7 +35,6 @@ const AddAuthors = ({ paperId, author }: AddAuthorsProps) => {
                 });
             }
 
-            // Kosongkan form setelah berhasil menambahkan/memperbarui author
             setName("");
             setEmail("");
             setInstitution("");
