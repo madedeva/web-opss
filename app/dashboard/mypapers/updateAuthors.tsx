@@ -21,7 +21,7 @@ const AddAuthors = ({ paperId, author }: AddAuthorsProps) => {
 
         try {
             if (authorId) {
-                await axios.put(`/api/authors/${authorId}`, {
+                await axios.put(`/api/addauthors/${authorId}`, {
                     name,
                     email,
                     institution,
