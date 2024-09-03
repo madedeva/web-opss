@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { SyntheticEvent, useEffect, useState } from "react";
 import CustomAlert from "@/app/components/Alert/CustomAlert";
 import axios from "axios";
+import DOMPurify from 'dompurify';
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -238,9 +239,7 @@ const MyReviewTable = () => {
                             <div className="modal-box bg-white">
                                 <h3 className="font-bold text-lg">Paper Title: {selectedPaper.paper_title}</h3>
                                 <hr className="mt-4" />
-                                <p className="py-4">
-                                    {selectedPaper.abstract}
-                                </p>
+                                <div className="py-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedPaper.abstract) }} />
                                 <div className="modal-action">
                                     <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
                                 </div>
