@@ -28,6 +28,8 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
             return NextResponse.json({ status: "fail", error: "Conference not found" });
           }
 
+          const Authors = JSON.parse(formData.get("Authors")?.toString() ?? '[]');
+
         const updateRegisterConference = await prisma.registerConference.update({
             where: {
                 id: Number(params.id),
@@ -44,7 +46,24 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
                 paper: paper.name,
                 // userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
                 conferenceId: conference.id,
-            }
+                Authors: {
+                    upsert: Authors.map((author: any) => ({
+                        where: { email: author.email }, // Assuming unique email for each author
+                        update: {
+                            name: author.name,
+                            institution: author.institution
+                        },
+                        create: {
+                            name: author.name,
+                            email: author.email,
+                            institution: author.institution
+                        }
+                    }))
+                }
+            },
+            include: {
+                Authors: true,
+            },
         });
         // revalidatePath("/");
         return NextResponse.json({ status: "success", data: updateRegisterConference });
