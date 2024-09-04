@@ -27,14 +27,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
     const fetchConferences = async () => {
       try {
         const response = await axios.get(`/api/conferences/${userId}`);
-        console.log('Conferences API Response:', response);
-
-        if (response.data === null || !Array.isArray(response.data)) {
-          console.error('Unexpected data format:', response.data);
-          setConferences([]);
-        } else {
-          setConferences(response.data);
-        }
+        setConferences(response.data);
       } catch (error) {
         console.error('Failed to fetch conferences', error);
         setConferences([]);
@@ -50,9 +43,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
     }
 
     try {
-      const response = await axios.get(`/api/papersubmission?conferenceId=${selectedConference}`);
-      console.log('Papers API Response:', response);
-
+      const response = await axios.get(`/api/downloadpapers?conferenceId=${selectedConference}`);
       const papers: PaperSubmission[] = response.data;
 
       if (!Array.isArray(papers) || papers.length === 0) {
