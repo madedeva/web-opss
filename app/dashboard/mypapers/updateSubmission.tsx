@@ -143,7 +143,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
             {alert && <CustomAlert type={alert.type} message={alert.message} />}
             <button
                 className="text-xs text-blue-950 underline hover:text-indigo-900 text-center text-nowrap" onClick={handleModal}>
-                Upload Revision
+                Update Submission
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
