@@ -6,6 +6,8 @@ import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Editor } from '@tinymce/tinymce-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
 
@@ -149,7 +151,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
             setStatus('Submitted');
             setSelectedConferenceId('');
             
-            setAlert({ type: 'success', message: 'Submission success!' });
+            toast.success('Submission created successfully!');
             setTimeout(() => setAlert(null), 5000);
 
             router.refresh();
@@ -157,8 +159,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
 
         } catch (error: any) {
             console.error('Error submitting the form:', error);
-            setAlert({ type: 'danger', message: 'Submission failed: ' + error.message });
-            setTimeout(() => setAlert(null), 5000);
+            toast.error('Submission created failed.');
         }
     
     }
