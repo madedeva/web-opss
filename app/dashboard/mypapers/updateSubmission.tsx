@@ -40,6 +40,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     const [fetchError, setFetchError] = useState<string | null>(null);
 
     const [fileName, setFileName] = useState<string | null>(null);
+    const [previousFileName, setPreviousFileName] = useState<string | null>(null);
 
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
@@ -128,6 +129,10 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     const handleRemoveKeyword = (keyword: string) => {
         setKeywords(keywords.filter(k => k !== keyword));
     };
+
+    useEffect(() => {
+        setPreviousFileName(registerConference.paper);
+      }, [registerConference]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files ? event.target.files[0] : null;
@@ -241,10 +246,9 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <span className="font-medium text-gray-600">
-                                        Drop files to Attach, or
-                                        <span className="text-blue-950 underline ml-1">browse</span>
-                                    </span>
+                                    {previousFileName && (
+                                    <span className="font-medium text-gray-600">{previousFileName}</span>
+                                    )}
                                 </span>
                                 <input
                                     type="file"
@@ -260,9 +264,9 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                                 />
                             </label>
                             {fileName && (
-                                <p className="mt-2 text-sm text-gray-700">
-                                    Selected file: <span className="font-medium">{fileName}</span>
-                                </p>
+                            <p className="mt-2 text-sm text-gray-700">
+                                Selected new file: <span className="font-medium">{fileName}</span>
+                            </p>
                             )}
                         </div>
                         {/* <div className="w-full mt-6">

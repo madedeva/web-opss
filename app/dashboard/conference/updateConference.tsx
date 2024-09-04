@@ -55,6 +55,10 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
 
+    const [fileName, setFileName] = useState<string | null>(null);
+    const [previousFileNameBanner, setPreviousFileNameBanner] = useState<string | null>(null);
+    const [previousFileNameTemplate, setPreviousFileNameTemplate] = useState<string | null>(null);
+
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -121,6 +125,23 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
 
     const handleModal = () => {
         setIsOpen(!isOpen);
+    };
+
+    useEffect(() => {
+        setPreviousFileNameBanner(conference.banner);
+      }, [conference]);
+
+    useEffect(() => {
+        setPreviousFileNameTemplate(conference.paper_template);
+      }, [conference]);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files ? event.target.files[0] : null;
+        if (file) {
+            setFileName(file.name);
+        } else {
+            setFileName(null);
+        }
     };
 
     return (
@@ -191,18 +212,27 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                         <path strokeLinecap="round" strokeLinejoin="round"
                                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <span className="font-medium text-gray-600">
-                                        Drop files to Attach, or
-                                        <span className="text-blue-950 underline ml-1">browse</span>
-                                    </span>
+                                    {previousFileNameBanner && (
+                                        <span className="font-medium text-gray-600">{previousFileNameBanner}</span>
+                                    )}
                                 </span>
-                                <input 
-                                type="file"
-                                onChange={(e) => e.target.files && setBanner(e.target.files[0])}
-                                name="file_upload"
-                                className="hidden" 
+                                <input
+                                    type="file"
+                                    onChange={(e) => {
+                                        if (e.target.files) {
+                                            setBanner(e.target.files[0]);
+                                            setFileName(e.target.files[0].name);
+                                        }
+                                    }}
+                                    name="file_upload"
+                                    className="hidden"
                                 />
                             </label>
+                            {fileName && (
+                            <p className="mt-2 text-sm text-gray-700">
+                                Selected new file: <span className="font-medium">{fileName}</span>
+                            </p>
+                            )}
                         </div>
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Conference Venue</label>
@@ -281,18 +311,27 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                                         <path strokeLinecap="round" strokeLinejoin="round"
                                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <span className="font-medium text-gray-600">
-                                        Drop files to Attach, or
-                                        <span className="text-blue-950 underline ml-1">browse</span>
-                                    </span>
+                                    {previousFileNameTemplate && (
+                                    <span className="font-medium text-gray-600">{previousFileNameTemplate}</span>
+                                    )}
                                 </span>
-                                <input 
-                                type="file"
-                                onChange={(e) => e.target.files && setPaperTemplate(e.target.files[0])}
-                                name="file_upload"
-                                className="hidden" 
+                                <input
+                                    type="file"
+                                    onChange={(e) => {
+                                        if (e.target.files) {
+                                            setPaperTemplate(e.target.files[0]);
+                                            setFileName(e.target.files[0].name);
+                                        }
+                                    }}
+                                    name="file_upload"
+                                    className="hidden"
                                 />
                             </label>
+                            {fileName && (
+                            <p className="mt-2 text-sm text-gray-700">
+                                Selected new file: <span className="font-medium">{fileName}</span>
+                            </p>
+                            )}
                         </div>
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Payment Information</label>
