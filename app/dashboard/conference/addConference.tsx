@@ -5,6 +5,8 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRef } from "react";
 import CustomAlert from "@/app/components/Alert/CustomAlert";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddConference = () => {
     const { data: session } = useSession();
@@ -133,7 +135,7 @@ const AddConference = () => {
             setEndDate('');
             setStatus('Inactive');
 
-            setAlert({ type: 'success', message: 'Conference added successfully!' });
+            toast.success('Conference added successfully!');
             setTimeout(() => setAlert(null), 5000);
 
             router.refresh();
@@ -141,7 +143,7 @@ const AddConference = () => {
 
         } catch (error: any) {
             console.error('Error submitting the form:', error);
-            setAlert({ type: 'danger', message: 'Conference addition failed: ' + error.message });
+            toast.error('Conference addition failed:' + error.message);
             setTimeout(() => setAlert(null), 5000);
         }
     }

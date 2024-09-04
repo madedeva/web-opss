@@ -2,6 +2,8 @@
 import { useState, SyntheticEvent, useEffect} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Conference = {
     id: number;
@@ -111,6 +113,8 @@ const UpdateConference = ({ conference }: { conference: Conference }) => {
                 'Content-Type': 'multipart/form-data'
             }
         });
+
+        toast.success('Conference updated successfully!')
         router.refresh();
         setIsOpen(false);
     };

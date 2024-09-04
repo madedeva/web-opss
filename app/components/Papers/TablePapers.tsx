@@ -225,7 +225,6 @@ const TablePapers = () => {
 
     return (
         <div className="bg-white p-6 rounded-lg">
-            <ToastContainer />
             <div className="mt-6">
                 <h3 className="text-lg font-medium">Submitted Papers</h3>
                 <p className="text-sm text-gray-600">

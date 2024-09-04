@@ -5,6 +5,8 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import CustomAlert from "@/app/components/Alert/CustomAlert";
 import axios from "axios";
 import DOMPurify from 'dompurify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -134,11 +136,11 @@ const MyReviewTable = () => {
             });
     
             setIsOpen2(false);
-            setAlert({ type: 'success', message: 'Update Berhasil' });
+            toast.success('Review submitted!');
             fetchPapers();
         } catch (error: any) {
             console.error('Error submitting the form:', error);
-            setAlert({ type: 'danger', message: 'Submission failed: ' + error.message });
+            toast.error('Review submit failed:' + error.message);
             setTimeout(() => setAlert(null), 5000);
         }
     

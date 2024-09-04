@@ -3,8 +3,8 @@ import { useState, SyntheticEvent, useEffect } from "react";
 import type { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-// import { toast, ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type UpdatePaperProps = {
     users: User[];
@@ -36,12 +36,12 @@ const UpdatePaper = ({ users, paperId, conferenceId }: UpdatePaperProps) => {
                 registerConferenceId: paperId,
             });
 
-            // toast.success('Reviewer assigned successfully!');
+            toast.success('Reviewer assigned successfully!');
             router.refresh();
             setIsOpen(false);
         } catch (error) {
             console.error("Error updating reviewer:", error);
-            // toast.error('Failed to assign reviewer!')
+            toast.error('Failed to assign reviewer!')
         }
     };
 
