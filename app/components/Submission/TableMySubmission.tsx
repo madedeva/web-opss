@@ -5,25 +5,6 @@ import { RegisterConference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-const getOrdinalSuffix = (day: number) => {
-  if (day > 3 && day < 21) return 'th';
-  switch (day % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
-  }
-};
-
-const getFormattedDate = (date: Date | string): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  const day = dateObj.getDate();
-  const month = dateObj.toLocaleString('en-US', { month: 'long' });
-  const year = dateObj.getFullYear();
-  const suffix = getOrdinalSuffix(day);
-  return `${month} ${day}${suffix}, ${year}`;
-};
-
 type UserCon = {
   id: number,
   paper_title: string,
