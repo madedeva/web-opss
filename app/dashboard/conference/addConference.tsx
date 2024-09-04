@@ -236,7 +236,6 @@ const AddConference = () => {
                             <input 
                                 id="file-upload"
                                 type="file"
-                                accept=".jpg, .jpeg, .png"
                                 ref={fileInput}
                                 value={banner}
                                 onChange={(e) => setBanner(e.target.value)}
@@ -391,7 +390,6 @@ const AddConference = () => {
                             <input 
                                 id="file-upload"
                                 type="file"
-                                accept=".docx, .doc"
                                 ref={fileInput2}
                                 value={paper_template}
                                 onChange={(e) => setPaperTemplate(e.target.value)}
