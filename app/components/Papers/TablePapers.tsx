@@ -440,7 +440,6 @@ const TablePapers = () => {
                 <div className="modal modal-open">
                     <div className="modal-box bg-white w-full max-w-2xl">
                         <h3 className="font-bold text-lg">Send email to:</h3>
-                        <hr className="mt-4" />
                         <ul className="list-disc pl-5 mb-4">
                             {papers
                             .filter((paper) => selectedUserId.includes(paper.userId))
@@ -448,6 +447,7 @@ const TablePapers = () => {
                                 <li key={paper.userId}>{paper.user.email}</li>
                             ))}
                         </ul>
+                        <hr className="mt-4 mb-4"/>
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
