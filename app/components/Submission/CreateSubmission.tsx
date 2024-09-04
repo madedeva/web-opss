@@ -17,7 +17,9 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
     const [topicOptions, setTopicOptions] = useState<string[]>([]);
     const [selectedTopic, setSelectedTopic] = useState("");
     const [abstract, setAbstract] = useState ("");
-    const [keywords, setKeywords] = useState<string[]>(['']);
+    const [keywords, setKeywords] = useState<string[]>([]);
+    const [keywordsInput, setKeywordsInput] = useState<string>('');
+    // const [keywords, setKeywords] = useState<string[]>(['']);
     const [paper, setPaper] = useState<any>();
     const paperInput = useRef<HTMLInputElement>(null);
     const [institution, setInstitution] = useState ("");
@@ -99,6 +101,17 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
         } else {
             setFileName(null);
         }
+    };
+
+    const handleAddKeyword = () => {
+        if (keywordsInput.trim() && !keywords.includes(keywordsInput.trim())) {
+            setKeywords([...keywords, keywordsInput.trim()]);
+            setKeywordsInput(''); // Reset input field setelah menambahkan keyword
+        }
+    };
+
+    const handleRemoveKeyword = (keywordToRemove: string) => {
+        setKeywords(keywords.filter(keyword => keyword !== keywordToRemove));
     };
 
     const handleSubmit = async (e: SyntheticEvent) => {
@@ -211,7 +224,40 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                     id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write abstract here.." required>
                 </textarea>
             </div> */}
-            <div className="w-full gap-4 mt-6">
+            <div className="form-control w-full mt-6">
+                <p className="mb-2">Keywords <span className="text-red-600">*</span></p>
+                <div className="flex items-center">
+                    <input
+                        type="text"
+                        value={keywordsInput}
+                        onChange={(e) => setKeywordsInput(e.target.value)}
+                        className="input input-bordered bg-white w-3/4"
+                        placeholder="Add a keyword"
+                    />
+                    <button
+                        type="button"
+                        onClick={handleAddKeyword}
+                        className="btn bg-blue-950 btn-outline text-white ml-2"
+                    >
+                        Add
+                    </button>
+                </div>
+                <ul className="list-disc mt-2 pl-5">
+                    {keywords.map((keyword, index) => (
+                        <li key={index} className="flex items-center mb-1">
+                            <span className="flex-1">{keyword}</span>
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveKeyword(keyword)}
+                                className="btn btn-xs btn-error text-white px-1 py-0.5 text-xs ml-2"
+                            >
+                                Remove
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            {/* <div className="w-full gap-4 mt-6">
                 {keywords.map((keywords, index) => (
                 <div className="form-control w-full mt-2" key={index}>
                     <p className="mb-2">Keywords <span className="text-red-600">*</span></p>
@@ -228,7 +274,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                 <div className="mt-2">
                     <button type="button" className="btn bg-blue-950 btn-md btn-outline text-white mt-2" onClick={addKeywordsField}>Add new keywords</button>
                 </div>
-            </div>
+            </div> */}
             {/* <div className="form-control w-full mt-6">
                 <p className="mb-2">Keywords <span className="text-red-600">*</span></p>
                 <input 

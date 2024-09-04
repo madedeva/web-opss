@@ -66,10 +66,10 @@ const AddConference = () => {
         newTopics[index] = value;
         setTopics(newTopics);
     }
-
+    
     const addTopicField = () => {
         setTopics([...topic, '']);
-    }
+    }  
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files ? event.target.files[0] : null;
