@@ -6,6 +6,8 @@ import { useSession } from 'next-auth/react';
 import axios from "axios";
 import DownloadButton from '../Conference/DownloadButton';
 import DOMPurify from 'dompurify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -166,14 +168,14 @@ const TablePapers = () => {
             messageTemplate,
           });
     
-          alert('Email sent successfully!');
+          toast.success('Email send successfully!');
           setIsModalOpen(false);
           setSubject('');
           setMessageTemplate('');
           setSelectedUserId([]);
         } catch (error) {
           console.error('Failed to send email', error);
-          alert('Failed to send email.');
+          toast.error('Failed to send email');
         }
       };
     // end send email
@@ -223,6 +225,7 @@ const TablePapers = () => {
 
     return (
         <div className="bg-white p-6 rounded-lg">
+            <ToastContainer />
             <div className="mt-6">
                 <h3 className="text-lg font-medium">Submitted Papers</h3>
                 <p className="text-sm text-gray-600">
