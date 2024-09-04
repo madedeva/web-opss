@@ -6,6 +6,8 @@ import { useSession } from 'next-auth/react';
 import axios from "axios";
 import DownloadButton from '../Conference/DownloadButton';
 import DOMPurify from 'dompurify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -166,14 +168,14 @@ const TablePapers = () => {
             messageTemplate,
           });
     
-          alert('Email sent successfully!');
+          toast.success('Email send successfully!');
           setIsModalOpen(false);
           setSubject('');
           setMessageTemplate('');
           setSelectedUserId([]);
         } catch (error) {
           console.error('Failed to send email', error);
-          alert('Failed to send email.');
+          toast.error('Failed to send email');
         }
       };
     // end send email
@@ -437,7 +439,6 @@ const TablePapers = () => {
                 <div className="modal modal-open">
                     <div className="modal-box bg-white w-full max-w-2xl">
                         <h3 className="font-bold text-lg">Send email to:</h3>
-                        <hr className="mt-4" />
                         <ul className="list-disc pl-5 mb-4">
                             {papers
                             .filter((paper) => selectedUserId.includes(paper.userId))
@@ -445,6 +446,7 @@ const TablePapers = () => {
                                 <li key={paper.userId}>{paper.user.email}</li>
                             ))}
                         </ul>
+                        <hr className="mt-4 mb-4"/>
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 mb-2">

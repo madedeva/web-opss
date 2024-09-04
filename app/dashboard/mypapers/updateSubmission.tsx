@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import CustomAlert from "@/app/components/Alert/CustomAlert";
 import { Editor } from '@tinymce/tinymce-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Submission = {
     id: number,
@@ -102,15 +104,13 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                 }
             });
 
-            setAlert({ type: 'success', message: 'Revision update success!' });
-            setTimeout(() => setAlert(null), 5000);
+            toast.success('Revision submitted successfully!');
 
             router.refresh();
             setIsOpen(false);
         }catch(error: any){
             console.error('Error submitting the form:', error);
-            setAlert({ type: 'danger', message: 'Revision update failed: ' + error.message });
-            setTimeout(() => setAlert(null), 5000);
+            toast.error('Revision submitted failed' + error.message);
         }
     };
 

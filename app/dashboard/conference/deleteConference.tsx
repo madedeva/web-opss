@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Conference = {
     id: number;
@@ -14,6 +16,8 @@ const DeleteConference = ({conference}: {conference: Conference}) => {
 
     const handleDelete = async (conferenceId: number) => {
         await axios.delete(`/api/conferences/${conferenceId}`);
+
+        toast.success('Conference deleted successfully!')
         router.refresh();
         setIsOpen(false);
     }

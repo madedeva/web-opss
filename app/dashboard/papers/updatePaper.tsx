@@ -3,6 +3,8 @@ import { useState, SyntheticEvent, useEffect } from "react";
 import type { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type UpdatePaperProps = {
     users: User[];
@@ -34,10 +36,12 @@ const UpdatePaper = ({ users, paperId, conferenceId }: UpdatePaperProps) => {
                 registerConferenceId: paperId,
             });
 
+            toast.success('Reviewer assigned successfully!');
             router.refresh();
             setIsOpen(false);
         } catch (error) {
             console.error("Error updating reviewer:", error);
+            toast.error('Failed to assign reviewer!')
         }
     };
 
@@ -58,7 +62,6 @@ const UpdatePaper = ({ users, paperId, conferenceId }: UpdatePaperProps) => {
             <button className="text-xs text-blue-950 hover:text-indigo-900 underline" onClick={handleModal}>
                 Asign Reviewer
             </button>
-
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
                 <div className="modal-box bg-white">
                     <h3 className="font-bold text-lg">Asign Reviewer</h3>

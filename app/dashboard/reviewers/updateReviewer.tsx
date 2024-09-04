@@ -4,6 +4,8 @@ import type { Conference, User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: User[], conferences: Conference[], userId: number, conId: number, conRevId: number}) => {
 
@@ -22,6 +24,8 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
             userId: parseInt(idUser),
             conferenceId: parseInt(idCon),
         });
+
+        toast.success('Reviewer updated successfully!')
         setUser(idUser);
         setCon(idCon);
         router.refresh();

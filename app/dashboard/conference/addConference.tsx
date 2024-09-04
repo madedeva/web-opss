@@ -5,6 +5,8 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRef } from "react";
 import CustomAlert from "@/app/components/Alert/CustomAlert";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddConference = () => {
     const { data: session } = useSession();
@@ -66,10 +68,10 @@ const AddConference = () => {
         newTopics[index] = value;
         setTopics(newTopics);
     }
-
+    
     const addTopicField = () => {
         setTopics([...topic, '']);
-    }
+    }  
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files ? event.target.files[0] : null;
@@ -133,7 +135,7 @@ const AddConference = () => {
             setEndDate('');
             setStatus('Inactive');
 
-            setAlert({ type: 'success', message: 'Conference added successfully!' });
+            toast.success('Conference added successfully!');
             setTimeout(() => setAlert(null), 5000);
 
             router.refresh();
@@ -141,7 +143,7 @@ const AddConference = () => {
 
         } catch (error: any) {
             console.error('Error submitting the form:', error);
-            setAlert({ type: 'danger', message: 'Conference addition failed: ' + error.message });
+            toast.error('Conference addition failed:' + error.message);
             setTimeout(() => setAlert(null), 5000);
         }
     }
@@ -236,7 +238,6 @@ const AddConference = () => {
                             <input 
                                 id="file-upload"
                                 type="file"
-                                accept=".jpg, .jpeg, .png"
                                 ref={fileInput}
                                 value={banner}
                                 onChange={(e) => setBanner(e.target.value)}
@@ -391,7 +392,6 @@ const AddConference = () => {
                             <input 
                                 id="file-upload"
                                 type="file"
-                                accept=".docx, .doc"
                                 ref={fileInput2}
                                 value={paper_template}
                                 onChange={(e) => setPaperTemplate(e.target.value)}

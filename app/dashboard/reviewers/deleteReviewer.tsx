@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Con_Reviewer } from "@prisma/client";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DeleteConRev = ({conRev}: {conRev: Con_Reviewer}) => {
 
@@ -10,6 +12,8 @@ const DeleteConRev = ({conRev}: {conRev: Con_Reviewer}) => {
 
     const handleDelete = async (conRevId: number) => {
         await axios.delete(`/api/reviewer/${conRevId}`);
+
+        toast.success('Reviewer deleted successfully!')
         router.refresh();
         setIsOpen(false);
     }

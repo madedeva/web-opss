@@ -2,6 +2,8 @@
 import { useState, SyntheticEvent } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type AddAuthorsProps = {
     paperId: number;
@@ -25,14 +27,16 @@ const AddAuthors = ({ paperId }: AddAuthorsProps) => {
                 submissionId: paperId,
             });
 
+            toast.success('Author added successfully!');
             setName("");
             setEmail("");
             setInstitution("");
-            
+
             router.refresh();
             setIsOpen(false);
         } catch (error) {
             console.error("Error adding author:", error);
+            toast.error('Author added failed' + error);
         }
     };
 

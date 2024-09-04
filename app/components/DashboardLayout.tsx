@@ -5,6 +5,8 @@ import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import { SessionProvider } from 'next-auth/react';
 import LoadingOverlay from './LoadingOverlay';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isSidebarVisible, setSidebarVisible] = useState(true);
@@ -27,6 +29,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
   return (
     <SessionProvider>
     <div className="flex h-screen overflow-hidden">
+    <ToastContainer />
     {isLoading && <LoadingOverlay />}
       <Sidebar isVisible={isSidebarVisible} />
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarVisible ? 'ml-64' : 'ml-0'}`}>

@@ -31,13 +31,13 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
             });
             setSelectedUserId('');
             setSelectedConferenceId('');
-            setAlert({ type: 'success', message: 'Reviewer added successfully!' });
+            toast.success('Reviewer added successfully!');
             setTimeout(() => setAlert(null), 5000);
             router.refresh();
             setIsOpen(false);
         } catch (error: any) {
             console.error('Failed to add reviewer:', error);
-            setAlert({ type: 'danger', message: 'Reviewer addition failed: ' + error.message });
+            toast.error('Reviewer added failed.')
             setTimeout(() => setAlert(null), 5000);
         }
     };
