@@ -31,6 +31,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
     const [countries, setCountries] = useState<string[]>([]);
     const [fetchError, setFetchError] = useState<string | null>(null);
     const [topics, setTopics] = useState<string[]>();
+    const [Authors, setAuthors] = useState([{ name: '', email: '', institution: ''}]);
 
     const [conference, setConference] = useState<Conference>();
 
@@ -43,6 +44,12 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
         name: string;
         email: string;
         roleId: number;
+    }
+
+    type Author = {
+        name: string;
+        email: string;
+        institution: string;
     }
 
     const [alert, setAlert] = useState<{ type: 'info' | 'danger' | 'success' | 'warning' | 'dark'; message: string } | null>(null);
@@ -116,6 +123,21 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
         setKeywords(keywords.filter(keyword => keyword !== keywordToRemove));
     };
 
+    const handleAuthorChange = (index: number, field: string, value: string) => {
+        const newAuthors = [...Authors];
+        (newAuthors[index] as any)[field] = value;
+        setAuthors(newAuthors);
+    };
+    
+    const addAuthorField = () => {
+        setAuthors([...Authors, { name: '', email: '', institution: '' }]);
+    };
+    
+    const removeAuthorField = (index: number) => {
+        const newAuthors = Authors.filter((_, i) => i !== index);
+        setAuthors(newAuthors);
+    };
+
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
         const formData = new FormData();
@@ -128,6 +150,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
         formData.append('country', country);
         formData.append('city', city);
         formData.append('status', status);
+        formData.append('Authors', JSON.stringify(Authors));
         formData.append('conferenceId', selectedConferenceId);
 
         const user = session?.user as User;
@@ -150,6 +173,8 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
             setCity('');
             setStatus('Submitted');
             setSelectedConferenceId('');
+
+            console.log(formData)
             
             toast.success('Submission created successfully!');
             setTimeout(() => setAlert(null), 5000);
@@ -350,6 +375,38 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                 onChange={(e) => setInstitution(e.target.value)}
                 className="input input-bordered bg-white" required/>
             </div>
+
+            {Authors.map((author, index) => (
+                <div key={index} className="form-control w-full mt-6">
+                    <p className="mb-2">Add Another Authors <span className="text-red-600">*</span></p>
+                    <p className="mb-2">Author {index + 1}</p>
+                    <input
+                        className="block w-full p-2 border bg-white rounded mb-2"
+                        type="text"
+                        placeholder="Author Name"
+                        value={author.name}
+                        onChange={(e) => handleAuthorChange(index, 'name', e.target.value)}
+                    />
+                    <input
+                        className="block w-full p-2 border bg-white rounded mb-2"
+                        type="text"
+                        placeholder="Author Email"
+                        value={author.email}
+                        onChange={(e) => handleAuthorChange(index, 'email', e.target.value)}
+                    />
+                    <input
+                        className="block w-full p-2 border bg-white rounded"
+                        type="text"
+                        placeholder="Author Institution"
+                        value={author.institution}
+                        onChange={(e) => handleAuthorChange(index, 'institution', e.target.value)}
+                    />
+                    <button type="button" className="btn btn-danger mt-2" onClick={() => removeAuthorField(index)}>Remove Author</button>
+                </div>
+            ))}
+            <button type="button" className="btn bg-blue-950 btn-outline text-white mt-4" onClick={addAuthorField}>
+                Add New Author
+            </button>
             <div className="form-control w-full mt-6">
                 <p className="mb-2">Country <span className="text-red-600">*</span></p>
                 <select

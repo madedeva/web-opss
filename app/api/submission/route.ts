@@ -18,12 +18,16 @@ export const POST = async (request: Request) => {
     try{
         const formData = await request.formData();
 
+        console.log(formData)
+
         const paper = formData.get("paper") as File;
         if (paper){
             const arrayBufferPaper = await paper.arrayBuffer();
             const bufferPaper = new Uint8Array(arrayBufferPaper);
             await fs.writeFile(`./public/uploads/papers/${paper.name}`, bufferPaper);
         }
+
+        const Authors = JSON.parse(formData.get("Authors")?.toString() ?? '[]');
 
         const con = await prisma.registerConference.create({
             data: {
@@ -38,7 +42,17 @@ export const POST = async (request: Request) => {
                 paper: paper.name,
                 userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
                 conferenceId: parseInt(formData.get("conferenceId")?.valueOf().toString() ?? '0'),
-            }
+                Authors: {
+                    create: Authors.map((author: any) => ({
+                        name: author.name,
+                        email: author.email,
+                        institution: author.institution
+                    }))
+                }
+            },
+            include: {
+                Authors: true,
+            },
         });
         revalidatePath("/");
         return NextResponse.json({ status: "success" });
