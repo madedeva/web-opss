@@ -150,7 +150,10 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
         formData.append('country', country);
         formData.append('city', city);
         formData.append('status', status);
-        formData.append('Authors', JSON.stringify(Authors));
+        const nonEmptyAuthors = Authors.filter(author => author.name || author.email || author.institution);
+        if (nonEmptyAuthors.length > 0) {
+            formData.append('Authors', JSON.stringify(nonEmptyAuthors));
+        }
         formData.append('conferenceId', selectedConferenceId);
 
         const user = session?.user as User;
@@ -173,6 +176,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
             setCity('');
             setStatus('Submitted');
             setSelectedConferenceId('');
+            setAuthors([{ name: '', email: '', institution: '' }]);
 
             console.log(formData)
             
@@ -378,7 +382,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
 
             {Authors.map((author, index) => (
                 <div key={index} className="form-control w-full mt-6">
-                    <p className="mb-2">Add Another Authors <span className="text-red-600">*</span></p>
+                    <p className="mb-2">Add Another Authors (Optional)</p>
                     <p className="mb-2">Author {index + 1}</p>
                     <input
                         className="block w-full p-2 border bg-white rounded mb-2"

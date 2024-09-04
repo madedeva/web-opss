@@ -85,6 +85,9 @@ export const GET = async (request: Request, {params}: {params: {id: string}}) =>
     const con = await prisma.registerConference.findUnique({
         where: {
             id: Number(params.id)
+        },
+        include: {
+            Authors: true
         }
     });
 
