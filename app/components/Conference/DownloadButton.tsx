@@ -116,7 +116,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
         onClick={handleDownload}
         className="mt-4 px-4 py-2 bg-blue-950 text-white rounded-full hover:bg-orange-500"
       >
-        Download Papers
+        Download Abstract
       </button>
     </div>
   );
