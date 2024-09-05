@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { saveAs } from 'file-saver';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
 import axios from 'axios';
+import { htmlToText } from 'html-to-text';
 
 type Conference = {
   id: number;
@@ -50,7 +51,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
     }
 
     try {
-      const response = await axios.get(`/api/papersubmission?userId=${userId}`);
+      const response = await axios.get(`/api/downloadabstract?conferenceId=${selectedConference}`);
       console.log('Papers API Response:', response);
 
       const papers: Paper[] = response.data;
@@ -70,7 +71,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
                   new TextRun({ text: `Title: ${paper.paper_title}`, bold: true }),
                 ],
               }),
-              new Paragraph({ children: [new TextRun(paper.abstract)] }),
+              new Paragraph({
+                children: [
+                  new TextRun(htmlToText(paper.abstract))
+                ],
+              }),
               new Paragraph({ children: [new TextRun('')] }),
             ]).flat(),
           },
@@ -111,7 +116,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
         onClick={handleDownload}
         className="mt-4 px-4 py-2 bg-blue-950 text-white rounded-full hover:bg-orange-500"
       >
-        Download Abstract
+        Download Papers
       </button>
     </div>
   );
