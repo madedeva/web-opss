@@ -5,25 +5,6 @@ import { RegisterConference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-const getOrdinalSuffix = (day: number) => {
-  if (day > 3 && day < 21) return 'th';
-  switch (day % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
-  }
-};
-
-const getFormattedDate = (date: Date | string): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  const day = dateObj.getDate();
-  const month = dateObj.toLocaleString('en-US', { month: 'long' });
-  const year = dateObj.getFullYear();
-  const suffix = getOrdinalSuffix(day);
-  return `${month} ${day}${suffix}, ${year}`;
-};
-
 type UserCon = {
   id: number,
   paper_title: string,
@@ -56,7 +37,7 @@ type UserCon = {
         email: string,
     };
   },
-  authors: {
+  Authors: {
     id: number,
     name: string,
     email: string,
@@ -81,6 +62,8 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
   const user = session?.user as User;
 
   const filteredRegConferences = reg_conference.filter(reg => reg.userId === user?.id);
+
+  console.log(filteredRegConferences);
 
   return (
         <div className="overflow-x-auto">
@@ -121,10 +104,10 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                         <p className='font-bold'>{reg_conference.user.name}</p> ({reg_conference.user.email}, {reg_conference.institution})
                       </div>
                       <div className="text-xs text-gray-900 mt-2">
-                        {reg_conference.authors?.map((author, index) => (
+                        {reg_conference.Authors?.map((author, index) => (
                           <p key={author.id}>
                             <span className="font-bold">{author.name}</span> ({author.email}, {author.institution})
-                            {index < reg_conference.authors.length - 1 && ', '}
+                            {index < reg_conference.Authors.length - 1 && ', '}
                           </p>
                         )) || <span>No authors available</span>}
                       </div>

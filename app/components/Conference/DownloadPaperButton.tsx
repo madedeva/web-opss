@@ -2,19 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { saveAs } from 'file-saver';
-import { Document, Packer, Paragraph, TextRun } from 'docx';
 import axios from 'axios';
-import { htmlToText } from 'html-to-text';
+import { PDFDocument } from 'pdf-lib';
 
 type Conference = {
   id: number;
   name: string;
 };
 
-interface Paper {
+type PaperSubmission = {
   paper_title: string;
-  abstract: string;
-}
+  paper: string;
+};
 
 type DownloadButtonProps = {
   userId: number;
@@ -28,14 +27,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
     const fetchConferences = async () => {
       try {
         const response = await axios.get(`/api/conferences/${userId}`);
-        console.log('Conferences API Response:', response);
-
-        if (response.data === null || !Array.isArray(response.data)) {
-          console.error('Unexpected data format:', response.data);
-          setConferences([]);
-        } else {
-          setConferences(response.data);
-        }
+        setConferences(response.data);
       } catch (error) {
         console.error('Failed to fetch conferences', error);
         setConferences([]);
@@ -51,41 +43,29 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
     }
 
     try {
-      const response = await axios.get(`/api/downloadabstract?conferenceId=${selectedConference}`);
-      console.log('Papers API Response:', response);
+      const response = await axios.get(`/api/downloadpapers?conferenceId=${selectedConference}`);
+      const papers: PaperSubmission[] = response.data;
 
-      const papers: Paper[] = response.data;
-
-      if (!Array.isArray(papers)) {
-        console.error('Unexpected papers format:', papers);
+      if (!Array.isArray(papers) || papers.length === 0) {
+        console.error('No papers found or unexpected format:', papers);
         return;
       }
 
-      const doc = new Document({
-        sections: [
-          {
-            properties: {},
-            children: papers.map((paper) => [
-              new Paragraph({
-                children: [
-                  new TextRun({ text: `Title: ${paper.paper_title}`, bold: true }),
-                ],
-              }),
-              new Paragraph({
-                children: [
-                  new TextRun(htmlToText(paper.abstract))
-                ],
-              }),
-              new Paragraph({ children: [new TextRun('')] }),
-            ]).flat(),
-          },
-        ],
-      });
+      const mergedPdf = await PDFDocument.create();
 
-      const blob = await Packer.toBlob(doc);
-      saveAs(blob, 'papers.docx');
+      for (const paper of papers) {
+        const pdfPath = `/uploads/papers/${paper.paper}`;
+        const pdfBytes = await fetch(pdfPath).then((res) => res.arrayBuffer());
+        const pdf = await PDFDocument.load(pdfBytes);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
+
+      const mergedPdfBytes = await mergedPdf.save();
+      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      saveAs(blob, 'merged_papers.pdf');
     } catch (error) {
-      console.error('Failed to download document', error);
+      console.error('Failed to download or merge PDFs', error);
     }
   };
 
@@ -116,7 +96,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
         onClick={handleDownload}
         className="mt-4 px-4 py-2 bg-blue-950 text-white rounded-full hover:bg-orange-500"
       >
-        Download Abstract
+        Download Papers
       </button>
     </div>
   );

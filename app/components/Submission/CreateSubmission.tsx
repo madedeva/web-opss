@@ -150,7 +150,10 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
         formData.append('country', country);
         formData.append('city', city);
         formData.append('status', status);
-        formData.append('Authors', JSON.stringify(Authors));
+        const nonEmptyAuthors = Authors.filter(author => author.name || author.email || author.institution);
+        if (nonEmptyAuthors.length > 0) {
+            formData.append('Authors', JSON.stringify(nonEmptyAuthors));
+        }
         formData.append('conferenceId', selectedConferenceId);
 
         const user = session?.user as User;
@@ -173,6 +176,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
             setCity('');
             setStatus('Submitted');
             setSelectedConferenceId('');
+            setAuthors([{ name: '', email: '', institution: '' }]);
 
             console.log(formData)
             
@@ -346,10 +350,10 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <span className="font-medium text-gray-600">
-                            Drop files to Attach, or
-                            <span className="text-blue-950 ml-1 underline">browse</span>
-                        </span>
+                        Selected file:
+                        {fileName && (
+                            <span className="font-medium text-gray-600">{fileName}</span>
+                        )}
                     </span>
                 </label>
                 <input 
@@ -361,11 +365,6 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                     name="file_upload"
                     className="hidden"
                 />
-                {fileName && (
-                    <p className="mt-2 text-sm text-gray-700">
-                        Selected file: <span className="font-medium">{fileName}</span>
-                    </p>
-                )}
             </div>
             <div className="form-control w-full mt-6">
                 <p className="mb-2">Institution <span className="text-red-600">*</span></p>
@@ -378,7 +377,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
 
             {Authors.map((author, index) => (
                 <div key={index} className="form-control w-full mt-6">
-                    <p className="mb-2">Add Another Authors <span className="text-red-600">*</span></p>
+                    <p className="mb-2">Add Another Authors (Optional)</p>
                     <p className="mb-2">Author {index + 1}</p>
                     <input
                         className="block w-full p-2 border bg-white rounded mb-2"

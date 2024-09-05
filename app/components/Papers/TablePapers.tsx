@@ -8,6 +8,7 @@ import DownloadButton from '../Conference/DownloadButton';
 import DOMPurify from 'dompurify';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DownloadPaperButton from '../Conference/DownloadPaperButton';
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -233,6 +234,10 @@ const TablePapers = () => {
                 <hr className="mt-2" />
 
                 <div className="mt-6 flex space-x-4">
+                    {user && <DownloadButton userId={user.id} />}
+                    {user && <DownloadPaperButton userId={user.id} />}
+                </div>
+                <div className="mt-6 flex space-x-4">
                     <div className="flex-1">
                         <label 
                             htmlFor="search"
@@ -274,9 +279,8 @@ const TablePapers = () => {
                             </select>
                         </div>
                     </div>
-                    {user && <DownloadButton userId={user.id} />}
                 </div>
-                <div className="mt-4">
+                <div className="mt-6">
                     <div className="flex space-x-4">
                         <button
                             className={`px-4 py-2 rounded-full ${selectedStatus === 'all' ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-700'}`}
