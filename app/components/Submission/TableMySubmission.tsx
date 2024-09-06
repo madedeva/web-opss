@@ -105,7 +105,7 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                       </div>
                       <div className="text-xs text-gray-900 mt-2">
                         {reg_conference.Authors?.map((author, index) => (
-                          <p key={author.id}>
+                          <p key={author.id} className="mt-2">
                             <span className="font-bold">{author.name}</span> ({author.email}, {author.institution})
                             {index < reg_conference.Authors.length - 1 && ', '}
                           </p>
