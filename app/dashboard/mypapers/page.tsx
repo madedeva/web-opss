@@ -77,8 +77,8 @@ const getConference = async () => {
 }
 
 const MyConferences = async () => {
-
-  const [reg_conference, conference] = await Promise.all([getRegisterConference(), getConference()]);
+  
+    const [reg_conference] = await Promise.all([getRegisterConference()]);
 
     return (
     <DashboardLayout>

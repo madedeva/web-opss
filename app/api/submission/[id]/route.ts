@@ -48,7 +48,7 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
                 conferenceId: conference.id,
                 Authors: {
                     upsert: Authors.map((author: any) => ({
-                        where: { email: author.email }, // Assuming unique email for each author
+                        where: { email: author.email, id: author.id }, // Assuming unique email for each author
                         update: {
                             name: author.name,
                             institution: author.institution
