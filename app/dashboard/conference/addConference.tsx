@@ -85,6 +85,8 @@ const AddConference = () => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
         const formData = new FormData();
+
+        console.log('FILES: ', fileInput2?.current?.files?.[0]!);
         formData.append('name', name);
         formData.append('acronym', acronym);
         formData.append('theme', theme);
@@ -218,7 +220,7 @@ const AddConference = () => {
                             </div>
                         </div>
 
-                        <div className="w-full mt-6">
+                        {/* <div className="w-full mt-6">
                             <p>Banner Image <span className="text-red-600">*</span></p>
                             <p className="text-xs mb-2">Only .jpg .png .jpeg files are allowed</p>
                             <label
@@ -244,9 +246,9 @@ const AddConference = () => {
                                 name="file_upload"
                                 className="hidden"
                             />
-                        </div>
+                        </div> */}
 
-                        {/* <div className="w-full mt-6">
+                        <div className="w-full mt-6">
                             <p>Upload Banner Image <span className="text-red-600">*</span></p>
                             <span className="text-sm">.jpg .jpeg or .png - max. 2mb</span>
                             <label
@@ -272,7 +274,7 @@ const AddConference = () => {
                                 className="hidden" 
                                 />
                             </label>
-                        </div> */}
+                        </div>
                         <div className="form-control w-full mt-6">
                             <p className="mb-2">Conference Venue <span className="text-red-600">*</span></p>
                             <input
@@ -340,7 +342,7 @@ const AddConference = () => {
                             />
                         </div>
 
-                        {/* <div className="w-full mt-6">
+                        <div className="w-full mt-6">
                             <p>Upload Paper Template <span className="text-red-600">*</span></p>
                             <span className="text-sm">.docx .doc</span>
                             <label
@@ -365,9 +367,9 @@ const AddConference = () => {
                                 className="hidden" 
                                 />
                             </label>
-                        </div> */}
+                        </div>
 
-                        <div className="w-full mt-6">
+                        {/* <div className="w-full mt-6">
                             <p>Paper Template <span className="text-red-600">*</span></p>
                             <p className="text-xs mb-2">Only .doc .docx files are allowed</p>
                             <label
@@ -393,7 +395,7 @@ const AddConference = () => {
                                 name="file_upload"
                                 className="hidden"
                             />
-                        </div>
+                        </div> */}
                         <div className="form-control w-full mt-6">
                             <p className="mb-2">Payment Information <span className="text-red-600">*</span></p>
                             <input
