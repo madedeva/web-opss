@@ -53,6 +53,14 @@ const getRegisterConference = async () => {
             }
           }
         },
+        Authors: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            institution: true,
+          }
+        }
       },
     });
     return res;

@@ -63,7 +63,7 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
 
   const filteredRegConferences = reg_conference.filter(reg => reg.userId === user?.id);
 
-  console.log(filteredRegConferences);
+  console.log(reg_conference);
 
   return (
         <div className="overflow-x-auto">
