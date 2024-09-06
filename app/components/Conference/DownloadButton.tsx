@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { saveAs } from 'file-saver';
-import { Document, Packer, Paragraph, TextRun } from 'docx';
+import { Document, Packer, Paragraph, TextRun, AlignmentType } from 'docx';
 import axios from 'axios';
 import { htmlToText } from 'html-to-text';
 
@@ -62,24 +62,42 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
       }
 
       const doc = new Document({
-        sections: [
-          {
-            properties: {},
-            children: papers.map((paper) => [
-              new Paragraph({
-                children: [
-                  new TextRun({ text: `Title: ${paper.paper_title}`, bold: true }),
-                ],
-              }),
-              new Paragraph({
-                children: [
-                  new TextRun(htmlToText(paper.abstract))
-                ],
-              }),
-              new Paragraph({ children: [new TextRun('')] }),
-            ]).flat(),
-          },
-        ],
+        sections: papers.map((paper) => ({
+          properties: {},
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              spacing: { line: 1.5 * 240 },
+              children: [
+                new TextRun({
+                  text: paper.paper_title,
+                  bold: true,
+                  font: 'Times New Roman',
+                  size: 24,
+                }),
+              ],
+              pageBreakBefore: true,
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: '',
+                }),
+              ],
+            }),
+            new Paragraph({
+              alignment: AlignmentType.JUSTIFIED,
+              spacing: { line: 1.5 * 240 },
+              children: [
+                new TextRun({
+                  text: htmlToText(paper.abstract),
+                  font: 'Times New Roman',
+                  size: 24,
+                }),
+              ],
+            }),
+          ],
+        })),
       });
 
       const blob = await Packer.toBlob(doc);
