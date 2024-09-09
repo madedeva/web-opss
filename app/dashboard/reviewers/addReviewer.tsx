@@ -12,9 +12,12 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
     const { data: session } = useSession();
     const user = session?.user as User;
 
-    const filteredConferences = conferences.filter(conference => 
-        conference.status === "Active" && conference.userId === user?.id
-    );
+    const filteredConferences = Array.isArray(conferences) 
+    ? conferences.filter(conference => {
+        console.log('Conference:', conference);
+        return conference.status === "Active" && conference.userId === user?.id;
+    })
+    : [];
 
     const [selectedUserId, setSelectedUserId] = useState('');
     const [selectedConferenceId, setSelectedConferenceId] = useState('');

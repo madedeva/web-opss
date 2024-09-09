@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import type {Con_Reviewer} from "@prisma/client";
 
@@ -17,40 +17,34 @@ export const POST = async (request: Request) => {
     return NextResponse.json(reviewer, {status: 201});
 }
 
-export const GET = async (request: Request) => {
-    const { searchParams } = new URL(request.url);
-    const conferenceId = searchParams.get("conferenceId");
-
-    let reviewers;
-
-    if (conferenceId) {
-        reviewers = await prisma.con_Reviewer.findMany({
-            where: {
-                conferenceId: Number(conferenceId),
-            },
-            include: {
-                user: {
-                    select: {
-                        name: true,
-                        email: true,
-                    },
-                },
-                conference: true,
-            },
-        });
-    } else {
-        reviewers = await prisma.con_Reviewer.findMany({
-            include: {
-                user: {
-                    select: {
-                        name: true,
-                        email: true,
-                    },
-                },
-                conference: true,
-            },
-        });
+export const GET = async (req: NextRequest) => {
+    try {
+      const { searchParams } = new URL(req.url);
+      const userId = searchParams.get('userId');
+      const conferenceId = searchParams.get('conferenceId');
+  
+      if (!userId || !conferenceId) {
+        return NextResponse.json({ message: 'userId dan conferenceId diperlukan' }, { status: 400 });
+      }
+  
+      // Query Reviewer berdasarkan userId dan conferenceId
+      const reviewers = await prisma.con_Reviewer.findMany({
+        where: {
+          userId: parseInt(userId),
+          conferenceId: parseInt(conferenceId),
+          conference: {
+            userId: parseInt(userId), // Memastikan conference dimiliki oleh user tertentu
+          },
+        },
+        include: {
+          user: true, // Sertakan data user
+          conference: true, // Sertakan data conference
+        },
+      });
+  
+      return NextResponse.json(reviewers, { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return NextResponse.json({ message: 'Terjadi kesalahan' }, { status: 500 });
     }
-
-    return NextResponse.json(reviewers, { status: 200 });
-};
+  };
