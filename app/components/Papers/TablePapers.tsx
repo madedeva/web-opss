@@ -9,6 +9,7 @@ import DOMPurify from 'dompurify';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DownloadPaperButton from '../Conference/DownloadPaperButton';
+import { Editor } from '@tinymce/tinymce-react';
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -74,6 +75,7 @@ const TablePapers = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
     const [selectedStatus, setSelectedStatus] = useState<string>('all');
+    const [editorContent, setEditorContent] = useState('');
     
     // send email
     const [selectedUserId, setSelectedUserId] = useState<number[]>([]);
@@ -121,6 +123,10 @@ const TablePapers = () => {
     }, [session]);
 
     // send email start
+    const handleEditorChange = (content:any) => {
+        setEditorContent(messageTemplate);
+    };
+
     useEffect(() => {
         async function fetchUsers() {
           try {
@@ -465,6 +471,20 @@ const TablePapers = () => {
                                 required
                             />
                             </div>
+                            {/* <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Message
+                                </label>
+                                <Editor
+                                    apiKey="0lu8tnu2h88qx3czxhxiluopabt3eubgk2ftrw8qfu489ruu"
+                                    value={messageTemplate}
+                                    init={{
+                                        height: 200,
+                                        menubar: false,
+                                    }}
+                                    onEditorChange={(newContent) => setMessageTemplate(newContent)}
+                                />
+                            </div> */}
                             <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Message
