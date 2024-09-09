@@ -53,7 +53,7 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
         <div>
             {alert && <CustomAlert type={alert.type} message={alert.message} />}
             <button className="bg-blue-950 text-white px-4 py-2 rounded-full" onClick={handleModalToggle}>
-                + New Reviewer
+                + Add New Reviewer
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>

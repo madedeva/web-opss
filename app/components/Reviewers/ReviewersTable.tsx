@@ -1,11 +1,15 @@
 'use client'
-import DashboardLayout from "@/app/components/DashboardLayout";
-import AddReviewer from "@/app/dashboard/reviewers/addReviewer";
 import DeleteConRev from "@/app/dashboard/reviewers/deleteReviewer";
 import UpdateReviewer from "@/app/dashboard/reviewers/updateReviewer";
-import { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+
+interface CustomSessionUser {
+  id: string;
+  name?: string;
+  email?: string;
+  image?: string;
+}
 
 interface ConReviewer {
   id: number;
@@ -18,20 +22,30 @@ interface ConReviewer {
   conference: {
     name: string;
     institution: string;
-    email: string
+    email: string;
+    userId: number;
   };
 }
 
 const ReviewerComponent = () => {
   const [reviewers, setReviewers] = useState<ConReviewer[]>([]);
   const { data: session } = useSession();
-  const userId = session?.user as User;
   const [conferenceId, setConferenceId] = useState<number>(0);
 
   useEffect(() => {
+    console.log('Session:', session);
+
     async function fetchReviewers() {
+      if (!session || !session.user) return;
+
+      const user = session.user as CustomSessionUser;
+      if (!user.id) {
+        console.error('User ID is missing');
+        return;
+      }
+
       try {
-        const res = await fetch(`/api/reviewers?userId=${userId}&conferenceId=${conferenceId}`);
+        const res = await fetch(`/api/reviewers?userId=${user.id}&conferenceId=${conferenceId}`);
         const data = await res.json();
         setReviewers(data);
       } catch (error) {
@@ -40,7 +54,7 @@ const ReviewerComponent = () => {
     }
 
     fetchReviewers();
-  }, [userId, conferenceId]);
+  }, [session, conferenceId]);
 
   const groupedByConference = reviewers.reduce((acc, reviewer) => {
     const conferenceId = reviewer.conferenceId;
