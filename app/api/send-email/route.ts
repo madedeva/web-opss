@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { PrismaClient } from '@prisma/client';
+// import * as DOMPurify from 'dompurify';
 
 const prisma = new PrismaClient();
 
@@ -34,10 +35,37 @@ export async function POST(request: Request) {
         }
     });
 
-    const emailPromises = users.map(user => {
-      const message = messageTemplate.replace(/<name>/g, user.name);
+    const emailPromises = users.map(async (user) => {
+      const registerConference = await prisma.registerConference.findFirst({
+        where: { userId: user.id },
+      });
+
+      if (!registerConference) {
+        return NextResponse.json({ error: 'Tidak ada data register conference' }, { status: 404 });
+      }
+
+      const conference = await prisma.conference.findFirst({
+        where: { id: registerConference.conferenceId },
+      });
+
+      if (!conference) {
+        return NextResponse.json({ error: 'Tidak ada data conference' }, { status: 404 });
+      }
+
+      // const subject = messageTemplate
+      // .replace(/<name>/g, user.name)
+      // .replace(/<title>/g, registerConference.paper_title)
+      // .replace(/<conference>/g, conference.name);
+
+      // const abstractText = DOMPurify.default.sanitize(registerConference.abstract);
+      const message = messageTemplate
+        .replace(/<name>/g, user.name)
+        .replace(/<title>/g, registerConference.paper_title)
+        .replace(/<abstract>/g, registerConference.abstract)
+        .replace(/<conference>/g, conference.name);
+
       return transporter.sendMail({
-        from: 'deva.kerti@undiksha.ac.id',
+        // from: conference.email,
         to: user.email,
         subject,
         text: message,

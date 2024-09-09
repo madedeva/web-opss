@@ -112,9 +112,9 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     }, [registerConference.conferenceId, registerConference.topic]);
 
     const handleAuthorChange = (index: number, field: string, value: string) => {
-        const newAuthors = [...Authors];
-        (newAuthors[index] as any)[field] = value;
-        setAuthors(newAuthors);
+        const updatedAuthors = [...Authors];
+        updatedAuthors[index] = { ...updatedAuthors[index], [field]: value };
+        setAuthors(updatedAuthors);
     };
     
     const addAuthorField = () => {
@@ -122,8 +122,8 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
     };
     
     const removeAuthorField = (index: number) => {
-        const newAuthors = Authors.filter((_, i) => i !== index);
-        setAuthors(newAuthors);
+        const updatedAuthors = Authors.filter((_, i) => i !== index);
+        setAuthors(updatedAuthors);
     };
 
     const handleUpdate = async (e: SyntheticEvent) => {
@@ -407,7 +407,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
-                            <button className="btn bg-blue-950 text-white">Upload Revision</button>
+                            <button className="btn bg-blue-950 text-white">Update Submission</button>
                         </div>
                     </form>
                 </div>
