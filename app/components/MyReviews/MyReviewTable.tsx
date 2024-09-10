@@ -258,19 +258,20 @@ const MyReviewTable = () => {
 
                     {isOpen2 && selectedPaper2 && (
                         <div className="modal modal-open">
-                            <div className="modal-box bg-white w-full max-w-5xl text-black">
+                            <div className="modal-box bg-white w-full max-w-2xl text-gray-700">
                             <form onSubmit={handleSubmit}>
                                 <h3 className="font-bold text-lg">Paper Title: {selectedPaper2.paper_title}</h3>
                                 <hr className="mt-4" />
                                     <p className="font-bold mt-4">Paper Abstract: </p>
-                                    <p className="py-2">{selectedPaper2.abstract}</p>
+                                    <p className="py-2" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedPaper2.abstract) }}/>
+                                    <hr className="mt-2"/>
                                         <input type="hidden" name="peperId" value={selectedPaper2.id}/>
-                                        <div className="form-control w-full mt-6">
-                                            <label className="label font-bold">Comments Review</label>
+                                        <div className="form-control w-full mt-4">
+                                            <label className="label">Comments Review</label>
                                             <textarea 
                                             value={comments}
                                             onChange={(e) => setComment(e.target.value)}
-                                            id="message" rows={12} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Write your comments"></textarea>
+                                            id="message" rows={8} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Type your review here"></textarea>
                                         </div>
                                         <div className="form-control w-full mt-6">
                                             <label className="mb-2">Status</label>
