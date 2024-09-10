@@ -24,7 +24,13 @@ const getFormattedDate = (date: Date | string): string => {
     const month = dateObj.toLocaleString('en-US', { month: 'long' });
     const year = dateObj.getFullYear();
     const suffix = getOrdinalSuffix(day);
-    return `${month} ${day}${suffix}, ${year}`;
+
+    let hours = dateObj.getHours();
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+
+    return `${month} ${day}${suffix}, ${year} ${hours}:${minutes} ${ampm}`;
 };
 
 type Paper = {
