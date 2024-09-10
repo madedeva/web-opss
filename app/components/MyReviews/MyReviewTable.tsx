@@ -267,7 +267,7 @@ const MyReviewTable = () => {
                                     <hr className="mt-2"/>
                                         <input type="hidden" name="peperId" value={selectedPaper2.id}/>
                                         <div className="form-control w-full mt-4">
-                                            <label className="label">Comments Review</label>
+                                            <label className="label">Review Comments</label>
                                             <textarea 
                                             value={comments}
                                             onChange={(e) => setComment(e.target.value)}
@@ -283,13 +283,13 @@ const MyReviewTable = () => {
                                                 setStatusPaper(target.value);
                                             }}
                                             className="select select-bordered bg-white" required>
-                                                <option value="" disabled>-- Select Status --</option>
+                                                <option value="">-- Select Submission Status --</option>
                                                 <option value="Accepted">Accepted</option>
                                                 <option value="Revision">Revision</option>
                                                 <option value="Rejected">Rejected</option>
                                             </select>
                                         </div>
-                                
+
                                 <div className="modal-action">
                                     <button type="button" className="btn text-white" onClick={handleModalClose2}>Cancel</button>
                                     <button type="submit" className="btn bg-blue-950 text-white" onClick={handleSubmit}>Submit Review</button>
