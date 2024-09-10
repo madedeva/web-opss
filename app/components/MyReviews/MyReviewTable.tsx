@@ -49,7 +49,13 @@ type Paper = {
             name: string;
             email: string;
         };
-    }
+    },
+    ReviewComments: {
+        id: number;
+        comments: string;
+        status: string;
+        sendReview: string;
+    }[]
 };
 
 type User = {
@@ -126,6 +132,7 @@ const MyReviewTable = () => {
         setIsOpen2(false);
     };
     
+    // comments on register conference
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
         
@@ -134,7 +141,7 @@ const MyReviewTable = () => {
                 comments: comments,
                 status: statusPaper,
             });
-    
+            
             setIsOpen2(false);
             toast.success('Review submitted!');
             fetchPapers();

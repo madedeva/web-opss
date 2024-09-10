@@ -1,5 +1,6 @@
 'use client';
 import AddAuthors from "@/app/dashboard/mypapers/addAuthors";
+import AddRevision from "@/app/dashboard/mypapers/addRevision";
 import UpdateSubmission from "@/app/dashboard/mypapers/updateSubmission";
 import { RegisterConference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -42,20 +43,39 @@ type UserCon = {
     name: string,
     email: string,
     institution: string
+  }[],
+  Revisions: {
+    id: number,
+    paper_title: string,
+    topic: string,
+    abstract: string,
+    keywords: string,
+    paper: string,
   }[]
 }
 
 const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) => {
   const [selectedComments, setSelectedComments] = useState<string | null>(null);
+  const [selectedRevision, setSelectedRevision] = useState<UserCon["Revisions"] | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isRevisionOpen, setIsRevisionOpen] = useState(false);
 
   const handleModalOpen = (comments: string | null | undefined) => {
     setSelectedComments(comments ?? null); 
     setIsOpen(true);
   };
 
+  const handleRevisionModalOpen = (revisions: UserCon["Revisions"]) => {
+    if (Array.isArray(revisions) && revisions.length > 0) {
+      console.log('Opening revisions modal with:', revisions);
+      setSelectedRevision(revisions);
+      setIsRevisionOpen(true);
+    }
+  };
+
   const handleModalClose = () => {
     setIsOpen(false);
+    setIsRevisionOpen(false);
   };
 
   const { data: session } = useSession();
@@ -109,7 +129,7 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                             <span className="font-bold">{author.name}</span> ({author.email}, {author.institution})
                             {index < reg_conference.Authors.length - 1 && ', '}
                           </p>
-                        )) || <span>No authors available</span>}
+                        )) || <span>No additional authors</span>}
                       </div>
                     </td>
                     <td className="px-3 py-2 whitespace-normal break-words">
@@ -118,13 +138,47 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                         </button>
                     </td>
                     <td className="px-3 py-2 whitespace-normal text-nowrap">
-                        <a className="text-xs text-blue-950 underline hover:text-indigo-900" href={`/uploads/papers/${reg_conference.paper}`} target="_blank" rel="noopener noreferrer">
-                        View Paper
+                      <div className="block">
+                        <a
+                          className="text-xs text-blue-950 underline hover:text-indigo-900 block"
+                          href={`/uploads/papers/${reg_conference.paper}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View Paper
                         </a>
-                        <AddAuthors paperId={reg_conference.id} />
-                    </td>
-                    <td className="px-3 py-2 whitespace-normal text-nowrap">
+
+                        {reg_conference.status === 'Revision' && (
+                          <div className="block">
+                            <AddAuthors paperId={reg_conference.id} />
+                          </div>
+                        )}
+
+                        {reg_conference.status === 'Submitted' && (
+                          <div className="block">
+                            <AddAuthors paperId={reg_conference.id} />
+                          </div>
+                        )}
+
                         {reg_conference.status !== 'Accepted' && reg_conference.status !== 'Rejected' && reg_conference.status !== 'Submitted' && (
+                          <div className="block">
+                            <AddRevision submissionId={reg_conference.id} />
+                          </div>
+                        )}
+
+                        {reg_conference.status !== 'Submitted' && (
+                          <button
+                            className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
+                            onClick={() => handleRevisionModalOpen(reg_conference.Revisions)}
+                          >
+                            Revisions History
+                          </button>
+                        )}
+                      </div>
+                    </td>
+
+                    <td className="px-3 py-2 whitespace-normal text-nowrap">
+                        {reg_conference.status === 'Accepted' && (
                           <UpdateSubmission registerConference={reg_conference}/>
                         )}
                         {reg_conference.status === 'Accepted' && (
@@ -162,6 +216,30 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                     ? selectedComments
                     : 'No comments available'}
                 </p>
+                <div className="modal-action">
+                  <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isRevisionOpen && selectedRevision && (
+            <div className="modal modal-open">
+              <div className="modal-box bg-white">
+                <h3 className="font-bold text-lg">Revisions</h3>
+                <ul className="py-4">
+                  {selectedRevision.map((revision) => (
+                    <li key={revision.id} className="my-2">
+                      <strong>Paper Title:</strong> {revision.paper_title}<br/>
+                      <strong>Topic:</strong> {revision.topic}<br/>
+                      <strong>Abstract:</strong> {revision.abstract}<br/>
+                      <strong>Keywords:</strong> {revision.keywords}<br/>
+                      <a className="text-blue-950 underline" href={`/uploads/papers/${revision.paper}`} download>
+                        Download Paper
+                      </a>
+                    </li>
+                  ))}
+                </ul>
                 <div className="modal-action">
                   <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
                 </div>

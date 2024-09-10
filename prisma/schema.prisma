@@ -112,13 +112,11 @@ model ReviewPaper {
   id                   Int                @id @default(autoincrement())
   reviewer             User               @relation(fields: [reviewerId], references: [id])
   reviewerId           Int
-  comments             String
-  status               String
-  sendReview           String
   registerConference   RegisterConference @relation(fields: [registerConferenceId], references: [id])
   registerConferenceId Int
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
+  ReviewComments       ReviewComments[]
 
   @@unique([reviewerId, registerConferenceId])
 }
@@ -143,14 +141,25 @@ model Emails {
 }
 
 model Revision {
-  id                   Int                @id @default(autoincrement())
-  paper_title          String
-  topic                String
-  abstract             String
-  keywords             String
-  paper                String
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-  RegisterConference   RegisterConference @relation(fields: [registerConferenceId], references: [id])
-  registerConferenceId Int
+  id           Int                @id @default(autoincrement())
+  paper_title  String
+  topic        String
+  abstract     String
+  keywords     String
+  paper        String
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  submission   RegisterConference @relation(fields: [submissionId], references: [id])
+  submissionId Int
+}
+
+model ReviewComments {
+  id         Int         @id @default(autoincrement())
+  comments   String
+  status     String
+  sendReview String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  review     ReviewPaper @relation(fields: [reviewId], references: [id])
+  reviewId   Int
 }

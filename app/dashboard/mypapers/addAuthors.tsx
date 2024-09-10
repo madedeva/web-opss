@@ -46,7 +46,7 @@ const AddAuthors = ({ paperId }: AddAuthorsProps) => {
 
     return (
         <div>
-            <button className="text-xs text-blue-950 hover:text-indigo-900 underline" onClick={handleModal}>
+            <button className="text-xs text-blue-950 hover:text-indigo-900 underline mt-2" onClick={handleModal}>
                 + Add New Author
             </button>
 
