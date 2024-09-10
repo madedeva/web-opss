@@ -204,7 +204,7 @@ const MyReviewTable = () => {
                                             <a className="text-xs text-blue-950 underline hover:text-indigo-900" href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
                                                 View Paper
                                             </a>
-                                            <p className="text-xs">updated at: {getFormattedDate(paper.updatedAt)}</p>
+                                            <p className="text-xs">last update: {getFormattedDate(paper.updatedAt)}</p>
                                         </td>
                                         <td className="px-3 py-2 whitespace-normal break-words">
                                             {paper.status === 'Accepted' && (
