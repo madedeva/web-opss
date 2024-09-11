@@ -30,6 +30,15 @@ const getFormattedDate = (date: Date | string): string => {
     return `${month} ${day}${suffix}, ${year}`;
 };
 
+type Emails = {
+    id: number;
+    subject: string;
+    message: string;
+    userId: number;
+    conferenceId: number;
+    sender: User;
+}
+
 type Paper = {
     id: number;
     paper_title: string;
@@ -65,9 +74,11 @@ type Paper = {
 
 const TablePapers = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
     const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
     const [papers, setPapers] = useState<Paper[]>([]);
     const [users, setUser] = useState<User[]>([]);
+    const [emails, setEmails] = useState<Emails[]>([]);
     const [selectedConference, setSelectedConference] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const { data: session, status } = useSession();
@@ -91,6 +102,10 @@ const TablePapers = () => {
     const handleModalClose = () => {
         setSelectedPaper(null);
         setIsOpen(false);
+    };
+
+    const handleModalClose2 = () => {
+        setIsOpen2(false);
     };
 
     // get paper data
@@ -136,7 +151,17 @@ const TablePapers = () => {
             console.error('Failed to fetch user data', error);
           }
         }
+
+        async function fetchEmailSended() {
+          try {
+            const response = await axios.get('/api/send-email');
+            setEmails(response.data);
+          } catch (error) {
+            console.error('Failed to fetch email data', error);
+          }
+        }
         fetchUsers();
+        fetchEmailSended();
       }, []);
 
       const handleCheckboxChange = (userId: number) => {
@@ -171,6 +196,7 @@ const TablePapers = () => {
         try {
           await axios.post('/api/send-email', {
             userId: selectedUserId,
+            userIdSender: user!.id,
             subject,
             messageTemplate,
           });
@@ -326,6 +352,13 @@ const TablePapers = () => {
                             >
                             Send Email
                         </button>
+
+                        <button
+                            onClick={() => setIsOpen2(true)}
+                            className={`px-4 py-2 rounded-full ${isOpen2 ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                            >
+                            List Email Sended
+                        </button>
                     </div>
                 </div>
 
@@ -440,6 +473,45 @@ const TablePapers = () => {
                             <div className="py-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedPaper.abstract) }} />
                             <div className="modal-action">
                                 <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {isOpen2 && (
+                    <div className="modal modal-open">
+                        <div className="modal-box bg-white">
+                            <h3 className="font-bold text-lg">List Sended Email</h3>
+                            <hr className="mt-4" />
+                            <div className="py-4 h-[300px] overflow-auto">
+                                {emails
+                                .map((email) => (
+                                <blockquote className="p-4 my-4 border-s-4 border-gray-400 bg-gray-100 mb-5">
+                                    <dl className="max-w-md text-gray-900 divide-y divide-gray-200">
+                                        <div className="flex flex-col pb-3">
+                                            <dt className="mb-1 text-gray-500 md:text-lg">Sender email address</dt>
+                                            <dd className="text-lg font-semibold">{email.sender.email}</dd>
+                                        </div>
+                                        <div className="flex flex-col pb-3">
+                                            <dt className="mb-1 text-gray-500 md:text-lg">Subject</dt>
+                                            <dd className="text-lg font-semibold">{email.subject}</dd>
+                                        </div>
+                                        <div className="flex flex-col pb-3">
+                                            <dt className="mb-1 text-gray-500 md:text-lg">Message</dt>
+                                            <dd className="text-lg font-light">{email.message}</dd>
+                                        </div>
+                                        {/* <button
+                                            // onClick={() => setIsOpen2(true)}
+                                            className={`px-4 py-2 rounded-full bg-orange-500 text-white w-full mt-2`}
+                                            >
+                                            Check
+                                        </button> */}
+                                    </dl>
+                                </blockquote>
+                                ))}
+                            </div>
+                            <div className="modal-action">
+                                <button type="button" className="btn text-white" onClick={handleModalClose2}>Close</button>
                             </div>
                         </div>
                     </div>

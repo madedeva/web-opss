@@ -11,7 +11,7 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
 
     const { data: session } = useSession();
     const user = session?.user as User;
-    const filteredConferences = conferences.filter(conferences => conferences.userId === user?.id);
+    const filteredConferences = conferences;
 
     const [idUser, setUser] = useState(userId.toString());
     const [idCon, setCon] = useState(conId.toString());

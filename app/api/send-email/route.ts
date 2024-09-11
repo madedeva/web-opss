@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
-    const { userId, subject, messageTemplate } = await request.json();
+    const { userId, userIdSender, subject, messageTemplate } = await request.json();
 
     console.log(userId)
 
@@ -64,6 +64,15 @@ export async function POST(request: Request) {
         .replace(/<abstract>/g, registerConference.abstract)
         .replace(/<conference>/g, conference.name);
 
+      await prisma.emails.create({
+        data: {
+          message: message,
+          subject: subject,
+          userId: userIdSender,
+          conferenceId: registerConference.id
+        }
+      });
+
       return transporter.sendMail({
         // from: conference.email,
         to: user.email,
@@ -79,4 +88,15 @@ export async function POST(request: Request) {
     console.error('Error sending emails:', error);
     return NextResponse.json({ error: 'Gagal mengirim email' }, { status: 500 });
   }
+}
+
+export const GET = async (request: Request) => {
+  const emails = await prisma.emails.findMany({
+    include: {
+      conference: true,
+      sender: true
+    }
+  });
+
+  return NextResponse.json(emails, {status: 200});
 }

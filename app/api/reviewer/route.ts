@@ -21,19 +21,17 @@ export const GET = async (req: NextRequest) => {
     try {
       const { searchParams } = new URL(req.url);
       const userId = searchParams.get('userId');
-      const conferenceId = searchParams.get('conferenceId');
+      // const conferenceId = searchParams.get('conferenceId');
   
-      if (!userId || !conferenceId) {
-        return NextResponse.json({ message: 'userId dan conferenceId diperlukan' }, { status: 400 });
+      if (!userId) {
+        return NextResponse.json({ message: 'userId diperlukan' }, { status: 400 });
       }
   
       // Query Reviewer berdasarkan userId dan conferenceId
       const reviewers = await prisma.con_Reviewer.findMany({
         where: {
-          userId: parseInt(userId),
-          conferenceId: parseInt(conferenceId),
           conference: {
-            userId: parseInt(userId), // Memastikan conference dimiliki oleh user tertentu
+            userId: Number(userId), // Konversi userId ke number
           },
         },
         include: {

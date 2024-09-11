@@ -1,6 +1,7 @@
 'use client'
 import DeleteConRev from "@/app/dashboard/reviewers/deleteReviewer";
 import UpdateReviewer from "@/app/dashboard/reviewers/updateReviewer";
+import { Conference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
@@ -27,25 +28,22 @@ interface ConReviewer {
   };
 }
 
-const ReviewerComponent = () => {
+const ReviewerComponent = ({ users, conferences } : {users: User[], conferences: Conference[]}) => {
   const [reviewers, setReviewers] = useState<ConReviewer[]>([]);
   const { data: session } = useSession();
   const [conferenceId, setConferenceId] = useState<number>(0);
 
   useEffect(() => {
     console.log('Session:', session);
-
+    
+    if (session?.user) {
+      fetchReviewers();
+    }
+    
     async function fetchReviewers() {
-      if (!session || !session.user) return;
-
-      const user = session.user as CustomSessionUser;
-      if (!user.id) {
-        console.error('User ID is missing');
-        return;
-      }
-
+      const user = session!.user as CustomSessionUser;
       try {
-        const res = await fetch(`/api/reviewers?userId=${user.id}&conferenceId=${conferenceId}`);
+        const res = await fetch(`/api/reviewer?userId=${user.id}`);
         const data = await res.json();
         setReviewers(data);
       } catch (error) {
@@ -53,8 +51,7 @@ const ReviewerComponent = () => {
       }
     }
 
-    fetchReviewers();
-  }, [session, conferenceId]);
+  }, [session?.user, conferenceId]);
 
   const groupedByConference = reviewers.reduce((acc, reviewer) => {
     const conferenceId = reviewer.conferenceId;
@@ -102,8 +99,8 @@ const ReviewerComponent = () => {
                     <td className="py-2">{cr.user.email}</td>
                     <td className="flex py-2">
                       <UpdateReviewer
-                        conferences={conf}
-                        users={cr.user}
+                        conferences={conferences}
+                        users={users}
                         userId={cr.user.id}
                         conId={cr.conferenceId}
                         conRevId={cr.id}
