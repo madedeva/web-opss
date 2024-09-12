@@ -138,6 +138,7 @@ model Emails {
   userId       Int
   conference   Conference @relation(fields: [conferenceId], references: [id])
   conferenceId Int
+  createdAt    DateTime   @default(now())
 }
 
 model Revision {

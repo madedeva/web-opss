@@ -23,6 +23,8 @@ export const GET = async (request: Request) => {
             include: {
                 conference: true,
                 ReviewPaper: true,
+                Authors: true,
+                Revision: true,
             }
         });
 

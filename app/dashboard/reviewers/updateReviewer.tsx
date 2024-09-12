@@ -45,11 +45,12 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
-                <div className="modal-box bg-white">
-                    <h3 className="font-bold text-lg">Add New Reviewer</h3>
+                <div className="modal-box bg-white w-full max-w-2xl">
+                <h3 className="font-bold text-lg text-center">Update Reviewer</h3>
+                <hr className="mb-4"/>
                     <form onSubmit={handleSubmit}>
                         <div className="form-control w-full">
-                            <label className="label font-bold">Reviewer</label>
+                            <label className="label text-lg">Reviewer</label>
                             <select 
                             value={idUser}
                             onChange={(e) => setUser(e.target.value)}
@@ -60,8 +61,8 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
                             ))}
                             </select>
                         </div>
-                        <div className="form-control w-full">
-                            <label className="label font-bold">Conference</label>
+                        <div className="form-control w-full mt-6">
+                            <label className="label text-lg">Conference</label>
                             <select 
                             value={idCon}
                             onChange={(e) => setCon(e.target.value)}
@@ -74,7 +75,7 @@ const UpdateReviewer = ({users, conferences, userId, conId, conRevId}: {users: U
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Close</button>
-                            <button type="submit" className="btn btn-accent text-white">Save</button>
+                            <button type="submit" className="btn bg-blue-950 text-white">Save</button>
                         </div>
                     </form>
                 </div>

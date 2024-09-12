@@ -51,7 +51,7 @@ const AddAuthors = ({ paperId }: AddAuthorsProps) => {
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
-                <div className="modal-box bg-white">
+                <div className="modal-box bg-white text-gray-700">
                     <h3 className="font-bold text-lg">Add Author</h3>
                     <form onSubmit={handleSubmit}>
                         <div className="form-control w-full mt-6">

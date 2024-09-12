@@ -62,3 +62,34 @@ export const POST = async (request: Request) => {
         return NextResponse.json({ status: "fail", error: e });
     }
 }
+
+
+export const GET = async (request: Request) => {
+    const { searchParams } = new URL(request.url);
+    const userId = parseInt(searchParams.get("userId") ?? '0');
+
+    if (!userId) {
+        return NextResponse.json({ status: "fail", message: "userId is required" });
+    }
+
+    try {
+        const conferences = await prisma.registerConference.findMany({
+            where: {
+                userId: userId,
+            },
+            include: {
+                Authors: true,
+            },
+        });
+
+        if (conferences.length === 0) {
+            return NextResponse.json({ status: "fail", message: "No conferences found for this user" });
+        }
+
+        return NextResponse.json({ status: "success", data: conferences });
+
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ status: "fail", error: error });
+    }
+};

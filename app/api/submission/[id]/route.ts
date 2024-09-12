@@ -93,20 +93,6 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
     }
 }
 
-// export const PATCH = async (request: Request, {params}: {params: {id: string}}) => {
-//     const body: RegisterConference = await request.json();
-//     const con = await prisma.registerConference.update({
-//         where: {
-//             id: Number(params.id)
-//         },
-//         data: {
-//             ...body,
-//         }
-//     });
-
-//     return NextResponse.json(con, {status: 200});
-// }
-
 export const DELETE = async (request: Request, {params}: {params: {id: string}}) => {
 
     const con = await prisma.registerConference.delete({

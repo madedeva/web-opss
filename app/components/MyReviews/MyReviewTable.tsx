@@ -61,6 +61,21 @@ type Paper = {
         comments: string;
         status: string;
         sendReview: string;
+    }[],
+    Authors: {
+        id: number,
+        name: string,
+        email: string,
+        institution: string
+    }[],
+    Revision: {
+        id: number,
+        paper_title: string,
+        topic: string,
+        abstract: string,
+        keywords: string,
+        paper: string,
+        createdAt: Date,
     }[]
 };
 
@@ -83,10 +98,21 @@ const MyReviewTable = () => {
     const { data: session, status, update } = useSession()
     const [user, setUser] = useState<User>();
 
+    const [selectedRevision, setSelectedRevision] = useState<Paper["Revision"] | null>(null);
+    const [isRevisionOpen, setIsRevisionOpen] = useState(false);
+
     const [alert, setAlert] = useState<{ type: 'info' | 'danger' | 'success' | 'warning' | 'dark'; message: string } | null>(null);
 
 
     const [loading, setLoading ] = useState(false);
+
+    const handleRevisionModalOpen = (revisions: Paper["Revision"]) => {
+        if (Array.isArray(revisions) && revisions.length > 0) {
+          console.log('Opening revisions modal with:', revisions);
+          setSelectedRevision(revisions);
+          setIsRevisionOpen(true);
+        }
+      };
 
     const fetchPapers = async () => {
         try {
@@ -125,6 +151,7 @@ const MyReviewTable = () => {
     const handleModalClose = () => {
         setSelectedPaper(null);
         setIsOpen(false);
+        setIsRevisionOpen(false);
     };
 
     const handleModalOpen2 = (paper: Paper) => {
@@ -185,6 +212,9 @@ const MyReviewTable = () => {
                                         Paper File
                                     </th>
                                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Revisions
+                                    </th>
+                                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status
                                     </th>
                                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -211,6 +241,14 @@ const MyReviewTable = () => {
                                                 View Paper
                                             </a>
                                             <p className="text-xs">last update: {getFormattedDate(paper.updatedAt)}</p>
+                                        </td>
+                                        <td className="px-3 py-2 whitespace-normal break-words">
+                                        <button
+                                            className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
+                                            onClick={() => handleRevisionModalOpen(paper.Revision)}
+                                            >
+                                                Revisions History
+                                            </button>
                                         </td>
                                         <td className="px-3 py-2 whitespace-normal break-words">
                                             {paper.status === 'Accepted' && (
@@ -251,7 +289,7 @@ const MyReviewTable = () => {
 
                     {isOpen && selectedPaper && (
                         <div className="modal modal-open">
-                            <div className="modal-box bg-white">
+                            <div className="modal-box bg-white text-gray-700">
                                 <h3 className="font-bold text-lg">Paper Title: {selectedPaper.paper_title}</h3>
                                 <hr className="mt-4" />
                                 <div className="py-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedPaper.abstract) }} />
@@ -303,6 +341,58 @@ const MyReviewTable = () => {
                                 </form>
                             </div>
                         </div>
+                    )}
+
+
+                    {isRevisionOpen && selectedRevision && (
+                        <div className="modal modal-open">
+                        <div className="modal-box bg-gray-50 shadow-xl rounded-lg w-full max-w-4xl">
+                        <div className="flex justify-between items-center border-b pb-3">
+                            <h3 className="text-2xl font-semibold text-gray-800">Revision History</h3>
+                            <button 
+                            className="text-gray-400 hover:text-gray-600" 
+                            onClick={handleModalClose}
+                            >
+                            ✕
+                            </button>
+                        </div>
+                    
+                        <ul className="py-6 space-y-4">
+                            {selectedRevision.map((revision) => (
+                            <li key={revision.id} className="p-4 bg-gray-100 text-gray-700 rounded-lg">
+                                <h4 className="text-xl font-bold text-gray-900">Paper Title: {revision.paper_title}</h4>
+                                <p className="mb-4">Submit Date: {getFormattedDate(revision.createdAt)}</p>
+                                <span className="block font-semibold text-gray-700 mb-1">Topic:</span> 
+                                <p>{revision.topic}</p>
+                                <div className="my-4">
+                                <label className="block font-semibold text-gray-700 mb-1">Abstract:</label>
+                                <div
+                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(revision.abstract) }}
+                                />
+                                </div>
+                                <p className="mb-4"><span className="font-semibold">Keywords:</span> {revision.keywords}</p>
+                                <a
+                                className="text-blue-950 underline font-medium"
+                                href={`/uploads/papers/${revision.paper}`}
+                                download
+                                >
+                                Download Paper
+                                </a>
+                            </li>
+                            ))}
+                        </ul>
+                    
+                        <div className="modal-action flex justify-end mt-4">
+                            <button 
+                            type="button" 
+                            className="btn bg-blue-950 text-white px-4 py-2 rounded-md"
+                            onClick={handleModalClose}
+                            >
+                            Close
+                            </button>
+                        </div>
+                        </div>
+                    </div>          
                     )}
                 </div>
             </div>

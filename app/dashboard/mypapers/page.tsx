@@ -1,5 +1,4 @@
 import DashboardLayout from "@/app/components/DashboardLayout"
-import RegisterConference from "./addSubmission";
 import { PrismaClient } from "@prisma/client";
 import TableMySubmission from "@/app/components/Submission/TableMySubmission";
 
@@ -30,7 +29,16 @@ type UserCon = {
         name: string,
         email: string,
     };
-  }
+  },
+  Revision: {
+    id: number,
+    paper_title: string,
+    topic: string,
+    abstract: string,
+    keywords: string,
+    paper: string,
+    createdAt: Date,
+  }[]
 }
 
 const getRegisterConference = async () => {
@@ -60,21 +68,22 @@ const getRegisterConference = async () => {
             name: true,
             institution: true,
           }
-        }
+        },
+        Revision: true
       },
     });
+
+    const reg_conference = res.map((item) => ({
+      ...item,
+      Revisions: item.Revision,
+    }));
+
     return res;
   } catch (error) {
     console.error("Error fetching registered conferences:", error);
     return [];
   }
 };
-
-
-const getConference = async () => {
-  const res = await prisma.conference.findMany();
-  return res;
-}
 
 const MyConferences = async () => {
   
@@ -88,9 +97,6 @@ const MyConferences = async () => {
           <p className="text-sm text-gray-600">
           Below is a list of the history of the papers you have submitted.
           </p>
-          {/* <div className="mt-2">
-          <RegisterConference conferences={conference}/>
-          </div> */}
           <TableMySubmission reg_conference={reg_conference} />
         </div>
       </div>

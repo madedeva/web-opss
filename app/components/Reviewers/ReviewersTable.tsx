@@ -1,9 +1,10 @@
-'use client'
+'use client';
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import type { Conference, User } from "@prisma/client";
 import DeleteConRev from "@/app/dashboard/reviewers/deleteReviewer";
 import UpdateReviewer from "@/app/dashboard/reviewers/updateReviewer";
-import { Conference, User } from "@prisma/client";
-import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import AddReviewer from "@/app/dashboard/reviewers/addReviewer";
 
 interface CustomSessionUser {
   id: string;
@@ -16,7 +17,9 @@ interface ConReviewer {
   id: number;
   name: string;
   conferenceId: number;
+  userId: number;
   user: {
+    id: number;
     name: string;
     email: string;
   };
@@ -28,32 +31,42 @@ interface ConReviewer {
   };
 }
 
-const ReviewerComponent = ({ users, conferences } : {users: User[], conferences: Conference[]}) => {
+const ReviewerComponent = ({ users, conferences }: { users: User[]; conferences: Conference[] }) => {
   const [reviewers, setReviewers] = useState<ConReviewer[]>([]);
   const { data: session } = useSession();
-  const [conferenceId, setConferenceId] = useState<number>(0);
+  const [selectedConference, setSelectedConference] = useState<number | null>(null);
 
   useEffect(() => {
-    console.log('Session:', session);
-    
     if (session?.user) {
+      const fetchReviewers = async () => {
+        const user = session!.user as CustomSessionUser;
+        try {
+          const res = await fetch(`/api/reviewer?userId=${user.id}`);
+          const data = await res.json();
+          setReviewers(data);
+        } catch (error) {
+          console.error("Error fetching reviewers:", error);
+        }
+      };
+  
       fetchReviewers();
+      const interval = setInterval(fetchReviewers, 5000); // Poll every 5 seconds
+  
+      return () => clearInterval(interval); // Clean up on unmount
     }
-    
-    async function fetchReviewers() {
-      const user = session!.user as CustomSessionUser;
-      try {
-        const res = await fetch(`/api/reviewer?userId=${user.id}`);
-        const data = await res.json();
-        setReviewers(data);
-      } catch (error) {
-        console.error('Error fetching reviewers:', error);
-      }
-    }
+  }, [session?.user]);  
 
-  }, [session?.user, conferenceId]);
+  const handleConferenceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedConference(value ? parseInt(value, 10) : null);
+  };
 
-  const groupedByConference = reviewers.reduce((acc, reviewer) => {
+  // Filter reviewers by the selected conference
+  const filteredReviewers = selectedConference === null 
+    ? reviewers 
+    : reviewers.filter(reviewer => reviewer.conferenceId === selectedConference);
+
+  const groupedByConference = filteredReviewers.reduce((acc, reviewer) => {
     const conferenceId = reviewer.conferenceId;
     if (!acc.has(conferenceId)) {
       acc.set(conferenceId, {
@@ -62,14 +75,36 @@ const ReviewerComponent = ({ users, conferences } : {users: User[], conferences:
         reviewers: [],
       });
     }
-    acc.get(conferenceId).reviewers.push(reviewer);
+    acc.get(conferenceId)!.reviewers.push(reviewer);
     return acc;
-  }, new Map<number, any>());
+  }, new Map<number, { id: number; name: string; reviewers: ConReviewer[] }>());
 
   const groupedByConferenceArray = Array.from(groupedByConference.values());
 
   return (
     <div className="mt-6">
+      <div className="flex justify-between items-center mb-4">
+        {/* Conference Filter Dropdown */}
+        <div className="form-control w-1/2">
+          <label htmlFor="conference" className="block text-sm font-medium text-gray-700 mb-2">
+            Filter by Conference
+          </label>
+          <select
+            value={selectedConference ?? ''}
+            onChange={handleConferenceChange}
+            className="select select-bordered bg-white"
+          >
+            <option value="">All Conferences</option>
+            {conferences.map((conference) => (
+              <option key={conference.id} value={conference.id}>
+                {conference.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Reviewer Table */}
       {groupedByConferenceArray.length > 0 ? (
         groupedByConferenceArray.map((conf) => (
           <div key={conf.id} className="mt-12">
@@ -92,7 +127,7 @@ const ReviewerComponent = ({ users, conferences } : {users: User[], conferences:
                 </tr>
               </thead>
               <tbody>
-                {conf.reviewers.map((cr:any) => (
+                {conf.reviewers.map((cr) => (
                   <tr className="text-gray-700 text-xs border-b border-gray-200" key={cr.id}>
                     <td className="py-2">{cr.user.name}</td>
                     <td className="py-2">{cr.conference.institution}</td>
@@ -105,7 +140,13 @@ const ReviewerComponent = ({ users, conferences } : {users: User[], conferences:
                         conId={cr.conferenceId}
                         conRevId={cr.id}
                       />
-                      <DeleteConRev conRev={cr} />
+                      <DeleteConRev 
+                        conRev={{ 
+                          id: cr.id, 
+                          conferenceId: cr.conferenceId, 
+                          userId: cr.userId // Make sure to include userId
+                        }} 
+                      />
                     </td>
                   </tr>
                 ))}

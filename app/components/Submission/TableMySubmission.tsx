@@ -5,6 +5,32 @@ import UpdateSubmission from "@/app/dashboard/mypapers/updateSubmission";
 import { RegisterConference, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import DOMPurify from 'dompurify';
+
+const getOrdinalSuffix = (day: number) => {
+  if (day > 3 && day < 21) return 'th';
+  switch (day % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+  }
+};
+
+const getFormattedDate = (date: Date | string): string => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const day = dateObj.getDate();
+  const month = dateObj.toLocaleString('en-US', { month: 'long' });
+  const year = dateObj.getFullYear();
+  const suffix = getOrdinalSuffix(day);
+
+  let hours = dateObj.getHours();
+  const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12;
+
+  return `${month} ${day}${suffix}, ${year} ${hours}:${minutes} ${ampm}`;
+};
 
 type UserCon = {
   id: number,
@@ -44,19 +70,20 @@ type UserCon = {
     email: string,
     institution: string
   }[],
-  Revisions: {
+  Revision: {
     id: number,
     paper_title: string,
     topic: string,
     abstract: string,
     keywords: string,
     paper: string,
+    createdAt: Date,
   }[]
 }
 
 const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) => {
   const [selectedComments, setSelectedComments] = useState<string | null>(null);
-  const [selectedRevision, setSelectedRevision] = useState<UserCon["Revisions"] | null>(null);
+  const [selectedRevision, setSelectedRevision] = useState<UserCon["Revision"] | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isRevisionOpen, setIsRevisionOpen] = useState(false);
 
@@ -65,7 +92,7 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
     setIsOpen(true);
   };
 
-  const handleRevisionModalOpen = (revisions: UserCon["Revisions"]) => {
+  const handleRevisionModalOpen = (revisions: UserCon["Revision"]) => {
     if (Array.isArray(revisions) && revisions.length > 0) {
       console.log('Opening revisions modal with:', revisions);
       setSelectedRevision(revisions);
@@ -169,7 +196,7 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                         {reg_conference.status !== 'Submitted' && (
                           <button
                             className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
-                            onClick={() => handleRevisionModalOpen(reg_conference.Revisions)}
+                            onClick={() => handleRevisionModalOpen(reg_conference.Revision)}
                           >
                             Revisions History
                           </button>
@@ -209,12 +236,10 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
 
           {isOpen && (
             <div className="modal modal-open">
-              <div className="modal-box bg-white">
+              <div className="modal-box bg-white text-gray-700">
                 <h3 className="font-bold text-lg">Reviewer Comments</h3>
-                <p className="py-4">
-                  {selectedComments
-                    ? selectedComments
-                    : 'No comments available'}
+                <p className={`py-4 ${!selectedComments ? 'text-gray-500' : ''}`}>
+                  {selectedComments ? selectedComments : '--No comments available--'}
                 </p>
                 <div className="modal-action">
                   <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
@@ -225,26 +250,53 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
 
           {isRevisionOpen && selectedRevision && (
             <div className="modal modal-open">
-              <div className="modal-box bg-white">
-                <h3 className="font-bold text-lg">Revisions</h3>
-                <ul className="py-4">
-                  {selectedRevision.map((revision) => (
-                    <li key={revision.id} className="my-2">
-                      <strong>Paper Title:</strong> {revision.paper_title}<br/>
-                      <strong>Topic:</strong> {revision.topic}<br/>
-                      <strong>Abstract:</strong> {revision.abstract}<br/>
-                      <strong>Keywords:</strong> {revision.keywords}<br/>
-                      <a className="text-blue-950 underline" href={`/uploads/papers/${revision.paper}`} download>
-                        Download Paper
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <div className="modal-action">
-                  <button type="button" className="btn text-white" onClick={handleModalClose}>Close</button>
-                </div>
+            <div className="modal-box bg-gray-50 shadow-xl rounded-lg w-full max-w-4xl">
+              <div className="flex justify-between items-center border-b pb-3">
+                <h3 className="text-2xl font-semibold text-gray-800">Revision History</h3>
+                <button 
+                  className="text-gray-400 hover:text-gray-600" 
+                  onClick={handleModalClose}
+                >
+                  ✕
+                </button>
+              </div>
+          
+              <ul className="py-6 space-y-4">
+                {selectedRevision.map((revision) => (
+                  <li key={revision.id} className="p-4 bg-gray-100 text-gray-700 rounded-lg">
+                    <h4 className="text-xl font-bold text-gray-900">Paper Title: {revision.paper_title}</h4>
+                    <p className="mb-4">Submit Date: {getFormattedDate(revision.createdAt)}</p>
+                    <span className="block font-semibold text-gray-700 mb-1">Topic:</span> 
+                    <p>{revision.topic}</p>
+                    <div className="my-4">
+                      <label className="block font-semibold text-gray-700 mb-1">Abstract:</label>
+                      <div
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(revision.abstract) }}
+                      />
+                    </div>
+                    <p className="mb-4"><span className="font-semibold">Keywords:</span> {revision.keywords}</p>
+                    <a
+                      className="text-blue-950 underline font-medium"
+                      href={`/uploads/papers/${revision.paper}`}
+                      download
+                    >
+                      Download Paper
+                    </a>
+                  </li>
+                ))}
+              </ul>
+          
+              <div className="modal-action flex justify-end mt-4">
+                <button 
+                  type="button" 
+                  className="btn bg-blue-950 text-white px-4 py-2 rounded-md"
+                  onClick={handleModalClose}
+                >
+                  Close
+                </button>
               </div>
             </div>
+          </div>          
           )}
         </div>
   );

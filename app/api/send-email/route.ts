@@ -1,15 +1,20 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { PrismaClient } from '@prisma/client';
-// import * as DOMPurify from 'dompurify';
 
 const prisma = new PrismaClient();
+
+const replacePlaceholders = (template: string, replacements: Record<string, string>) => {
+  let result = template;
+  for (const [key, value] of Object.entries(replacements)) {
+    result = result.replace(new RegExp(`<${key}>`, 'g'), value);
+  }
+  return result;
+};
 
 export async function POST(request: Request) {
   try {
     const { userId, userIdSender, subject, messageTemplate } = await request.json();
-
-    console.log(userId)
 
     if (!userId || !Array.isArray(userId) || userId.length === 0) {
       return NextResponse.json({ error: 'User IDs tidak valid' }, { status: 400 });
@@ -28,11 +33,11 @@ export async function POST(request: Request) {
     }
 
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'deva.kerti@undiksha.ac.id',
-            pass: 'zntegtyxgvnqojbn'
-        }
+      service: 'gmail',
+      auth: {
+        user: 'deva.kerti@undiksha.ac.id',
+        pass: 'zntegtyxgvnqojbn'
+      }
     });
 
     const emailPromises = users.map(async (user) => {
@@ -52,31 +57,30 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Tidak ada data conference' }, { status: 404 });
       }
 
-      // const subject = messageTemplate
-      // .replace(/<name>/g, user.name)
-      // .replace(/<title>/g, registerConference.paper_title)
-      // .replace(/<conference>/g, conference.name);
+      // Define replacements
+      const replacements = {
+        name: user.name,
+        title: registerConference.paper_title,
+        abstract: registerConference.abstract,
+        conference: conference.name
+      };
 
-      // const abstractText = DOMPurify.default.sanitize(registerConference.abstract);
-      const message = messageTemplate
-        .replace(/<name>/g, user.name)
-        .replace(/<title>/g, registerConference.paper_title)
-        .replace(/<abstract>/g, registerConference.abstract)
-        .replace(/<conference>/g, conference.name);
+      // Replace placeholders in both subject and message
+      const personalizedSubject = replacePlaceholders(subject, replacements);
+      const message = replacePlaceholders(messageTemplate, replacements);
 
       await prisma.emails.create({
         data: {
           message: message,
-          subject: subject,
+          subject: personalizedSubject,
           userId: userIdSender,
-          conferenceId: registerConference.id
+          conferenceId: conference.id
         }
       });
 
       return transporter.sendMail({
-        // from: conference.email,
         to: user.email,
-        subject,
+        subject: personalizedSubject,
         text: message,
       });
     });
@@ -98,5 +102,5 @@ export const GET = async (request: Request) => {
     }
   });
 
-  return NextResponse.json(emails, {status: 200});
+  return NextResponse.json(emails, { status: 200 });
 }

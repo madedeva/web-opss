@@ -6,6 +6,11 @@ import Header from '../../components/HomePage/Header';
 import Footer from '../../components/HomePage/Footer';
 import { Conference } from '@prisma/client';
 import { DocumentArrowDownIcon, PencilSquareIcon, InformationCircleIcon, CalendarIcon, ChatBubbleBottomCenterTextIcon, CreditCardIcon, PhoneIcon } from '@heroicons/react/24/solid';
+import crypto from 'crypto';
+
+const generateHash = (input: any) => {
+  return crypto.createHash('sha256').update(input).digest('hex').substring(0, 10); // Ambil 10 karakter pertama
+};
 
 const imageUrls = [
   "https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29sbGVnZSUyMGNhbXB1c3xlbnwwfHwwfHx8MA%3D%3D",
@@ -13,6 +18,16 @@ const imageUrls = [
 
 const getRandomImageUrl = () => {
   return imageUrls[Math.floor(Math.random() * imageUrls.length)];
+};
+
+const generateRandomString = (length: number) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 };
 
 const getOrdinalSuffix = (day: number) => {
@@ -39,6 +54,14 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
 
   const [loading, setLoading ] = useState(false);
   const [conference, setConference] = useState<Conference>();
+  const [hashString, setHashString] = useState('');
+
+  useEffect(() => {
+    if (conference?.slug) {
+      const hash = generateHash(conference.slug);
+      setHashString(hash);
+    }
+  }, [conference?.slug]);
 
     const fetchPapers = async () => {
         try {
@@ -104,6 +127,17 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
               <h1 className="text-4xl font-bold text-gray-700">{conference?.name} ({conference?.acronym})</h1>
               <p className="text-2xl mt-4 text-gray-400">{conference?.institution && conference.institution.toUpperCase()}</p>
               <p className="text-2xl mt-4 text-gray-400">{conference?.city && conference.city.toUpperCase()}, {conference?.country && conference.country.toUpperCase()}</p>
+              <p className="mb-4 mt-4">
+                <span className='text-gray-700'>Submission Link: </span>
+                <a
+                  href={`/dashboard/create-submission/${conference?.slug}`}
+                  className="text-blue-950 underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {`http://localhost:3000/dashboard/create-submission/${hashString}`}
+                </a>
+              </p>
             </div>
           </section>
 
@@ -180,6 +214,7 @@ const ConferenceDetail = ({params}: {params: {slug: string}}) => {
                   Submit Paper
                 </button>
               </p>
+
             </div>
           </section>
         </main>

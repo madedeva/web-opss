@@ -1,5 +1,5 @@
 import DashboardLayout from "@/app/components/DashboardLayout";
-import ReviewerPage from "@/app/components/Conference/ReviewerPage";
+import ReviewerPage from "@/app/components/Reviewers/ReviewerPage";
 
 const Reviewer = () => {
   

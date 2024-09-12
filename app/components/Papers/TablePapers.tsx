@@ -27,13 +27,20 @@ const getFormattedDate = (date: Date | string): string => {
     const month = dateObj.toLocaleString('en-US', { month: 'long' });
     const year = dateObj.getFullYear();
     const suffix = getOrdinalSuffix(day);
-    return `${month} ${day}${suffix}, ${year}`;
+
+    let hours = dateObj.getHours();
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+
+    return `${month} ${day}${suffix}, ${year} ${hours}:${minutes} ${ampm}`;
 };
 
 type Emails = {
     id: number;
     subject: string;
     message: string;
+    createdAt: Date;
     userId: number;
     conferenceId: number;
     sender: User;
@@ -310,9 +317,12 @@ const TablePapers = () => {
                                 ))}
                             </select>
                         </div>
-                    </div>
+                    </div>  
                 </div>
                 <div className="mt-6">
+                    <p className="mt-2 mb-4 text-gray-700">
+                        {selectedConference ? `${papers.find((paper) => paper.conferenceId === parseInt(selectedConference))?.conference.name}` : 'All Conferences'}
+                    </p>
                     <div className="flex space-x-4">
                         <button
                             className={`px-4 py-2 rounded-full ${selectedStatus === 'all' ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-700'}`}
@@ -357,7 +367,7 @@ const TablePapers = () => {
                             onClick={() => setIsOpen2(true)}
                             className={`px-4 py-2 rounded-full ${isOpen2 ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-700'}`}
                             >
-                            List Email Sended
+                            Email History
                         </button>
                     </div>
                 </div>
@@ -458,7 +468,7 @@ const TablePapers = () => {
                                     </a>
                                 </td>
                                 <td className="py-2 px-4">
-                                    <UpdatePaper users={users} paperId={paper.id} conferenceId={paper.conferenceId} />
+                                    <UpdatePaper users={users} paperId={paper.id} />
                                 </td>
                             </tr>
                         ))}
@@ -467,7 +477,7 @@ const TablePapers = () => {
                             
                 {isOpen && selectedPaper && (
                     <div className="modal modal-open">
-                        <div className="modal-box bg-white">
+                        <div className="modal-box bg-white text-gray-700">
                             <h3 className="font-bold text-lg">Paper Title: {selectedPaper.paper_title}</h3>
                             <hr className="mt-4" />
                             <div className="py-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedPaper.abstract) }} />
@@ -480,112 +490,145 @@ const TablePapers = () => {
 
                 {isOpen2 && (
                     <div className="modal modal-open">
-                        <div className="modal-box bg-white">
-                            <h3 className="font-bold text-lg">List Sended Email</h3>
-                            <hr className="mt-4" />
-                            <div className="py-4 h-[300px] overflow-auto">
-                                {emails
-                                .map((email) => (
-                                <blockquote className="p-4 my-4 border-s-4 border-gray-400 bg-gray-100 mb-5">
-                                    <dl className="max-w-md text-gray-900 divide-y divide-gray-200">
-                                        <div className="flex flex-col pb-3">
-                                            <dt className="mb-1 text-gray-500 md:text-lg">Sender email address</dt>
-                                            <dd className="text-lg font-semibold">{email.sender.email}</dd>
-                                        </div>
-                                        <div className="flex flex-col pb-3">
-                                            <dt className="mb-1 text-gray-500 md:text-lg">Subject</dt>
-                                            <dd className="text-lg font-semibold">{email.subject}</dd>
-                                        </div>
-                                        <div className="flex flex-col pb-3">
-                                            <dt className="mb-1 text-gray-500 md:text-lg">Message</dt>
-                                            <dd className="text-lg font-light">{email.message}</dd>
-                                        </div>
-                                        {/* <button
-                                            // onClick={() => setIsOpen2(true)}
-                                            className={`px-4 py-2 rounded-full bg-orange-500 text-white w-full mt-2`}
-                                            >
-                                            Check
-                                        </button> */}
-                                    </dl>
-                                </blockquote>
-                                ))}
-                            </div>
-                            <div className="modal-action">
-                                <button type="button" className="btn text-white" onClick={handleModalClose2}>Close</button>
-                            </div>
-                        </div>
+                    <div className="modal-box w-full max-w-2xl bg-white rounded-lg shadow-lg">
+                      <div className="flex justify-between items-center">
+                        <h3 className="text-2xl font-semibold text-gray-800">Email History</h3>
+                        <button 
+                          type="button" 
+                          className="text-gray-500 hover:text-gray-700 transition" 
+                          onClick={handleModalClose2}
+                        >
+                          ✖
+                        </button>
+                      </div>
+                      <hr className="mt-2 mb-4 border-gray-300" />
+                      
+                      <div className="overflow-y-auto max-h-[400px] px-2 space-y-4">
+                        {emails.map((email) => (
+                          <div 
+                            key={email.id} 
+                            className="p-4 shadow-sm rounded-lg bg-gray-100"
+                          >
+                            <dl className="space-y-2">
+                              <div>
+                                <dt className="text-sm font-medium text-gray-500">Sender:</dt>
+                                <dd className="text-md font-semibold text-gray-800">{email.sender.name}</dd>
+                              </div>
+                              <div>
+                                <dt className="text-sm font-medium text-gray-500">Send Date:</dt>
+                                <dd className="text-md font-semibold text-gray-800">{getFormattedDate(email.createdAt)}</dd>
+                              </div>
+                              <div>
+                                <dt className="text-sm font-medium text-gray-500">Subject:</dt>
+                                <dd className="text-md font-semibold text-gray-800">{email.subject}</dd>
+                              </div>
+                              <div>
+                                <dt className="text-sm font-medium text-gray-500">Message:</dt>
+                                <dd className="text-base text-gray-700 whitespace-pre-wrap">{email.message}</dd>
+                              </div>
+                            </dl>
+                          </div>
+                        ))}
+                      </div>
+                  
+                      <div className="modal-action">
+                        <button
+                            type="button"
+                            className="btn text-white"
+                            onClick={handleModalClose2}
+                            >
+                                Close
+                            </button>
+                      </div>
                     </div>
+                  </div>
                 )}
 
                 {isOpen && selectedUserId.length > 0 && (
-                <div className="modal modal-open">
-                    <div className="modal-box bg-white w-full max-w-2xl">
-                        <h3 className="font-bold text-lg">Send email to:</h3>
-                        <ul className="list-disc pl-5 mb-4">
-                            {papers
-                            .filter((paper) => selectedUserId.includes(paper.userId))
-                            .map((paper) => (
-                                <li key={paper.userId}>{paper.user.email}</li>
-                            ))}
-                        </ul>
-                        <hr className="mt-4 mb-4"/>
-                        <form onSubmit={handleSubmit}>
-                            <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Subject
-                            </label>
-                            <input
-                                type="text"
-                                name="subject"
-                                value={subject}
-                                onChange={(e) => setSubject(e.target.value)}
-                                className="input input-bordered w-full mt-1 bg-white"
-                                required
-                            />
+                    <div className="modal modal-open">
+                        <div className="modal-box bg-white w-full max-w-4xl flex text-gray-700">
+                            {/* Konten Modal Kiri */}
+                            <div className="w-2/3 pr-4">
+                                <h3 className="font-bold text-lg">Send email to:</h3>
+                                <ul className="list-disc pl-5 mb-4">
+                                    {papers
+                                    .filter((paper) => selectedUserId.includes(paper.userId))
+                                    .map((paper) => (
+                                        <li key={paper.userId}>{paper.user.email}</li>
+                                    ))}
+                                </ul>
+                                <hr className="mt-4 mb-4"/>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Subject
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="subject"
+                                            value={subject}
+                                            onChange={(e) => setSubject(e.target.value)}
+                                            className="input input-bordered w-full mt-1 bg-white"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Message
+                                        </label>
+                                        <textarea
+                                            name="message"
+                                            value={messageTemplate}
+                                            onChange={(e) => setMessageTemplate(e.target.value)}
+                                            rows={8}
+                                            className="block p-2.5 w-full text-sm rounded-lg border bg-white"
+                                            placeholder="Enter message here, use <name> to insert user name."
+                                            required
+                                        />
+                                    </div>
+                                    <div className="modal-action">
+                                        <button
+                                            type="button"
+                                            className="btn text-white"
+                                            onClick={handleModalClose}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button type="submit" className="btn bg-blue-950 text-white">
+                                            Send Email
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-                            {/* <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Message
-                                </label>
-                                <Editor
-                                    apiKey="0lu8tnu2h88qx3czxhxiluopabt3eubgk2ftrw8qfu489ruu"
-                                    value={messageTemplate}
-                                    init={{
-                                        height: 200,
-                                        menubar: false,
-                                    }}
-                                    onEditorChange={(newContent) => setMessageTemplate(newContent)}
-                                />
-                            </div> */}
-                            <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Message
-                            </label>
-                            <textarea
-                                name="message"
-                                value={messageTemplate}
-                                onChange={(e) => setMessageTemplate(e.target.value)}
-                                rows={8}
-                                className="block p-2.5 w-full text-sm rounded-lg border bg-white"
-                                placeholder="Enter message here, use <name> to insert user name."
-                                required
-                            />
+
+                            {/* Accordion Konten Kanan */}
+                            <div className="w-1/3 pl-4">
+                                <div className="join join-vertical w-full">
+                                    <div className="collapse collapse-arrow join-item">
+                                        <input type="radio" name="my-accordion-4" defaultChecked />
+                                        <div className="collapse-title text-xl font-medium">Select Authors</div>
+                                        <div className="collapse-content">
+                                        <p>Begin by selecting the authors to whom you wish to send an email. You can choose one or more individual authors or select all authors as needed.</p>
+                                        </div>
+                                    </div>
+                                    <div className="collapse collapse-arrow join-item">
+                                        <input type="radio" name="my-accordion-4" />
+                                        <div className="collapse-title text-xl font-medium">Customize Email Content</div>
+                                        <div className="collapse-content">
+                                        <p>Use the placeholder &lt;name&gt; in your email content to insert the recipient's name dynamically, &lt;title&gt; to replace paper title, &lt;conference&gt; to replace conference name, and &lt;abstract&gt; to replace abstract. This allows you to personalize each email with the recipient’s name, making the communication more engaging.</p>
+                                        </div>
+                                    </div>
+                                    <div className="collapse collapse-arrow join-item">
+                                        <input type="radio" name="my-accordion-4" />
+                                        <div className="collapse-title text-xl font-medium">View Email History</div>
+                                        <div className="collapse-content">
+                                        <p>You can track the emails sent by clicking on the "Email History" button. This will provide you with a record of past email communications.</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="modal-action">
-                            <button
-                                type="button"
-                                className="btn text-white"
-                                onClick={handleModalClose}
-                            >
-                                Cancel
-                            </button>
-                            <button type="submit" className="btn bg-blue-950 text-white">
-                                Send Email
-                            </button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
                 )}
 
                 <div className="flex justify-between items-center mt-4">
