@@ -8,6 +8,21 @@ import { useRouter } from "next/navigation";
 import { Editor } from '@tinymce/tinymce-react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
+const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],        // Format teks
+      [{ 'align': [] }],                                // Opsi perataan teks
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // List ordered dan unordered
+      ['link'],                                         // Opsi link
+      ['clean']                                         // Tombol untuk clear format
+    ],
+  };
 
 const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
 
@@ -235,15 +250,13 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                 </select>
             </div>
             <div className="form-control w-full mt-6">
-                <p className="mb-2">Abstract <span className="text-red-600">*</span></p>
-                <Editor
-                    apiKey="0lu8tnu2h88qx3czxhxiluopabt3eubgk2ftrw8qfu489ruu"
-                    value={abstract}
-                    init={{
-                        height: 400,
-                        menubar: false,
-                    }}
-                    onEditorChange={(newContent) => setAbstract(newContent)}
+                <ReactQuill 
+                    theme="snow" 
+                    className="mb-12"
+                    value={abstract} 
+                    onChange={setAbstract}
+                    style={{ height: '400px' }}
+                    modules={modules}
                 />
             </div>
             {/* <div className="form-control w-full mt-6">

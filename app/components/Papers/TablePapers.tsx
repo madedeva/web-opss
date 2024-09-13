@@ -9,7 +9,21 @@ import DOMPurify from 'dompurify';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DownloadPaperButton from '../Conference/DownloadPaperButton';
-import { Editor } from '@tinymce/tinymce-react';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
+const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],        // Format teks
+      [{ 'align': [] }],                                // Opsi perataan teks
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // List ordered dan unordered
+      ['link'],                                         // Opsi link
+      ['clean']                                         // Tombol untuk clear format
+    ],
+  };
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -576,6 +590,15 @@ const TablePapers = () => {
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Message
                                         </label>
+                                        {/* <ReactQuill 
+                                            theme="snow" 
+                                            className="mb-12"
+                                            value={messageTemplate} 
+                                            onChange={setMessageTemplate}
+                                            style={{ height: '300px' }}
+                                            modules={modules}
+                                            placeholder='Enter message here, use <name> to insert user name'
+                                        /> */}
                                         <textarea
                                             name="message"
                                             value={messageTemplate}
