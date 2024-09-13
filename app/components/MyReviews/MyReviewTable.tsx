@@ -34,16 +34,6 @@ const getFormattedDate = (date: Date | string): string => {
     return `${month} ${day}${suffix}, ${year} ${hours}:${minutes} ${ampm}`;
 };
 
-type ReviewPaper = {
-    id: number;
-    reviewerId: number;
-    registerConferenceId: number;
-    reviewer: {
-        name: string;
-        email: string;
-    };
-};
-
 type Paper = {
     id: number;
     paper_title: string;
@@ -109,9 +99,6 @@ const MyReviewTable = () => {
     const { data: session, status, update } = useSession()
     const [user, setUser] = useState<User>();
 
-    const [reviewPaper, setReviewPaper] = useState<ReviewPaper[]>([]);
-    const [error, setError] = useState<string | null>(null);
-
     const [selectedRevision, setSelectedRevision] = useState<Paper["Revision"] | null>(null);
     const [isRevisionOpen, setIsRevisionOpen] = useState(false);
 
@@ -124,19 +111,6 @@ const MyReviewTable = () => {
           setIsRevisionOpen(true);
         }
       };
-
-      useEffect(() => {
-        const fetchReviewPapers = async () => {
-            try {
-                const response = await axios.get(`/api/assignreviewer`);
-                setReviewPaper(response.data.data);
-            } catch (err) {
-                setError("Failed to load reviewers");
-            }
-        };
-
-        fetchReviewPapers();
-    }, []);
 
     const fetchPapers = async () => {
         try {
@@ -306,6 +280,8 @@ const MyReviewTable = () => {
                                                 <div className="block">
                                                 {paper.status === 'Accepted' ? (
                                                     <span className="text-green-600">Review complete</span>
+                                                ) : paper.status === 'Rejected' ? (
+                                                    <span className="text-red-600">Paper Rejected</span>
                                                 ) : (
                                                     <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen2(paper)}>
                                                         Review paper
@@ -313,8 +289,7 @@ const MyReviewTable = () => {
                                                 )}
                                                 </div>
                                                 <div className="block mt-2">
-                                                    <span className="underline text-blue-950">+ Add Review Comments</span>
-                                                    {/* <AddReviewComments reviewPaperId={reviewPaper.id}/> */}
+                                                    <AddReviewComments submissionId={paper.id} userId={user?.id}/>
                                                 </div>
                                             </div>
                                         </td>
