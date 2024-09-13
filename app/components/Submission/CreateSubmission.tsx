@@ -250,6 +250,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                 </select>
             </div>
             <div className="form-control w-full mt-6">
+            <p className="mb-2">Abstract <span className="text-red-600">*</span></p>
                 <ReactQuill 
                     theme="snow" 
                     className="mb-12"
