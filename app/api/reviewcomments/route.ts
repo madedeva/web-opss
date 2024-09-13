@@ -1,36 +1,36 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import type { ReviewComments } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export const POST = async (request: Request) => {
     try {
-        const body: ReviewComments = await request.json();
+        const body = await request.json();
 
         console.log("Received data:", body);
 
-        const reviewcomments = await prisma.reviewPaper.findUnique({
+        const reviewPaper = await prisma.reviewPaper.findUnique({
             where: { id: body.reviewId },
         });
 
-        if (!reviewcomments) {
-            return NextResponse.json({ error: "Invalid submission ID" }, { status: 400 });
+        if (!reviewPaper) {
+            console.log("Invalid reviewPaper ID");
+            return NextResponse.json({ error: "Invalid reviewPaper ID" }, { status: 400 });
         }
 
         const commentsreview = await prisma.reviewComments.create({
             data: {
                 comments: body.comments,
                 status: body.status,
-                sendReview: body.sendReview,
+                sendReview: "No",
                 reviewId: body.reviewId,
-
             },
         });
 
         return NextResponse.json(commentsreview, { status: 201 });
     } catch (error) {
-        console.error("Error creating author:", error);
-        return NextResponse.json({ error: "Failed to create author" }, { status: 500 });
+        console.error("Error creating review comment:", error);
+        return NextResponse.json({ error: "Failed to create review comment" }, { status: 500 });
     }
 };
+

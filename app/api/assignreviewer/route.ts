@@ -5,23 +5,20 @@ const prisma = new PrismaClient();
 
 export const POST = async (request: Request) => {
     try {
-        const { userIds, registerConferenceId } = await request.json(); // Make sure this matches the client payload
+        const { userIds, registerConferenceId } = await request.json();
 
-        // Validate required fields
         if (!userIds || !registerConferenceId) {
             return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
         }
 
-        // Create many review assignments for each userId (reviewer)
         const createdReviewers = await prisma.reviewPaper.createMany({
             data: userIds.map((userId: number) => ({
-                reviewerId: userId, // Assuming reviewerId is related to userId
+                reviewerId: userId,
                 registerConferenceId,
             })),
-            skipDuplicates: true, // To avoid duplicate entries
+            skipDuplicates: true,
         });
 
-        // Check if any rows were created, otherwise return a warning message
         if (createdReviewers.count === 0) {
             return NextResponse.json({ message: "No new reviewers to add" }, { status: 200 });
         }
@@ -30,5 +27,29 @@ export const POST = async (request: Request) => {
     } catch (error) {
         console.error('Failed to assign reviewers:', error);
         return NextResponse.json({ message: 'Failed to assign reviewers' }, { status: 500 });
+    }
+};
+
+
+export const GET = async (request: Request) => {
+    try {
+        const reviewers = await prisma.reviewPaper.findMany({
+            where: {
+                id: Number(),
+            },
+            include: {
+                reviewer: true,
+            }
+        });
+
+        if (reviewers.length === 0) {
+            return NextResponse.json({ message: "No reviewers found" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: 'Reviewers retrieved successfully', data: reviewers }, { status: 200 });
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Failed to retrieve reviewers:', errorMessage);
+        return NextResponse.json({ message: 'Failed to retrieve reviewers', error: errorMessage }, { status: 500 });
     }
 };

@@ -7,6 +7,7 @@ import axios from "axios";
 import DOMPurify from 'dompurify';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddReviewComments from "@/app/dashboard/myreviews/addReviewComments";
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -31,6 +32,16 @@ const getFormattedDate = (date: Date | string): string => {
     hours = hours % 12 || 12;
 
     return `${month} ${day}${suffix}, ${year} ${hours}:${minutes} ${ampm}`;
+};
+
+type ReviewPaper = {
+    id: number;
+    reviewerId: number;
+    registerConferenceId: number;
+    reviewer: {
+        name: string;
+        email: string;
+    };
 };
 
 type Paper = {
@@ -98,13 +109,13 @@ const MyReviewTable = () => {
     const { data: session, status, update } = useSession()
     const [user, setUser] = useState<User>();
 
+    const [reviewPaper, setReviewPaper] = useState<ReviewPaper[]>([]);
+    const [error, setError] = useState<string | null>(null);
+
     const [selectedRevision, setSelectedRevision] = useState<Paper["Revision"] | null>(null);
     const [isRevisionOpen, setIsRevisionOpen] = useState(false);
 
     const [alert, setAlert] = useState<{ type: 'info' | 'danger' | 'success' | 'warning' | 'dark'; message: string } | null>(null);
-
-
-    const [loading, setLoading ] = useState(false);
 
     const handleRevisionModalOpen = (revisions: Paper["Revision"]) => {
         if (Array.isArray(revisions) && revisions.length > 0) {
@@ -113,6 +124,19 @@ const MyReviewTable = () => {
           setIsRevisionOpen(true);
         }
       };
+
+      useEffect(() => {
+        const fetchReviewPapers = async () => {
+            try {
+                const response = await axios.get(`/api/assignreviewer`);
+                setReviewPaper(response.data.data);
+            } catch (err) {
+                setError("Failed to load reviewers");
+            }
+        };
+
+        fetchReviewPapers();
+    }, []);
 
     const fetchPapers = async () => {
         try {
@@ -242,12 +266,17 @@ const MyReviewTable = () => {
                                             </a>
                                             <p className="text-xs">last update: {getFormattedDate(paper.updatedAt)}</p>
                                         </td>
-                                        <td className="px-3 py-2 whitespace-normal break-words">
-                                        <button
-                                            className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
-                                            onClick={() => handleRevisionModalOpen(paper.Revision)}
-                                            >
-                                                Revisions History
+                                        <td className="px-3 py-2 whitespace-normal text-nowrap">
+                                            <button
+                                                className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
+                                                onClick={() => handleRevisionModalOpen(paper.Revision)}
+                                                >
+                                                    Revisions History
+                                            </button>
+                                            <button
+                                                className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
+                                                >
+                                                    Review History
                                             </button>
                                         </td>
                                         <td className="px-3 py-2 whitespace-normal break-words">
@@ -272,14 +301,22 @@ const MyReviewTable = () => {
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="px-3 py-2 whitespace-normal break-words text-xs font-medium">
-                                            {paper.status === 'Accepted' ? (
-                                                <span className="text-green-600">Review complete</span>
-                                            ) : (
-                                                <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen2(paper)}>
-                                                    Review paper
-                                                </button>
-                                            )}
+                                        <td className="px-3 py-2 whitespace-normal text-xs font-medium text-nowrap">
+                                            <div className="block">
+                                                <div className="block">
+                                                {paper.status === 'Accepted' ? (
+                                                    <span className="text-green-600">Review complete</span>
+                                                ) : (
+                                                    <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen2(paper)}>
+                                                        Review paper
+                                                    </button>
+                                                )}
+                                                </div>
+                                                <div className="block mt-2">
+                                                    <span className="underline text-blue-950">+ Add Review Comments</span>
+                                                    {/* <AddReviewComments reviewPaperId={reviewPaper.id}/> */}
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
