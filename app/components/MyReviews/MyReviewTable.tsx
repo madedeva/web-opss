@@ -105,11 +105,9 @@ const MyReviewTable = () => {
     const [alert, setAlert] = useState<{ type: 'info' | 'danger' | 'success' | 'warning' | 'dark'; message: string } | null>(null);
 
     const handleRevisionModalOpen = (revisions: Paper["Revision"]) => {
-        if (Array.isArray(revisions) && revisions.length > 0) {
-          console.log('Opening revisions modal with:', revisions);
-          setSelectedRevision(revisions);
-          setIsRevisionOpen(true);
-        }
+        console.log('Opening revisions modal with:', revisions);
+        setSelectedRevision(revisions);
+        setIsRevisionOpen(true);
       };
 
     const fetchPapers = async () => {
