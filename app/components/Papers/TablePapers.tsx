@@ -483,6 +483,9 @@ const TablePapers = () => {
                                 City, Country
                             </th>
                             <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Reviewers
+                            </th>
+                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Status
                             </th>
                             <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -517,6 +520,9 @@ const TablePapers = () => {
                                     <p>{paper.keywords}</p>
                                 </td>
                                 <td className="py-2 px-4">{paper.city}, {paper.country}</td>
+                                <td className="py-2 px-4">
+                                    <p className='font-bold mt-2'>Nama Reviewer,</p><p>(2 total reviews)</p>
+                                </td>
                                 <td className="py-2 px-4">
                                 {paper.status === 'Accepted' && (
                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
