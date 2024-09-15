@@ -25,7 +25,7 @@ const ReviewComments = ({ submissionId }: ReviewCommentProps) => {
             setError(null);
             try {
                 const response = await axios.get(`/api/reviewcomments?submissionId=${submissionId}`);
-                setReviewComments(response.data);
+                setReviewComments(response.data.ReviewComments);
             } catch (error) {
                 setError("Error fetching review comments.");
                 console.error("Error fetching review comments:", error);
