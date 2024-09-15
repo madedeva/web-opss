@@ -16,7 +16,7 @@ export const GET = async (request: Request) => {
             where : {
               conference : {
                 userId : userId
-              }
+              },
             },
             include:{
                 conference: {
@@ -35,7 +35,12 @@ export const GET = async (request: Request) => {
                       email: true,
                     },
                   },
-                }
+                  ReviewComments: {
+                    select: {
+                      comments: true
+                    }
+                  }
+                },
             });
         
             console.log(userId)

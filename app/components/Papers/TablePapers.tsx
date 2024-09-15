@@ -92,6 +92,7 @@ type Paper = {
             email: string;
         };
     };
+    ReviewComments: any
 };
 
 const TablePapers = () => {
@@ -293,6 +294,8 @@ const TablePapers = () => {
     const handleModalOpen2 = (paper: Paper) => {
         setPaperId(paper.id);
         setSelectedPaper2(paper);
+        setStatusPaper(paper.status);
+        setComment(paper.ReviewComments[paper.ReviewComments.length - 1].comments);
         setIsOpenReview2(true);
     };
 
