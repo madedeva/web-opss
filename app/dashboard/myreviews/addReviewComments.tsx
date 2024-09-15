@@ -19,7 +19,6 @@ const AddReviewComments = ({ submissionId, userId }: AddReviewCommentProps) => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        // Confirmation for Accepted or Rejected status
         if (status === "Accepted" || status === "Rejected") {
             const isConfirmed = window.confirm(`Are you sure you want to select status: ${status}?`);
             if (!isConfirmed) {

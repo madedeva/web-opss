@@ -93,11 +93,8 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
   };
 
   const handleRevisionModalOpen = (revisions: UserCon["Revision"]) => {
-    if (Array.isArray(revisions) && revisions.length > 0) {
-      console.log('Opening revisions modal with:', revisions);
-      setSelectedRevision(revisions);
-      setIsRevisionOpen(true);
-    }
+    setSelectedRevision(revisions);
+    setIsRevisionOpen(true);
   };
 
   const handleModalClose = () => {
@@ -174,18 +171,22 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                         >
                           View Paper
                         </a>
+                        <button
+                            className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2">
+                            Review History
+                        </button>
 
-                        {reg_conference.status === 'Revision' && (
+                        {/* {reg_conference.status === 'Revision' && (
                           <div className="block">
                             <AddAuthors paperId={reg_conference.id} />
                           </div>
-                        )}
+                        )} */}
 
-                        {reg_conference.status === 'Submitted' && (
+                        {/* {reg_conference.status === 'Submitted' && (
                           <div className="block">
                             <AddAuthors paperId={reg_conference.id} />
                           </div>
-                        )}
+                        )} */}
 
                         {reg_conference.status !== 'Accepted' && reg_conference.status !== 'Rejected' && reg_conference.status !== 'Submitted' && (
                           <div className="block">
@@ -205,9 +206,8 @@ const TableMySubmission = ({ reg_conference }: { reg_conference: UserCon[] }) =>
                     </td>
 
                     <td className="px-3 py-2 whitespace-normal text-nowrap">
-                        {reg_conference.status === 'Accepted' && (
                           <UpdateSubmission registerConference={reg_conference}/>
-                        )}
+
                         {reg_conference.status === 'Accepted' && (
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                             Accepted

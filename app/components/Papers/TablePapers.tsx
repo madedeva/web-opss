@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { User } from '@prisma/client';
 import UpdatePaper from '@/app/dashboard/papers/updatePaper';
 import { useSession } from 'next-auth/react';
@@ -11,17 +11,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import DownloadPaperButton from '../Conference/DownloadPaperButton';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
+import { useRouter } from "next/navigation";
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 const modules = {
     toolbar: [
       [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike'],        // Format teks
-      [{ 'align': [] }],                                // Opsi perataan teks
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // List ordered dan unordered
-      ['link'],                                         // Opsi link
-      ['clean']                                         // Tombol untuk clear format
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'align': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
     ],
   };
 
@@ -114,6 +115,16 @@ const TablePapers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [subject, setSubject] = useState('');
     const [messageTemplate, setMessageTemplate] = useState('');
+
+    // review
+    const [alert, setAlert] = useState<{ type: 'info' | 'danger' | 'success' | 'warning' | 'dark'; message: string } | null>(null);
+    const [comments, setComment] = useState('');
+    const [statusPaper, setStatusPaper] = useState('');
+    const [paperId, setPaperId] = useState<number>();
+    const [selectedPaper2, setSelectedPaper2] = useState<Paper | null>(null);
+    const [isOpenReview2, setIsOpenReview2] = useState(false);
+
+    const router = useRouter();
 
     const handleModalOpen = (paper: Paper) => {
         setSelectedPaper(paper);
@@ -210,7 +221,7 @@ const TablePapers = () => {
         e.preventDefault();
     
         if (selectedUserId.length === 0) {
-          alert('Select at least one user to send email');
+          toast.warn('Select at least one user to send email');
           return;
         }
     
@@ -233,6 +244,63 @@ const TablePapers = () => {
         }
       };
     // end send email
+    
+    // submit review
+    const fetchPapers = async () => {
+        try {
+            const response = await fetch(`/api/reviewsubmission?userId=${user!.id}`);
+            if (response.ok) {
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    setPapers(data);
+                } else {
+                    console.error('Expected an array of papers, but got:', data);
+                }
+            } else {
+                console.error('Failed to fetch papers:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching papers:', error);
+        }
+    };
+
+    const handleSubmitReview = async (e: SyntheticEvent) => {
+        e.preventDefault();
+        
+        try {
+            await axios.put(`/api/reviewsubmission/${paperId}`, {
+                comments: comments,
+                status: statusPaper,
+            });
+            
+            setIsOpenReview2(false);
+            toast.success('Review submitted!');
+            router.refresh();
+            fetchPapers();
+        } catch (error: any) {
+            console.error('Error submitting the form:', error);
+            toast.error('Review submit failed:' + error.message);
+        }
+    
+    }
+
+    useEffect(() => {
+        if (!isOpenReview2) {
+            router.refresh();
+        }
+    }, [isOpenReview2]);
+
+    const handleModalOpen2 = (paper: Paper) => {
+        setPaperId(paper.id);
+        setSelectedPaper2(paper);
+        setIsOpenReview2(true);
+    };
+
+    const handleModalCloseReview2 = () => {
+        setSelectedPaper2(null);
+        setIsOpenReview2(false);
+    };
+    // end submit review
 
     const handleConferenceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedConference(e.target.value || null);
@@ -286,10 +354,10 @@ const TablePapers = () => {
                 </p>
                 <hr className="mt-2" />
 
-                <div className="mt-6 flex space-x-4">
+                {/* <div className="mt-6 flex space-x-4">
                     {user && <DownloadButton userId={user.id} />}
                     {user && <DownloadPaperButton userId={user.id} />}
-                </div>
+                </div> */}
                 <div className="mt-6 flex space-x-4">
                     <div className="flex-1">
                         <label 
@@ -418,9 +486,6 @@ const TablePapers = () => {
                                 Status
                             </th>
                             <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Paper File
-                            </th>
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Action
                             </th>
                         </tr>
@@ -476,13 +541,19 @@ const TablePapers = () => {
                                 </span>
                                 )}
                                 </td>
-                                <td className="py-2 px-4">
+                                <td className="py-2 px-4 text-nowrap">
                                     <a className="underline text-blue-950 text-xs" href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
                                         View Paper
                                     </a>
-                                </td>
-                                <td className="py-2 px-4">
                                     <UpdatePaper users={users} paperId={paper.id} />
+                                    <button
+                                        className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
+                                    >
+                                        Review History
+                                    </button>
+                                    <button className="text-xs text-blue-950 underline hover:text-indigo-900 mt-2" onClick={() => handleModalOpen2(paper)}>
+                                        Update Submission Status
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -491,7 +562,7 @@ const TablePapers = () => {
                             
                 {isOpen && selectedPaper && (
                     <div className="modal modal-open">
-                        <div className="modal-box bg-white text-gray-700">
+                        <div className="modal-box bg-white text-gray-700 w-full max-w-2xl">
                             <h3 className="font-bold text-lg">Paper Title: {selectedPaper.paper_title}</h3>
                             <hr className="mt-4" />
                             <div className="py-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedPaper.abstract) }} />
@@ -653,6 +724,49 @@ const TablePapers = () => {
                         </div>
                     </div>
                 )}
+
+                {isOpenReview2 && selectedPaper2 && (
+                        <div className="modal modal-open">
+                            <div className="modal-box bg-white w-full max-w-2xl text-gray-700">
+                            <form onSubmit={handleSubmitReview}>
+                                <h3 className="font-bold text-lg">Paper Title: {selectedPaper2.paper_title}</h3>
+                                <hr className="mt-4" />
+                                    <p className="font-bold mt-4">Paper Abstract: </p>
+                                    <p className="py-2" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedPaper2.abstract) }}/>
+                                    <hr className="mt-2"/>
+                                        <input type="hidden" name="peperId" value={selectedPaper2.id}/>
+                                        <div className="form-control w-full mt-4">
+                                            <label className="label">Review Comments</label>
+                                            <textarea 
+                                            value={comments}
+                                            onChange={(e) => setComment(e.target.value)}
+                                            id="message" rows={8} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Type your review here"></textarea>
+                                        </div>
+                                        <div className="form-control w-full mt-6">
+                                            <label className="mb-2">Status</label>
+                                            <select 
+                                            value={statusPaper}
+                                            onChange={(e) => setStatusPaper(e.target.value)}
+                                            onClick={(e) => {
+                                                const target = e.target as HTMLSelectElement;
+                                                setStatusPaper(target.value);
+                                            }}
+                                            className="select select-bordered bg-white" required>
+                                                <option value="">-- Select Submission Status --</option>
+                                                <option value="Accepted">Accepted</option>
+                                                <option value="Revision">Revision</option>
+                                                <option value="Rejected">Rejected</option>
+                                            </select>
+                                        </div>
+
+                                <div className="modal-action">
+                                    <button type="button" className="btn text-white" onClick={handleModalCloseReview2}>Cancel</button>
+                                    <button type="submit" className="btn bg-blue-950 text-white" onClick={handleSubmitReview}>Submit Review</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
 
                 <div className="flex justify-between items-center mt-4">
                     <div>

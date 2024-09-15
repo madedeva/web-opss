@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import type { Conference, User } from "@prisma/client";
 import DeleteConRev from "@/app/dashboard/reviewers/deleteReviewer";
 import UpdateReviewer from "@/app/dashboard/reviewers/updateReviewer";
-import AddReviewer from "@/app/dashboard/reviewers/addReviewer";
 
 interface CustomSessionUser {
   id: string;
@@ -50,9 +49,9 @@ const ReviewerComponent = ({ users, conferences }: { users: User[]; conferences:
       };
   
       fetchReviewers();
-      const interval = setInterval(fetchReviewers, 5000); // Poll every 5 seconds
+      const interval = setInterval(fetchReviewers, 5000);
   
-      return () => clearInterval(interval); // Clean up on unmount
+      return () => clearInterval(interval);
     }
   }, [session?.user]);  
 
@@ -61,7 +60,6 @@ const ReviewerComponent = ({ users, conferences }: { users: User[]; conferences:
     setSelectedConference(value ? parseInt(value, 10) : null);
   };
 
-  // Filter reviewers by the selected conference
   const filteredReviewers = selectedConference === null 
     ? reviewers 
     : reviewers.filter(reviewer => reviewer.conferenceId === selectedConference);
@@ -84,8 +82,7 @@ const ReviewerComponent = ({ users, conferences }: { users: User[]; conferences:
   return (
     <div className="mt-6">
       <div className="flex justify-between items-center mb-4">
-        {/* Conference Filter Dropdown */}
-        <div className="form-control w-1/2">
+        <div className="form-control w-full">
           <label htmlFor="conference" className="block text-sm font-medium text-gray-700 mb-2">
             Filter by Conference
           </label>
@@ -104,12 +101,11 @@ const ReviewerComponent = ({ users, conferences }: { users: User[]; conferences:
         </div>
       </div>
 
-      {/* Reviewer Table */}
       {groupedByConferenceArray.length > 0 ? (
         groupedByConferenceArray.map((conf) => (
-          <div key={conf.id} className="mt-12">
-            <h4 className="text-md font-medium mt-2">{conf.name}</h4>
-            <table className="min-w-full divide-y divide-gray-200 mt-6">
+          <div key={conf.id} className="mt-6 p-4 bg-gray-25 rounded-md border border-gray-100">
+            <h4 className="text-md font-medium mt-2 text-gray-700">{conf.name}</h4>
+            <table className="min-w-full divide-y divide-gray-50 mt-6">
               <thead className="bg-gray-50">
                 <tr className="text-xs border-b border-gray-200">
                   <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -144,7 +140,7 @@ const ReviewerComponent = ({ users, conferences }: { users: User[]; conferences:
                         conRev={{ 
                           id: cr.id, 
                           conferenceId: cr.conferenceId, 
-                          userId: cr.userId // Make sure to include userId
+                          userId: cr.userId
                         }} 
                       />
                     </td>

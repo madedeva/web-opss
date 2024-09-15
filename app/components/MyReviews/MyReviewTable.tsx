@@ -8,6 +8,7 @@ import DOMPurify from 'dompurify';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddReviewComments from "@/app/dashboard/myreviews/addReviewComments";
+import ReviewComments from "@/app/dashboard/myreviews/showReviewComments";
 
 const getOrdinalSuffix = (day: number) => {
     if (day > 3 && day < 21) return 'th';
@@ -202,10 +203,7 @@ const MyReviewTable = () => {
                                         Conference
                                     </th>
                                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Abstract
-                                    </th>
-                                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Paper File
+                                        Paper
                                     </th>
                                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Revisions
@@ -227,16 +225,15 @@ const MyReviewTable = () => {
                                         <td className="px-3 py-2 whitespace-normal break-words">
                                             <div className="text-xs text-gray-900">{paper.conference.name}</div>
                                         </td>
-                                        <td className="px-3 py-2 whitespace-normal break-words">
-                                            <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen(paper)}>
-                                                View abstract
-                                            </button>
-                                        </td>
-                                        <td className="px-3 py-2 whitespace-normal break-words">
-                                            <a className="text-xs text-blue-950 underline hover:text-indigo-900" href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
-                                                View Paper
-                                            </a>
-                                            <p className="text-xs">last update: {getFormattedDate(paper.updatedAt)}</p>
+                                        <td className="px-3 py-2 whitespace-normal break-words text-nowrap">
+                                            <div className="flex flex-col space-y-2">
+                                                <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen(paper)}>
+                                                    View Abstract
+                                                </button>
+                                                <a className="text-xs text-blue-950 underline hover:text-indigo-900" href={`/uploads/papers/${paper.paper}`} target="_blank" rel="noopener noreferrer">
+                                                    View Paper
+                                                </a>
+                                            </div>
                                         </td>
                                         <td className="px-3 py-2 whitespace-normal text-nowrap">
                                             <button
@@ -245,11 +242,7 @@ const MyReviewTable = () => {
                                                 >
                                                     Revisions History
                                             </button>
-                                            <button
-                                                className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
-                                                >
-                                                    Review History
-                                            </button>
+                                            <ReviewComments submissionId={paper.id}/>
                                         </td>
                                         <td className="px-3 py-2 whitespace-normal break-words">
                                             {paper.status === 'Accepted' && (
@@ -280,15 +273,26 @@ const MyReviewTable = () => {
                                                     <span className="text-green-600">Review complete</span>
                                                 ) : paper.status === 'Rejected' ? (
                                                     <span className="text-red-600">Paper Rejected</span>
+                                                ) : null}
+
+                                                {/* {paper.status === 'Accepted' ? (
+                                                    <span className="text-green-600">Review complete</span>
+                                                ) : paper.status === 'Rejected' ? (
+                                                    <span className="text-red-600">Paper Rejected</span>
                                                 ) : (
                                                     <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen2(paper)}>
                                                         Review paper
                                                     </button>
+                                                )} */}
+                                                </div>
+                                                {paper.status !== 'Accepted' && paper.status !== 'Rejected' && (
+                                                    <div className="block">
+                                                        <AddReviewComments submissionId={paper.id} userId={user?.id}/>
+                                                    </div>
                                                 )}
-                                                </div>
-                                                <div className="block mt-2">
+                                                {/* <div className="block mt-2">
                                                     <AddReviewComments submissionId={paper.id} userId={user?.id}/>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </td>
                                     </tr>

@@ -3,6 +3,42 @@ import DeleteConference from "@/app/dashboard/conference/deleteConference";
 import UpdateConference from "@/app/dashboard/conference/updateConference";
 import { RegisterConference, Conference, PrismaClient, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import DownloadButton from "./DownloadButton";
+import DownloadPaperButton from "./DownloadPaperButton";
+
+type Paper = {
+  id: number;
+  paper_title: string;
+  institution: string;
+  topic: string;
+  abstract: string;
+  keywords: string;
+  country: string;
+  city: string;
+  status: string;
+  paper: string;
+  userId: number;
+  conferenceId: number;
+  createdAt: Date;
+  user: {
+      id: number;
+      name: string;
+      email: string;
+  };
+  conference: {
+      id: number;
+      name: string;
+      description: string;
+      submission_deadlineStart: Date;
+      submission_deadlineEnd: Date;
+      paper_template: string;
+      User: {
+          name: string;
+          email: string;
+      };
+  };
+};
 
 const prisma = new PrismaClient();
 
@@ -52,14 +88,47 @@ interface ConferenceWithCount extends Conference {
     };
   }
   
+  
   const TableConference = ({ conference }: { conference: ConferenceWithCount[] }) => {
-
+    const [users, setUser] = useState<User[]>([]);
+    const [usersession, setUserSession] = useState<User>();
+    const [papers, setPapers] = useState<Paper[]>([]);
     const { data: session } = useSession();
     const user = session?.user as User;
+
+    useEffect(() => {
+      if (session?.user) {
+        const usersession = session.user as User;
+        setUserSession(user);
+      }
+
+      const fetchPapers = async () => {
+        try {
+          const response = await fetch(`/api/papersubmission?userId=${user!.id}`);
+          const data: Paper[] = await response.json();
+          setPapers(data);
+        } catch (error) {
+          console.error('Error fetching papers:', error);
+        }
+      };
+
+      const getUser = async () => {
+        const res = await fetch('/api/users');
+        const data: User[] = await res.json();
+        setUser(data);
+      };
+
+      getUser();
+    }, [session]);
+
     const filteredConferences = conference.filter(conference => conference.userId === user?.id);
 
     return (
       <div className="overflow-x-auto">
+        <div className="flex space-x-4 mt-4">
+          {user && <DownloadButton userId={user.id} />}
+          {user && <DownloadPaperButton userId={user.id} />}
+        </div>
         <table className="min-w-full divide-y divide-gray-200 mt-6">
             <thead className="bg-gray-50">
                 <tr className="text-xs border-b border-gray-200">
