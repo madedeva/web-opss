@@ -102,17 +102,17 @@ const AssignReviewer = ({ users, paperId }: { users: User[]; paperId: number; })
                         <p className="text-red-500">{error}</p>
                     ) : reviewerStats.length > 0 ? (
                         <table className="table-auto w-full mb-6">
-                            <thead>
+                            {/* <thead>
                                 <tr>
                                     <th className="py-2 px-4 border-b text-left">Reviewer Name</th>
                                     <th className="py-2 px-4 border-b text-left">Total Reviews</th>
                                 </tr>
-                            </thead>
+                            </thead> */}
                             <tbody>
                                 {reviewerStats.map((reviewer) => (
                                     <tr key={reviewer.reviewerId}>
                                         <td className="py-2 px-4 border-b">{reviewer.reviewerName}</td>
-                                        <td className="py-2 px-4 border-b">{reviewer.totalReviewsCount}</td>
+                                        {/* <td className="py-2 px-4 border-b">{reviewer.totalReviewsCount}</td> */}
                                     </tr>
                                 ))}
                             </tbody>
