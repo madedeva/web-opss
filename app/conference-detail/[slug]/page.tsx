@@ -9,7 +9,7 @@ import { DocumentArrowDownIcon, PencilSquareIcon, InformationCircleIcon, Calenda
 import crypto from 'crypto';
 
 const generateHash = (input: any) => {
-  return crypto.createHash('sha256').update(input).digest('hex').substring(0, 10); // Ambil 10 karakter pertama
+  return crypto.createHash('sha256').update(input).digest('hex').substring(0, 10);
 };
 
 const imageUrls = [

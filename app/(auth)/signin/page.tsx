@@ -5,7 +5,7 @@ import { SessionProvider, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { EnvelopeIcon, LockClosedIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid';
+import { EnvelopeIcon, LockClosedIcon, ArrowRightCircleIcon, EyeIcon } from '@heroicons/react/24/solid';
 
 const SignIn = () => {
   const [form, setForm] = useState({
@@ -13,6 +13,7 @@ const SignIn = () => {
     password: '',
   });
   const [error, setError] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false); 
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): any => {
@@ -77,13 +78,20 @@ const SignIn = () => {
                   <input
                     id="password"
                     name="password"
-                    type="password"
+                    type={passwordVisible ? 'text' : 'password'}
                     value={form.password}
                     onChange={handleChange}
                     className="block w-full text-sm pl-10 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
                     placeholder='Password'
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                  >
+                    <EyeIcon className={`h-5 w-5 text-gray-400 ${passwordVisible ? 'text-gray-600' : 'text-gray-400'}`} />
+                  </button>
                 </div>
               </div>
               <div>

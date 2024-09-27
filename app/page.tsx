@@ -80,12 +80,14 @@ import PartnerSlider from './components/PartnerSlider';
             </section>
 
             <section className="py-20 text-center">
-            <h2 className="text-3xl font-bold mb-4 text-white">Discover the Simplicity of Our Process</h2>
-            <p className="mb-8">Explore how easy it is to manage your conference with our step-by-step guide</p>
-            <div className="flex justify-center">
-            <button className="bg-orange-500 text-white py-2 px-6 rounded flex items-center transform transition duration-300 hover:scale-105" onClick={openVideo}>
-                Watch Video <svg width="32px" height="32px" viewBox="-6 -6 36.00 36.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M13.8876 9.9348C14.9625 10.8117 15.5 11.2501 15.5 12C15.5 12.7499 14.9625 13.1883 13.8876 14.0652C13.5909 14.3073 13.2966 14.5352 13.0261 14.7251C12.7888 14.8917 12.5201 15.064 12.2419 15.2332C11.1695 15.8853 10.6333 16.2114 10.1524 15.8504C9.6715 15.4894 9.62779 14.7336 9.54038 13.2222C9.51566 12.7947 9.5 12.3757 9.5 12C9.5 11.6243 9.51566 11.2053 9.54038 10.7778C9.62779 9.26636 9.6715 8.51061 10.1524 8.1496C10.6333 7.78859 11.1695 8.11466 12.2419 8.76679C12.5201 8.93597 12.7888 9.10831 13.0261 9.27492C13.2966 9.46483 13.5909 9.69274 13.8876 9.9348Z" stroke="#ffffff" strokeWidth="1.5"></path> <path d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round"></path> </g></svg></button>
-            </div>
+                <h2 className="text-3xl font-bold mb-4">Discover the Simplicity of Our Process</h2>
+                <p className="mb-8">Explore how easy it is to manage your conference with our step-by-step guide</p>
+                <div className="flex justify-center">
+                    <button
+                        className="bg-orange-500 text-white py-2 px-6 rounded flex items-center transform transition duration-300 hover:scale-105" onClick={openVideo}>
+                        Watch Video <svg width="32px" height="32px" viewBox="-6 -6 36.00 36.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M13.8876 9.9348C14.9625 10.8117 15.5 11.2501 15.5 12C15.5 12.7499 14.9625 13.1883 13.8876 14.0652C13.5909 14.3073 13.2966 14.5352 13.0261 14.7251C12.7888 14.8917 12.5201 15.064 12.2419 15.2332C11.1695 15.8853 10.6333 16.2114 10.1524 15.8504C9.6715 15.4894 9.62779 14.7336 9.54038 13.2222C9.51566 12.7947 9.5 12.3757 9.5 12C9.5 11.6243 9.51566 11.2053 9.54038 10.7778C9.62779 9.26636 9.6715 8.51061 10.1524 8.1496C10.6333 7.78859 11.1695 8.11466 12.2419 8.76679C12.5201 8.93597 12.7888 9.10831 13.0261 9.27492C13.2966 9.46483 13.5909 9.69274 13.8876 9.9348Z" stroke="#ffffff" strokeWidth="1.5"></path> <path d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round"></path> </g></svg>
+                    </button>
+                </div>
             </section>
 
             <section className="bg-blue-950 text-white py-20" id="conference">
@@ -94,7 +96,7 @@ import PartnerSlider from './components/PartnerSlider';
                     <GetAllConference />
                     <div className="flex justify-center">
                     <a href="/dashboard/availableconference"><button className="mt-8 bg-orange-500 text-white py-2 px-6 rounded flex items-center transform transition duration-300 hover:scale-105">
-                        Explore More
+                        Load More
                         <svg className="ml-2" width="32px" height="32px" viewBox="-6 -6 36.00 36.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -110,7 +112,7 @@ import PartnerSlider from './components/PartnerSlider';
             <PartnerSlider />
 
             <section className="py-20 text-center">
-            <h2 className="text-3xl font-bold mb-4 text-white">Get in Touch with Us</h2>
+            <h2 className="text-3xl font-bold mb-4">Get in Touch with Us</h2>
             <p className="mb-8">We`re here to help. Reach out for any questions or support.</p>
             <form className="max-w-xl mx-auto">
                 <input type="text" placeholder="Your name" className="w-full mb-4 p-2 border rounded" />

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserIcon, EnvelopeIcon, LockClosedIcon, ArrowRightCircleIcon} from '@heroicons/react/24/solid';
+import { UserIcon, EnvelopeIcon, LockClosedIcon, ArrowRightCircleIcon, EyeIcon} from '@heroicons/react/24/solid';
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -19,6 +19,7 @@ const SignUp = () => {
   }
 
   const [roles, setRoles] = useState<Role[]>([]);
+  const [passwordVisible, setPasswordVisible] = useState(false); 
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -100,20 +101,30 @@ const SignUp = () => {
                 />
               </div>
             </div>
-            <div className="relative">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password <span className="text-red-600">*</span></label>
-              <div className="mt-1 flex items-center border border-orange-400 rounded-md shadow-sm">
-                <LockClosedIcon className="w-5 h-5 text-gray-400 ml-3" aria-hidden="true" />
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  className="w-full text-sm px-3 py-2 border-none bg-white rounded-md focus:outline-none focus:ring-0"
-                  placeholder='Password' required
-                />
-              </div>
+            <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password <span className="text-red-600">*</span>
+                </label>
+                <div className="mt-1 relative">
+                  <LockClosedIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    id="password"
+                    name="password"
+                    type={passwordVisible ? 'text' : 'password'}
+                    value={form.password}
+                    onChange={handleChange}
+                    className="block w-full text-sm pl-10 py-2 border border-orange-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                    placeholder='Password'
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                  >
+                    <EyeIcon className={`h-5 w-5 text-gray-400 ${passwordVisible ? 'text-gray-600' : 'text-gray-400'}`} />
+                  </button>
+                </div>
             </div>
             <div>
               <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">Select Role <span className="text-red-600">*</span></label>

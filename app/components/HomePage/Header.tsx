@@ -16,6 +16,7 @@ const Header: React.FC = () => {
         <h1 className="text-xl font-bold">Online Paper Submission System</h1>
         <nav className="hidden md:flex items-center">
           <a href="/" className="px-4">Home</a>
+          <a href="/docs" className="px-4">Docs</a>
           <a href="/about-us" className="px-4">About Us</a>
           {session ? (
             <div className="relative group">
@@ -64,6 +65,7 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <nav className="md:hidden bg-blue-950">
           <a href="/" className="block px-4 py-2">Home</a>
+          <a href="/docs" className="px-4">Docs</a>
           <a href="/about-us" className="block px-4 py-2">About Us</a>
           {session ? (
             <div className='w-1/2 ml-2'>

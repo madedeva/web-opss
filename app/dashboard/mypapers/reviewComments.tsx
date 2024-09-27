@@ -44,7 +44,7 @@ type ReviewComment = {
     }
 };
 
-const ReviewComments = ({ submissionId }: ReviewCommentProps) => {
+const ReviewCommentsAuthor = ({ submissionId }: ReviewCommentProps) => {
     const [reviewComments, setReviewComments] = useState<ReviewComment[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -77,7 +77,7 @@ const ReviewComments = ({ submissionId }: ReviewCommentProps) => {
     return (
         <div>
             <button className="text-xs text-blue-950 hover:text-indigo-900 underline mt-2" onClick={handleModal}>
-                Review History
+                View Comments
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
@@ -92,35 +92,37 @@ const ReviewComments = ({ submissionId }: ReviewCommentProps) => {
                         <div className="mt-6">
                             {reviewComments.length > 0 ? (
                                 <ul className="space-y-4 mt-4">
-                                {reviewComments.map((comment) => (
-                                    <li key={comment.id} className="p-4 bg-gray-100 text-gray-700 rounded-lg">
-                                        <p><strong>Reviewer:</strong></p>
-                                        <p>{comment.User.name}</p>
-                                        <p className="mt-4"><strong>Comments:</strong></p>
-                                        <p className="text-wrap">{comment.comments}</p>
-                                        
-                                        <p className="mt-4"><strong>Review Status:</strong></p>
-                                        {comment.status === 'Accepted' && (
-                                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                Accepted
-                                            </span>
-                                        )}
-                                        {comment.status === 'Revision' && (
-                                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                Revision
-                                            </span>
-                                        )}
-                                        {comment.status === 'Rejected' && (
-                                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                Rejected
-                                            </span>
-                                        )}
-                                        
-                                        <p className="mt-4"><strong>Submitted Date:</strong></p>
-                                        <p>{getFormattedDate(comment.createdAt)}</p>
-                                    </li>
-                                ))}
-                            </ul>                            
+                                    {reviewComments
+                                        .filter(comment => comment.sendReview === "Yes")
+                                        .map((comment) => (
+                                            <li key={comment.id} className="p-4 bg-gray-100 text-gray-700 rounded-lg">
+                                                <p><strong>Reviewer:</strong></p>
+                                                <p>{comment.User.name}</p>
+                                                <p className="mt-4"><strong>Comments:</strong></p>
+                                                <p className="text-wrap">{comment.comments}</p>
+
+                                                <p className="mt-4"><strong>Review Status:</strong></p>
+                                                {comment.status === 'Accepted' && (
+                                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                        Accepted
+                                                    </span>
+                                                )}
+                                                {comment.status === 'Revision' && (
+                                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                        Revision
+                                                    </span>
+                                                )}
+                                                {comment.status === 'Rejected' && (
+                                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                        Rejected
+                                                    </span>
+                                                )}
+
+                                                <p className="mt-4"><strong>Submitted Date:</strong></p>
+                                                <p>{getFormattedDate(comment.createdAt)}</p>
+                                            </li>
+                                        ))}
+                                </ul>
                             ) : (
                                 <p>No review comments available for this submission.</p>
                             )}
@@ -138,4 +140,4 @@ const ReviewComments = ({ submissionId }: ReviewCommentProps) => {
     );
 };
 
-export default ReviewComments;
+export default ReviewCommentsAuthor;

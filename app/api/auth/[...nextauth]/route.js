@@ -64,16 +64,22 @@ const handler = NextAuth({
       if (user) {
         token.id = user.id;
         token.roleId = user.roleId;
-        token.authorAccess = user.authorAccess;
-        token.reviewerAccess = user.reviewerAccess;
       }
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.roleId = token.roleId;
-      session.user.authorAccess = token.authorAccess;
-      session.user.reviewerAccess = token.reviewerAccess;
+
+      const role = await prisma.role.findUnique({
+      where: { id: token.roleId },
+      select: { name: true },
+    });
+
+    if (role) {
+      session.user.roleName = role.name;
+    }
+
       return session;
     },
   },

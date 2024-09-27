@@ -60,7 +60,11 @@ export const GET = async (request: Request) => {
         const submission = await prisma.registerConference.findUnique({
             where: { id: submissionIdNumber },
             include: {
-                ReviewComments: true,
+                ReviewComments: {
+                    include: {
+                        User: true,
+                    }
+                }
             },
         });
 

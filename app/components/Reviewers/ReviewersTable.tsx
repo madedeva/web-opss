@@ -6,7 +6,7 @@ import DeleteConRev from "@/app/dashboard/reviewers/deleteReviewer";
 import UpdateReviewer from "@/app/dashboard/reviewers/updateReviewer";
 
 interface CustomSessionUser {
-  id: string;
+  id: number;
   name?: string;
   email?: string;
   image?: string;

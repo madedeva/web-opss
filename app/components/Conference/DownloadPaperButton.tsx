@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
 import { PDFDocument } from 'pdf-lib';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Conference = {
   id: number;
@@ -38,7 +40,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
 
   const handleDownload = async () => {
     if (selectedConference === null) {
-      alert('Please select a conference');
+      toast.warning('Please select a conference');
       return;
     }
 
@@ -94,7 +96,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
       </select>
       <button
         onClick={handleDownload}
-        className="mt-4 px-4 py-2 bg-blue-950 text-white rounded-full hover:bg-orange-500"
+        className="mt-4 px-3 py-1.5 bg-blue-950 text-white rounded-full hover:bg-orange-500 text-sm"
       >
         Download Papers
       </button>

@@ -129,6 +129,7 @@ interface ConferenceWithCount extends Conference {
           {user && <DownloadButton userId={user.id} />}
           {user && <DownloadPaperButton userId={user.id} />}
         </div>
+        <hr className="mt-4"/>
         <table className="min-w-full divide-y divide-gray-200 mt-6">
             <thead className="bg-gray-50">
                 <tr className="text-xs border-b border-gray-200">
@@ -136,6 +137,7 @@ interface ConferenceWithCount extends Conference {
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conference Date</th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submission Deadline</th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statistic</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
@@ -154,6 +156,14 @@ interface ConferenceWithCount extends Conference {
                         </td>
                         <td className="py-2 px-4">
                             <p><a className="underline text-blue-950 text-xs" href="/dashboard/papers">Submitted Paper ({conference._count?.RegisterConference ?? 0})</a></p>
+                        </td>
+                        <td className="py-2 px-4">
+                            <a
+                              href={`/conference-detail/${conference.slug}`}
+                              className="text-xs text-blue-950 underline hover:text-indigo-900 text-nowrap"
+                            >
+                              View details
+                            </a>
                         </td>
                         <td className="py-2 px-4">
                             {conference.status === 'Active' ? (

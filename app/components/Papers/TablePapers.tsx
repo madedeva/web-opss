@@ -12,6 +12,7 @@ import DownloadPaperButton from '../Conference/DownloadPaperButton';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import { useRouter } from "next/navigation";
+import UpdateReviewComment from '@/app/dashboard/papers/updateReview';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -72,6 +73,7 @@ type Paper = {
     city: string;
     status: string;
     paper: string;
+    comments: string;
     userId: number;
     conferenceId: number;
     createdAt: Date;
@@ -104,7 +106,7 @@ const TablePapers = () => {
     const [emails, setEmails] = useState<Emails[]>([]);
     const [selectedConference, setSelectedConference] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     const [user, setUserSession] = useState<User>();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
@@ -120,7 +122,7 @@ const TablePapers = () => {
     // review
     const [alert, setAlert] = useState<{ type: 'info' | 'danger' | 'success' | 'warning' | 'dark'; message: string } | null>(null);
     const [comments, setComment] = useState('');
-    const [statusPaper, setStatusPaper] = useState('');
+    const [status, setStatusPaper] = useState('');
     const [paperId, setPaperId] = useState<number>();
     const [selectedPaper2, setSelectedPaper2] = useState<Paper | null>(null);
     const [isOpenReview2, setIsOpenReview2] = useState(false);
@@ -267,23 +269,27 @@ const TablePapers = () => {
 
     const handleSubmitReview = async (e: SyntheticEvent) => {
         e.preventDefault();
-        
+    
         try {
-            await axios.put(`/api/reviewsubmission/${paperId}`, {
-                comments: comments,
-                status: statusPaper,
-            });
-            
+            const reviewData: any = {
+                status: status,
+            };
+    
+            if (comments && comments.trim() !== '') {
+                reviewData.comments = comments;
+            }
+    
+            await axios.put(`/api/reviewsubmission/${paperId}`, reviewData);
+    
             setIsOpenReview2(false);
             toast.success('Review submitted!');
             router.refresh();
             fetchPapers();
         } catch (error: any) {
             console.error('Error submitting the form:', error);
-            toast.error('Review submit failed:' + error.message);
+            toast.error('Review submit failed: ' + error.message);
         }
-    
-    }
+    };    
 
     useEffect(() => {
         if (!isOpenReview2) {
@@ -295,7 +301,7 @@ const TablePapers = () => {
         setPaperId(paper.id);
         setSelectedPaper2(paper);
         setStatusPaper(paper.status);
-        setComment(paper.ReviewComments[paper.ReviewComments.length - 1].comments);
+        setComment(paper.comments);
         setIsOpenReview2(true);
     };
 
@@ -460,7 +466,8 @@ const TablePapers = () => {
                 <table className="min-w-full divide-y divide-gray-200 mt-6">
                     <thead className="bg-gray-50">
                         <tr className="text-xs border-b border-gray-200">
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex">
+                            <th scope="col"
+                            className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex">
                                 <input
                                 id="allpaper"
                                 className='mr-2'
@@ -470,25 +477,32 @@ const TablePapers = () => {
                                 />
                                 Select All
                             </th>
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" 
+                                className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Paper Title
                             </th>
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" 
+                                className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Author
                             </th>
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col"
+                                className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Submit Date
                             </th>
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" 
+                                className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Topic, Abstract, Keywords
                             </th>
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col"
+                                className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 City, Country
                             </th>
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col"
+                                className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Status
                             </th>
-                            <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col"
+                                className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Action
                             </th>
                         </tr>
@@ -513,7 +527,9 @@ const TablePapers = () => {
                                     <p className='font-bold'>Topic</p>
                                     <p>{paper.topic}</p>
                                     <p className="mt-4 font-bold">Abstract</p>
-                                    <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen(paper)}>
+                                    <button
+                                        className="text-xs text-blue-950 underline hover:text-indigo-900"
+                                        onClick={() => handleModalOpen(paper)}>
                                         View abstract
                                     </button>
                                     <p className="mt-4 font-bold">Keywords</p>
@@ -549,12 +565,10 @@ const TablePapers = () => {
                                         View Paper
                                     </a>
                                     <UpdatePaper users={users} paperId={paper.id} />
-                                    <button
-                                        className="text-xs text-blue-950 underline hover:text-indigo-900 block mt-2"
-                                    >
-                                        Review History
-                                    </button>
-                                    <button className="text-xs text-blue-950 underline hover:text-indigo-900 mt-2" onClick={() => handleModalOpen2(paper)}>
+                                    <UpdateReviewComment submissionId={paper.id}/>
+                                    <button 
+                                        className="text-xs text-blue-950 underline hover:text-indigo-900 mt-2"
+                                        onClick={() => handleModalOpen2(paper)}>
                                         Update Submission Status
                                     </button>
                                 </td>
@@ -635,7 +649,6 @@ const TablePapers = () => {
                 {isOpen && selectedUserId.length > 0 && (
                     <div className="modal modal-open">
                         <div className="modal-box bg-white w-full max-w-4xl flex text-gray-700">
-                            {/* Konten Modal Kiri */}
                             <div className="w-2/3 pr-4">
                                 <h3 className="font-bold text-lg">Send email to:</h3>
                                 <ul className="list-disc pl-5 mb-4">
@@ -698,28 +711,33 @@ const TablePapers = () => {
                                 </form>
                             </div>
 
-                            {/* Accordion Konten Kanan */}
                             <div className="w-1/3 pl-4">
                                 <div className="join join-vertical w-full">
                                     <div className="collapse collapse-arrow join-item">
                                         <input type="radio" name="my-accordion-4" defaultChecked />
-                                        <div className="collapse-title text-xl font-medium">Select Authors</div>
+                                        <div className="collapse-title text-xl font-medium">
+                                            Select Authors
+                                        </div>
                                         <div className="collapse-content">
-                                        <p>Begin by selecting the authors to whom you wish to send an email. You can choose one or more individual authors or select all authors as needed.</p>
+                                            <p>Begin by selecting the authors to whom you wish to send an email. You can choose one or more individual authors or select all authors as needed.</p>
                                         </div>
                                     </div>
                                     <div className="collapse collapse-arrow join-item">
                                         <input type="radio" name="my-accordion-4" />
-                                        <div className="collapse-title text-xl font-medium">Customize Email Content</div>
+                                        <div className="collapse-title text-xl font-medium">
+                                            Customize Email Content
+                                        </div>
                                         <div className="collapse-content">
-                                        <p>Use the placeholder &lt;name&gt; in your email content to insert the recipient's name dynamically, &lt;title&gt; to replace paper title, &lt;conference&gt; to replace conference name, and &lt;abstract&gt; to replace abstract. This allows you to personalize each email with the recipient’s name, making the communication more engaging.</p>
+                                            <p>Use the placeholder &lt;name&gt; in your email content to insert the recipient's name dynamically, &lt;title&gt; to replace paper title, &lt;conference&gt; to replace conference name, and &lt;abstract&gt; to replace abstract. This allows you to personalize each email with the recipient’s name, making the communication more engaging.</p>
                                         </div>
                                     </div>
                                     <div className="collapse collapse-arrow join-item">
                                         <input type="radio" name="my-accordion-4" />
-                                        <div className="collapse-title text-xl font-medium">View Email History</div>
+                                        <div className="collapse-title text-xl font-medium">
+                                            View Email History
+                                        </div>
                                         <div className="collapse-content">
-                                        <p>You can track the emails sent by clicking on the "Email History" button. This will provide you with a record of past email communications.</p>
+                                            <p>You can track the emails sent by clicking on the "Email History" button. This will provide you with a record of past email communications.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -739,33 +757,45 @@ const TablePapers = () => {
                                     <hr className="mt-2"/>
                                         <input type="hidden" name="peperId" value={selectedPaper2.id}/>
                                         <div className="form-control w-full mt-4">
-                                            <label className="label">Review Comments</label>
+                                            <label className="label">Add Notes</label>
                                             <textarea 
-                                            value={comments}
-                                            onChange={(e) => setComment(e.target.value)}
-                                            id="message" rows={8} className="block p-2.5 w-full text-sm rounded-lg border bg-white" placeholder="Type your review here"></textarea>
+                                                value={comments}
+                                                onChange={(e) => setComment(e.target.value)}
+                                                id="message" rows={8}
+                                                className="block p-2.5 w-full text-sm rounded-lg border bg-white"
+                                                placeholder="Type your review here">
+                                            </textarea>
                                         </div>
                                         <div className="form-control w-full mt-6">
                                             <label className="mb-2">Status</label>
                                             <select 
-                                            value={statusPaper}
-                                            onChange={(e) => setStatusPaper(e.target.value)}
-                                            onClick={(e) => {
-                                                const target = e.target as HTMLSelectElement;
-                                                setStatusPaper(target.value);
-                                            }}
-                                            className="select select-bordered bg-white" required>
-                                                <option value="">-- Select Submission Status --</option>
-                                                <option value="Accepted">Accepted</option>
-                                                <option value="Revision">Revision</option>
-                                                <option value="Rejected">Rejected</option>
+                                                value={status}
+                                                onChange={(e) => setStatusPaper(e.target.value)}
+                                                onClick={(e) => {
+                                                    const target = e.target as HTMLSelectElement;
+                                                    setStatusPaper(target.value);
+                                                }}
+                                                className="select select-bordered bg-white" required>
+                                                    <option value="">-- Select Submission Status --</option>
+                                                    <option value="Accepted">Accepted</option>
+                                                    <option value="Revision">Revision</option>
+                                                    <option value="Rejected">Rejected</option>
                                             </select>
                                         </div>
-
-                                <div className="modal-action">
-                                    <button type="button" className="btn text-white" onClick={handleModalCloseReview2}>Cancel</button>
-                                    <button type="submit" className="btn bg-blue-950 text-white" onClick={handleSubmitReview}>Submit Review</button>
-                                </div>
+                                    <div className="modal-action">
+                                        <button
+                                            type="button"
+                                            className="btn text-white"
+                                            onClick={handleModalCloseReview2}>
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="btn bg-blue-950 text-white"
+                                            onClick={handleSubmitReview}>
+                                            Submit Review
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                         </div>

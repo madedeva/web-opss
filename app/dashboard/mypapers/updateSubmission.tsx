@@ -211,8 +211,8 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         <div>
             {alert && <CustomAlert type={alert.type} message={alert.message} />}
             <button
-                className="text-xs text-blue-950 underline hover:text-indigo-900 text-center text-nowrap" onClick={handleModal}>
-                Update Submission
+                className="text-xs text-blue-950 underline hover:text-indigo-900 text-center text-nowrap mb-2" onClick={handleModal}>
+                Submission Details
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>

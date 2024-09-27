@@ -27,6 +27,7 @@ model User {
   Con_Reviewer       Con_Reviewer[]
   Emails             Emails[]
   ReviewComments     ReviewComments[]
+  // UserConference     UserConference[]
 }
 
 model PasswordResetToken {
@@ -73,6 +74,7 @@ model Conference {
   RegisterConference       RegisterConference[]
   Con_Reviewer             Con_Reviewer[]
   Emails                   Emails[]
+  // UserConference           UserConference[]
 }
 
 model RegisterConference {
@@ -167,3 +169,11 @@ model ReviewComments {
   User         User               @relation(fields: [userId], references: [id])
   userId       Int
 }
+
+// model UserConference {
+//   id           Int        @id @default(autoincrement())
+//   conference   Conference @relation(fields: [conferenceId], references: [id])
+//   conferenceId Int
+//   User         User       @relation(fields: [userId], references: [id])
+//   userId       Int
+// }

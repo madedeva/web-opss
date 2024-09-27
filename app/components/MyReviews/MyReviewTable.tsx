@@ -1,5 +1,4 @@
 'use client';
-import DashboardLayout from "@/app/components/DashboardLayout";
 import { useSession } from "next-auth/react";
 import { SyntheticEvent, useEffect, useState } from "react";
 import CustomAlert from "@/app/components/Alert/CustomAlert";
@@ -95,10 +94,11 @@ const MyReviewTable = () => {
     const [isOpen2, setIsOpen2] = useState(false);
     const [papers, setPapers] = useState<Paper[]>([]);
     const [comments, setComment] = useState('');
-    const [statusPaper, setStatusPaper] = useState('Pending');
+    const [statusPaper, setStatusPaper] = useState('');
     const [paperId, setPaperId] = useState<number>();
     const { data: session, status, update } = useSession()
     const [user, setUser] = useState<User>();
+    const [newRevisionsCount, setNewRevisionsCount] = useState(0);
 
     const [selectedRevision, setSelectedRevision] = useState<Paper["Revision"] | null>(null);
     const [isRevisionOpen, setIsRevisionOpen] = useState(false);
@@ -109,6 +109,7 @@ const MyReviewTable = () => {
         console.log('Opening revisions modal with:', revisions);
         setSelectedRevision(revisions);
         setIsRevisionOpen(true);
+        setNewRevisionsCount(0);
       };
 
     const fetchPapers = async () => {
@@ -151,37 +152,37 @@ const MyReviewTable = () => {
         setIsRevisionOpen(false);
     };
 
-    const handleModalOpen2 = (paper: Paper) => {
-        setPaperId(paper.id);
-        setSelectedPaper2(paper);
-        setIsOpen2(true);
-    };
+    // const handleModalOpen2 = (paper: Paper) => {
+    //     setPaperId(paper.id);
+    //     setSelectedPaper2(paper);
+    //     setIsOpen2(true);
+    // };
 
-    const handleModalClose2 = () => {
-        setSelectedPaper2(null);
-        setIsOpen2(false);
-    };
+    // const handleModalClose2 = () => {
+    //     setSelectedPaper2(null);
+    //     setIsOpen2(false);
+    // };
     
     // comments on register conference
-    const handleSubmit = async (e: SyntheticEvent) => {
-        e.preventDefault();
+    // const handleSubmit = async (e: SyntheticEvent) => {
+    //     e.preventDefault();
         
-        try {
-            await axios.put(`/api/reviewsubmission/${paperId}`, {
-                comments: comments,
-                status: statusPaper,
-            });
+    //     try {
+    //         await axios.put(`/api/reviewsubmission/${paperId}`, {
+    //             comments: comments,
+    //             status: statusPaper,
+    //         });
             
-            setIsOpen2(false);
-            toast.success('Review submitted!');
-            fetchPapers();
-        } catch (error: any) {
-            console.error('Error submitting the form:', error);
-            toast.error('Review submit failed:' + error.message);
-            setTimeout(() => setAlert(null), 5000);
-        }
+    //         setIsOpen2(false);
+    //         toast.success('Review submitted!');
+    //         fetchPapers();
+    //     } catch (error: any) {
+    //         console.error('Error submitting the form:', error);
+    //         toast.error('Review submit failed:' + error.message);
+    //         setTimeout(() => setAlert(null), 5000);
+    //     }
     
-    }
+    // }
 
     return (
             <div className="bg-white p-6 rounded-lg">
@@ -226,7 +227,7 @@ const MyReviewTable = () => {
                                             <div className="text-xs text-gray-900">{paper.conference.name}</div>
                                         </td>
                                         <td className="px-3 py-2 whitespace-normal break-words text-nowrap">
-                                            <div className="flex flex-col space-y-2">
+                                            <div className="flex flex-col space-y-2 items-start">
                                                 <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen(paper)}>
                                                     View Abstract
                                                 </button>
@@ -274,25 +275,12 @@ const MyReviewTable = () => {
                                                 ) : paper.status === 'Rejected' ? (
                                                     <span className="text-red-600">Paper Rejected</span>
                                                 ) : null}
-
-                                                {/* {paper.status === 'Accepted' ? (
-                                                    <span className="text-green-600">Review complete</span>
-                                                ) : paper.status === 'Rejected' ? (
-                                                    <span className="text-red-600">Paper Rejected</span>
-                                                ) : (
-                                                    <button className="text-xs text-blue-950 underline hover:text-indigo-900" onClick={() => handleModalOpen2(paper)}>
-                                                        Review paper
-                                                    </button>
-                                                )} */}
                                                 </div>
                                                 {paper.status !== 'Accepted' && paper.status !== 'Rejected' && (
                                                     <div className="block">
                                                         <AddReviewComments submissionId={paper.id} userId={user?.id}/>
                                                     </div>
                                                 )}
-                                                {/* <div className="block mt-2">
-                                                    <AddReviewComments submissionId={paper.id} userId={user?.id}/>
-                                                </div> */}
                                             </div>
                                         </td>
                                     </tr>
@@ -314,7 +302,7 @@ const MyReviewTable = () => {
                         </div>
                     )}
 
-                    {isOpen2 && selectedPaper2 && (
+                    {/* {isOpen2 && selectedPaper2 && (
                         <div className="modal modal-open">
                             <div className="modal-box bg-white w-full max-w-2xl text-gray-700">
                             <form onSubmit={handleSubmit}>
@@ -355,14 +343,13 @@ const MyReviewTable = () => {
                                 </form>
                             </div>
                         </div>
-                    )}
-
+                    )} */}
 
                     {isRevisionOpen && selectedRevision && (
                         <div className="modal modal-open">
-                        <div className="modal-box bg-gray-50 shadow-xl rounded-lg w-full max-w-4xl">
+                        <div className="modal-box bg-gray-50 shadow-xl rounded-lg w-full max-w-2xl">
                         <div className="flex justify-between items-center border-b pb-3">
-                            <h3 className="text-2xl font-semibold text-gray-800">Revision History</h3>
+                            <h3 className="text-md font-semibold text-gray-800">Revision History</h3>
                             <button 
                             className="text-gray-400 hover:text-gray-600" 
                             onClick={handleModalClose}
@@ -374,7 +361,7 @@ const MyReviewTable = () => {
                         <ul className="py-6 space-y-4">
                             {selectedRevision.map((revision) => (
                             <li key={revision.id} className="p-4 bg-gray-100 text-gray-700 rounded-lg">
-                                <h4 className="text-xl font-bold text-gray-900">Paper Title: {revision.paper_title}</h4>
+                                <h4 className="font-bold text-gray-900">Paper Title: {revision.paper_title}</h4>
                                 <p className="mb-4">Submit Date: {getFormattedDate(revision.createdAt)}</p>
                                 <span className="block font-semibold text-gray-700 mb-1">Topic:</span> 
                                 <p>{revision.topic}</p>

@@ -16,11 +16,11 @@ const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 const modules = {
     toolbar: [
       [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike'],        // Format teks
-      [{ 'align': [] }],                                // Opsi perataan teks
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // List ordered dan unordered
-      ['link'],                                         // Opsi link
-      ['clean']                                         // Tombol untuk clear format
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'align': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
     ],
   };
 
@@ -130,7 +130,7 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
     const handleAddKeyword = () => {
         if (keywordsInput.trim() && !keywords.includes(keywordsInput.trim())) {
             setKeywords([...keywords, keywordsInput.trim()]);
-            setKeywordsInput(''); // Reset input field setelah menambahkan keyword
+            setKeywordsInput('');
         }
     };
 
@@ -414,7 +414,9 @@ const CreateSubmissionComponent = ({params}: {params: {slug: string}}) => {
                         value={author.institution}
                         onChange={(e) => handleAuthorChange(index, 'institution', e.target.value)}
                     />
-                    <button type="button" className="btn btn-danger mt-2" onClick={() => removeAuthorField(index)}>Remove Author</button>
+                    <button type="button" className="btn btn-danger mt-2" onClick={() => removeAuthorField(index)}>
+                        Remove Author
+                    </button>
                 </div>
             ))}
             <button type="button" className="btn bg-blue-950 btn-outline text-white mt-4" onClick={addAuthorField}>
