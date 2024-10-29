@@ -11,19 +11,19 @@ const Footer: React.FC = () => {
             <p className="flex items-center justify-center md:justify-start mb-2">
               <FaMapMarkerAlt className="mr-2" />
               <a href="https://maps.app.goo.gl/GCfseoP4URdy9e4c7" className="hover:underline">
-                Jl. Udayana No. 11, Banjar Tegal, Singaraja, Bali
+                Address: Jl. Udayana No. 11, Banjar Tegal, Singaraja, Bali
               </a>
             </p>
             <p className="flex items-center justify-center md:justify-start mb-2">
               <FaEnvelope className="mr-2" />
               <a href="mailto:deva.kerti@undiksha.ac.id" className="hover:underline">
-                deva.kerti@undiksha.ac.id
+                Contact Support: deva.kerti@undiksha.ac.id
               </a>
             </p>
             <p className="flex items-center justify-center md:justify-start">
               <FaPhoneAlt className="mr-2" />
               <a href="tel:+6281529974101" className="hover:underline">
-                +62 8152 9974 101
+                Call: +62 8152 9974 101
               </a>
             </p>
           </div>

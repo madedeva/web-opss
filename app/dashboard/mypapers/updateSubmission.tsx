@@ -6,6 +6,21 @@ import CustomAlert from "@/app/components/Alert/CustomAlert";
 import { Editor } from '@tinymce/tinymce-react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
+const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],        // Format teks
+      [{ 'align': [] }],                                // Opsi perataan teks
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // List ordered dan unordered
+      ['link'],                                         // Opsi link
+      ['clean']                                         // Tombol untuk clear format
+    ],
+  };
 
 type Submission = {
     id: number,
@@ -18,8 +33,33 @@ type Submission = {
     country: string,
     city: string,
     status: string,
-    userId: number,
+    userId: number
+    comments?: string | null;
+    createdAt: Date,
     conferenceId: number
+    user: {
+        name: string,
+        email: string,
+    },
+    conference: {
+        id: number,
+        name: string,
+        description: string,
+        submission_deadlineStart: Date,
+        submission_deadlineEnd: Date,
+        paper_template: string,
+        acronym: string
+        User: {
+            name: string,
+            email: string,
+        };
+    },
+    Authors: {
+        id: number,
+        name: string,
+        email: string,
+        institution: string
+    }[]
 }
 
 const UpdateSubmission = ({registerConference }: {registerConference: Submission}) => {
@@ -41,6 +81,10 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
 
     const [fileName, setFileName] = useState<string | null>(null);
     const [previousFileName, setPreviousFileName] = useState<string | null>(null);
+
+    const [Authors, setAuthors] = useState(registerConference.Authors);
+
+    console.log(registerConference);
 
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
@@ -82,6 +126,21 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         fetchConferenceTopics();
     }, [registerConference.conferenceId, registerConference.topic]);
 
+    const handleAuthorChange = (index: number, field: string, value: string) => {
+        const updatedAuthors = [...Authors];
+        updatedAuthors[index] = { ...updatedAuthors[index], [field]: value };
+        setAuthors(updatedAuthors);
+    };
+    
+    const addAuthorField = () => {
+        setAuthors([...Authors, {id: 0, name: '', email: '', institution: ''}]);
+    };
+    
+    const removeAuthorField = (index: number) => {
+        const updatedAuthors = Authors.filter((_, i) => i !== index);
+        setAuthors(updatedAuthors);
+    };
+
     const handleUpdate = async (e: SyntheticEvent) => {
         e.preventDefault();
 
@@ -97,6 +156,10 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         formData.append('country', country || '');
         formData.append('city', city || '');
         formData.append('status', status || '');
+        const nonEmptyAuthors = Authors.filter(author => author.name || author.email || author.institution);
+        if (nonEmptyAuthors.length > 0) {
+            formData.append('Authors', JSON.stringify(nonEmptyAuthors));
+        }
 
         try{
             await axios.put(`/api/submission/${registerConference.id}`, formData, {
@@ -107,6 +170,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
 
             toast.success('Revision submitted successfully!');
 
+            // setAuthors(registerConference.Authors);
             router.refresh();
             setIsOpen(false);
         }catch(error: any){
@@ -147,8 +211,8 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
         <div>
             {alert && <CustomAlert type={alert.type} message={alert.message} />}
             <button
-                className="text-xs text-blue-950 underline hover:text-indigo-900 text-center text-nowrap" onClick={handleModal}>
-                Update Submission
+                className="text-xs text-blue-950 underline hover:text-indigo-900 text-center text-nowrap mb-2" onClick={handleModal}>
+                Submission Details
             </button>
 
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
@@ -179,14 +243,13 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                         </div>
                         <div className="form-control w-full mt-6">
                             <p className="mb-2">Abstract <span className="text-red-600">*</span></p>
-                            <Editor
-                                apiKey="0lu8tnu2h88qx3czxhxiluopabt3eubgk2ftrw8qfu489ruu"
-                                value={abstract}
-                                init={{
-                                    height: 400,
-                                    menubar: false,
-                                }}
-                                onEditorChange={(newContent) => setAbstract(newContent)}
+                            <ReactQuill 
+                                theme="snow" 
+                                className="mb-12"
+                                value={abstract} 
+                                onChange={setAbstract}
+                                style={{ height: '400px' }}
+                                modules={modules}
                             />
                         </div>
                         {/* <div className="form-control w-full mt-6">
@@ -301,6 +364,37 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                             onChange={(e) => setInstitution(e.target.value)}
                             className="input input-bordered bg-white" required/>
                         </div>
+                        {Authors.map((author, index) => (
+                            <div key={index} className="form-control w-full mt-6">
+                                <p className="mb-2">Add Another Authors (Optional)</p>
+                                <p className="mb-2">Author {index + 1}</p>
+                                <input
+                                    className="block w-full p-2 border bg-white rounded mb-2"
+                                    type="text"
+                                    placeholder="Author Name"
+                                    value={author.name}
+                                    onChange={(e) => handleAuthorChange(index, 'name', e.target.value)}
+                                />
+                                <input
+                                    className="block w-full p-2 border bg-white rounded mb-2"
+                                    type="text"
+                                    placeholder="Author Email"
+                                    value={author.email}
+                                    onChange={(e) => handleAuthorChange(index, 'email', e.target.value)}
+                                />
+                                <input
+                                    className="block w-full p-2 border bg-white rounded"
+                                    type="text"
+                                    placeholder="Author Institution"
+                                    value={author.institution}
+                                    onChange={(e) => handleAuthorChange(index, 'institution', e.target.value)}
+                                />
+                                <button type="button" className="btn btn-danger mt-2" onClick={() => removeAuthorField(index)}>Remove Author</button>
+                            </div>
+                        ))}
+                        <button type="button" className="btn bg-blue-950 btn-outline text-white mt-4" onClick={addAuthorField}>
+                            Add New Author
+                        </button>
                         <div className="form-control w-full mt-6">
                             <label className="label font-bold">Country</label>
                             <select
@@ -327,7 +421,7 @@ const UpdateSubmission = ({registerConference }: {registerConference: Submission
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn text-white" onClick={handleModal}>Cancel</button>
-                            <button className="btn bg-blue-950 text-white">Upload Revision</button>
+                            <button className="btn bg-blue-950 text-white">Update Submission</button>
                         </div>
                     </form>
                 </div>

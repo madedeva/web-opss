@@ -19,6 +19,7 @@ export const GET = async (request: Request) => {
       select: {
         paper_title: true,
         abstract: true,
+        keywords: true,
       },
     });
 

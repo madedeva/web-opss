@@ -25,6 +25,9 @@ model User {
   PasswordResetToken PasswordResetToken[]
   ReviewPaper        ReviewPaper[]
   Con_Reviewer       Con_Reviewer[]
+  Emails             Emails[]
+  ReviewComments     ReviewComments[]
+  CoOperator         CoOperator[]
 }
 
 model PasswordResetToken {
@@ -70,13 +73,15 @@ model Conference {
   userId                   Int
   RegisterConference       RegisterConference[]
   Con_Reviewer             Con_Reviewer[]
+  Emails                   Emails[]
+  CoOperator               CoOperator[]
 }
 
 model RegisterConference {
-  id             Int           @id @default(autoincrement())
-  conference     Conference    @relation(fields: [conferenceId], references: [id])
+  id             Int              @id @default(autoincrement())
+  conference     Conference       @relation(fields: [conferenceId], references: [id])
   conferenceId   Int
-  user           User          @relation(fields: [userId], references: [id])
+  user           User             @relation(fields: [userId], references: [id])
   userId         Int
   paper_title    String
   topic          String
@@ -88,13 +93,14 @@ model RegisterConference {
   country        String
   city           String
   status         String
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  // Con_Reviewer             Con_Reviewer[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   ReviewPaper    ReviewPaper[]
-  Con_Reviewer   Con_Reviewer? @relation(fields: [con_ReviewerId], references: [id])
+  Con_Reviewer   Con_Reviewer?    @relation(fields: [con_ReviewerId], references: [id])
   con_ReviewerId Int?
   Authors        Authors[]
+  Revision       Revision[]
+  ReviewComments ReviewComments[]
 }
 
 model Con_Reviewer {
@@ -108,12 +114,10 @@ model Con_Reviewer {
 
 model ReviewPaper {
   id                   Int                @id @default(autoincrement())
-  reviewer             User               @relation(fields: [reviewerId], references: [id]) //ganti dengan di comment
-  reviewerId           Int //ganti dengan di comment
+  reviewer             User               @relation(fields: [reviewerId], references: [id])
+  reviewerId           Int
   registerConference   RegisterConference @relation(fields: [registerConferenceId], references: [id])
   registerConferenceId Int
-  // reviewer Con_Reviewer? @relation(fields: [conrevId], references: [id])
-  // reviewerId     Int?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 
@@ -127,4 +131,49 @@ model Authors {
   institution  String
   submissionId Int
   submission   RegisterConference @relation(fields: [submissionId], references: [id])
+}
+
+model Emails {
+  id           Int        @id @default(autoincrement())
+  subject      String
+  message      String
+  sender       User       @relation(fields: [userId], references: [id])
+  userId       Int
+  conference   Conference @relation(fields: [conferenceId], references: [id])
+  conferenceId Int
+  createdAt    DateTime   @default(now())
+}
+
+model Revision {
+  id           Int                @id @default(autoincrement())
+  paper_title  String
+  topic        String
+  abstract     String
+  keywords     String
+  paper        String
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  submission   RegisterConference @relation(fields: [submissionId], references: [id])
+  submissionId Int
+}
+
+model ReviewComments {
+  id           Int                @id @default(autoincrement())
+  comments     String
+  status       String
+  sendReview   String
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  submission   RegisterConference @relation(fields: [submissionId], references: [id])
+  submissionId Int
+  User         User               @relation(fields: [userId], references: [id])
+  userId       Int
+}
+
+model CoOperator {
+  id           Int        @id @default(autoincrement())
+  conference   Conference @relation(fields: [conferenceId], references: [id])
+  conferenceId Int
+  User         User       @relation(fields: [userId], references: [id])
+  userId       Int
 }

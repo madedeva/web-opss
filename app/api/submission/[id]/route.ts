@@ -28,7 +28,34 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
             return NextResponse.json({ status: "fail", error: "Conference not found" });
           }
 
-          const Authors = JSON.parse(formData.get("Authors")?.toString() ?? '[]');
+        const Authors = JSON.parse(formData.get("Authors")?.toString() ?? '[]');
+
+          // Get current authors from the registerConference
+        const currentAuthors = await prisma.authors.findMany({
+            where: {
+            submissionId: Number(params.id),
+            },
+        });
+    
+        // Find authors to delete
+        const authorIdsToDelete = currentAuthors
+            .filter((currentAuthor) => !Authors.some((newAuthor: any) => newAuthor.id === currentAuthor.id))
+            .map((author) => author.id);
+    
+        // Prepare authors for update or create
+        const upsertAuthors = Authors.map((author: any) => ({
+            where: { id: author.id ?? 0 }, // If `id` is not present, Prisma will treat this as a creation
+            update: {
+            name: author.name,
+            email: author.email,
+            institution: author.institution,
+            },
+            create: {
+            name: author.name,
+            email: author.email,
+            institution: author.institution,
+            },
+        }));
 
         const updateRegisterConference = await prisma.registerConference.update({
             where: {
@@ -47,19 +74,11 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
                 // userId: parseInt(formData.get("userId")?.valueOf().toString() ?? '0'),
                 conferenceId: conference.id,
                 Authors: {
-                    upsert: Authors.map((author: any) => ({
-                        where: { email: author.email }, // Assuming unique email for each author
-                        update: {
-                            name: author.name,
-                            institution: author.institution
-                        },
-                        create: {
-                            name: author.name,
-                            email: author.email,
-                            institution: author.institution
-                        }
-                    }))
-                }
+                    deleteMany: {
+                      id: { in: authorIdsToDelete }, // Delete authors that are not in the new list
+                    },
+                    upsert: upsertAuthors,
+                },
             },
             include: {
                 Authors: true,
@@ -73,20 +92,6 @@ export const PUT = async (req: Request, {params}: {params: {id: string}}) => {
         return NextResponse.json({ status: "fail", error: e });
     }
 }
-
-// export const PATCH = async (request: Request, {params}: {params: {id: string}}) => {
-//     const body: RegisterConference = await request.json();
-//     const con = await prisma.registerConference.update({
-//         where: {
-//             id: Number(params.id)
-//         },
-//         data: {
-//             ...body,
-//         }
-//     });
-
-//     return NextResponse.json(con, {status: 200});
-// }
 
 export const DELETE = async (request: Request, {params}: {params: {id: string}}) => {
 

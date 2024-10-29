@@ -16,11 +16,15 @@ const Header: React.FC = () => {
         <h1 className="text-xl font-bold">Online Paper Submission System</h1>
         <nav className="hidden md:flex items-center">
           <a href="/" className="px-4">Home</a>
+          <a href="/docs" className="px-4">Help & Documentation</a>
           <a href="/about-us" className="px-4">About Us</a>
           {session ? (
             <div className="relative group">
-              <button className="px-4 py-2">
+              <button className="px-4 py-2 flex">
                 {session.user?.email}
+                <svg className="w-4 h-4 ml-1 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
               <div className="absolute right-0 mt-2 bg-white text-black rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <a href="/dashboard" className="px-4 py-2 flex">Dashboard <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-speedometer2 ml-2" viewBox="0 0 16 16">
@@ -64,11 +68,15 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <nav className="md:hidden bg-blue-950">
           <a href="/" className="block px-4 py-2">Home</a>
+          <a href="/docs" className="px-4">Help & Documentation</a>
           <a href="/about-us" className="block px-4 py-2">About Us</a>
           {session ? (
             <div className='w-1/2 ml-2'>
-              <button className="block px-4 py-2">
+              <button className="px-4 py-2 flex">
                 {session.user?.email}
+                <svg className="w-4 h-4 ml-1 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
               <div className="bg-white text-black rounded shadow-lg">
                 <a href="/dashboard" className="px-4 py-2 flex">Dashboard <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-speedometer2 ml-2" viewBox="0 0 16 16">
