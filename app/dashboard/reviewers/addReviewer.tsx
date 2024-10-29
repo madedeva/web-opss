@@ -28,7 +28,7 @@ const AddReviewer = ({ users, conferences }: { users: User[]; conferences: Confe
     const filteredUsers = users
         .filter(user =>
             user.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            !selectedUserIds.includes(user.id)  // Exclude already selected users
+            !selectedUserIds.includes(user.id)
         );
 
         const handleSubmit = async (e: SyntheticEvent) => {

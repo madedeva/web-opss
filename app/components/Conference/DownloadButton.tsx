@@ -55,7 +55,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ userId }) => {
     }
 
     if (!templateFile) {
-      alert('Please upload a template file');
+      toast.warning('Please upload a template file');
       return;
     }
 

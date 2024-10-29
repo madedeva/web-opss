@@ -24,15 +24,51 @@ const SignIn = () => {
     });
   };
 
+  const validateEmail = (email: string): boolean => {
+    // Simple regex to validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string): string => {
+    let errorMsg = '';
+    if (password.length < 8) {
+      errorMsg = 'Password must be at least 8 characters long.';
+    } else if (!/[0-9]/.test(password)) {
+      errorMsg = 'Password must contain at least 1 number.';
+    } else if (!/[A-Z]/.test(password)) {
+      errorMsg = 'Password must contain at least 1 uppercase letter.';
+    } else if (!/[a-z]/.test(password)) {
+      errorMsg = 'Password must contain at least 1 lowercase letter.';
+    } else if (!/[!@#$%^&*]/.test(password)) {
+      errorMsg = 'Password must contain at least 1 special character.';
+    }
+    return errorMsg;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const email = (e.currentTarget as HTMLFormElement).email.value;
     const password = (e.currentTarget as HTMLFormElement).password.value;
+
+    if (!validateEmail(email)) {
+      setError('Invalid email format.');
+      toast.error('Invalid email format.');
+      return;
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setError(passwordError);
+      toast.error(passwordError);
+      return;
+    }
+
     const result = await signIn("credentials", { redirect: false, email, password });
 
     if (result?.error) {
       setError(result.error);
-      toast.error('Sign in failed' + error);
+      toast.error('Sign in failed: ' + result.error);
     } else {
       toast.success('Sign in success!');
       router.push('/');
@@ -50,7 +86,25 @@ const SignIn = () => {
           <div className="m-auto w-full max-w-md p-8 bg-white rounded-md shadow-md">
             <h2 className="text-2xl font-semibold text-center text-orange-500">Sign In</h2>
             <form onSubmit={handleSubmit} className="space-y-4 mt-6">
-              {error && <p className='text-red-400 text-center'>{error}</p>}
+              {error && (
+                <div className="flex items-center justify-center py-2 px-4 bg-red-50 border border-red-300 text-red-600 rounded-md shadow-md hover:bg-red-100 hover:border-red-400 transition-colors duration-300 ease-in-out">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mr-3 text-red-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.257 3.099c.765-1.36 2.677-1.36 3.442 0l7.156 12.73c.747 1.329-.193 2.993-1.721 2.993H2.822c-1.528 0-2.468-1.664-1.721-2.993L8.257 3.1zM11 10v4m0 4h.01"
+                    />
+                  </svg>
+                  <p className="text-sm font-medium">{error}</p>
+                </div>
+              )}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email <span className="text-red-600">*</span>

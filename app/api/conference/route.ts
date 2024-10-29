@@ -12,7 +12,6 @@ export const GET = async (req: Request) => {
     }
   
     try {
-      // Fetch the registerConference and related Conference
       const registerConference = await prisma.registerConference.findUnique({
         where: { id: parseInt(registerConferenceId) },
         include: {

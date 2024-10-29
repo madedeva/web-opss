@@ -45,26 +45,36 @@ export default function Documentation() {
                   <p className="mb-6">
                     Learn how to set up your conference, including configuring key details, managing submissions, and inviting reviewers.
                   </p>
-                  <a href="/conference-setup-guide.pdf" download className="inline-block bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">
-                    Download User Guide
+                  <a
+                    href="/uploads/templates/USER_GUIDE_OPERATOR.pdf"
+                    download
+                    className="inline-block bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">
+                    User Guide as Operator
                   </a>
                 </div>
-                <div className="shadow-lg p-8 rounded bg-green-100">
-                  <h3 className="text-xl font-bold mb-4">Submission Workflow</h3>
-                  <p className="mb-6">
-                    Get a detailed guide on optimizing the paper submission process, from submission to review and final decision.
-                  </p>
-                  <a href="/submission-workflow-guide.pdf" download className="inline-block bg-green-600 text-white font-semibold py-3 px-6 rounded-lg shadow hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105">
-                    Download User Guide
-                  </a>
-                </div>
+               <div className="shadow-lg p-8 rounded bg-green-100">
+                <h3 className="text-xl font-bold mb-4">Submission Workflow</h3>
+                <p className="mb-6">
+                  Get a detailed guide on optimizing the paper submission process, from submission to review and final decision.
+                </p>
+                <a
+                  href="/uploads/templates/USER_GUIDE_AUTHOR.pdf"
+                  download
+                  className="inline-block bg-green-600 text-white font-semibold py-3 px-6 rounded-lg shadow hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105"
+                >
+                  User Guide as Author
+                </a>
+              </div>
                 <div className="shadow-lg p-8 rounded bg-yellow-100">
                   <h3 className="text-xl font-bold mb-4">Reviewer Guidelines</h3>
                   <p className="mb-6">
                     Understand how to manage paper reviews, assign reviewers, and track feedback efficiently throughout the conference.
                   </p>
-                  <a href="/reviewer-guidelines.pdf" download className="inline-block bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg shadow hover:bg-yellow-700 transition duration-300 ease-in-out transform hover:scale-105">
-                    Download User Guide
+                  <a
+                    href="/uploads/templates/USER_GUIDE_REVIEWER.pdf"
+                    download
+                    className="inline-block bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg shadow hover:bg-yellow-700 transition duration-300 ease-in-out transform hover:scale-105">
+                    User Guide as Reviewer
                   </a>
                 </div>
               </div>

@@ -728,7 +728,13 @@ const TablePapers = () => {
                                             Customize Email Content
                                         </div>
                                         <div className="collapse-content">
-                                            <p>Use the placeholder &lt;name&gt; in your email content to insert the recipient's name dynamically, &lt;title&gt; to replace paper title, &lt;conference&gt; to replace conference name, and &lt;abstract&gt; to replace abstract. This allows you to personalize each email with the recipient’s name, making the communication more engaging.</p>
+                                            <ul className="list-disc ml-5">
+                                            <li>Use the placeholder <span className='font-bold'>&lt;name&gt;</span> in your email content to insert the recipient's name dynamically.</li>
+                                            <li><span className='font-bold'>&lt;title&gt;</span> to replace paper title.</li>
+                                            <li><span className='font-bold'>&lt;conference&gt;</span> to replace conference name.</li>
+                                            <li><span className='font-bold'>&lt;abstract&gt;</span> to replace abstract.</li>
+                                            </ul>
+                                            <p>This allows you to personalize each email with the recipient’s name, making the communication more engaging.</p>
                                         </div>
                                     </div>
                                     <div className="collapse collapse-arrow join-item">
